@@ -25,7 +25,7 @@ public class Main  extends JavaPlugin
  		new KrimBlockName();
     }
 
- 	//Für spätere Funktionen
+ 	//Für spätere Funktionen eingeplant
  	public KSMap getMap(int id)
  	{
  		KSMap m;
@@ -37,6 +37,12 @@ public class Main  extends JavaPlugin
  			m = this.maps.get(id);
  		
  		return m;
+ 	}
+ 	
+ 	public void Prune()
+ 	{
+ 		helper.pruneAuctions();
+ 		helper.pruneDelivery();
  	}
  	
     public void onDisable()
@@ -86,7 +92,9 @@ public class Main  extends JavaPlugin
         
         Commander c = new Commander(this);
         getCommand("register").setExecutor(c); 
+        Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new KSTimer(this), 1, 20*60);
     }
+    
     public static PluginDescriptionFile pdf;
     public static String name;
     public static String cmdName;

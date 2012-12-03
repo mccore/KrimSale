@@ -30,7 +30,7 @@ public class KSListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event)
     {
-		
+
     }
 	
 }
