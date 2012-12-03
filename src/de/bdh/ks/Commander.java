@@ -10,7 +10,7 @@ public class Commander implements CommandExecutor {
 	{
 		this.plugin = plugin;
 	}
-	
+
 	
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String args[])
     {
@@ -29,7 +29,7 @@ public class Commander implements CommandExecutor {
         				//Liste von allen Transaktionen des Spielers
         			} else if(args[0].equalsIgnoreCase("add"))
         			{
-        				//Füge unendliches Angebot ein
+        				//Füge unendliches Angebot ein (admin flag + amount = 10000)
         			} else if(args[0].equalsIgnoreCase("remove"))
         			{
         				//Entferne unendliches Angebot

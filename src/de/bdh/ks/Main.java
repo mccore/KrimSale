@@ -17,7 +17,8 @@ public class Main  extends JavaPlugin
 	 
  	public Main()
     {
- 		
+ 		//INIT
+ 		new KrimBlockName();
     }
 
  	//Für spätere Funktionen
