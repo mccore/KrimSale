@@ -2,9 +2,12 @@ package de.bdh.ks;
 
 import java.util.HashMap;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -13,6 +16,7 @@ public class Main  extends JavaPlugin
 	Database Database;
 	public KSListener listener;
 	public static KSHelper helper;
+	public Economy econ;
 	public HashMap<Integer,KSMap> maps = new HashMap<Integer,KSMap>();
 	 
  	public Main()
@@ -59,11 +63,17 @@ public class Main  extends JavaPlugin
     		
     	} catch(Exception e)
     	{
-    		System.out.println((new StringBuilder()).append("[KS] Database initialization failed: ").append(e).toString());
+    		System.out.println((new StringBuilder()).append("[KSALE] Database initialization failed: ").append(e).toString());
             getServer().getPluginManager().disablePlugin(this);
             return;
     	}
     	
+    	RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+        	System.out.println((new StringBuilder()).append("[KSALE] !!! NO MONEY SYSTEM FOUND").toString()); 
+        } else
+        	econ = rsp.getProvider();
+        
     	helper = new KSHelper(this);
         pdf = getDescription();
         name = pdf.getName();
