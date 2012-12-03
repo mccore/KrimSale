@@ -21,6 +21,7 @@ public class configManager {
     public static String SQLDatabase = "minecraft";
     public static String SQLTable = "minecraft";
     public static Integer useMaps = 0;
+    public static Integer ender = 1;
     
     private static File confFile;
     
@@ -52,6 +53,7 @@ public class configManager {
         SQLUsername = conf.getString("System.Database.Settings.MySQL.Username", SQLUsername);
         SQLPassword = conf.getString("System.Database.Settings.MySQL.Password", SQLPassword);
         useMaps = conf.getInt("System.useMaps", useMaps);
+        ender = conf.getInt("System.useEnderChests", ender);
         
         try {
         	if (!confFile.exists())
@@ -92,6 +94,7 @@ public class configManager {
             conf.set("System.Database.Settings.MySQL.Username", SQLUsername);
             conf.set("System.Database.Settings.MySQL.Password", SQLPassword);
             conf.set("System.useMaps",useMaps);
+            conf.set("System.useEnderChests", ender);
             
             try {
                 confFile.createNewFile();

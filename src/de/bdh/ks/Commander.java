@@ -1,5 +1,7 @@
 package de.bdh.ks;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -11,6 +13,32 @@ public class Commander implements CommandExecutor {
 		this.plugin = plugin;
 	}
 
+	public boolean enderChestClose(CommandSender s)
+	{
+		if(configManager.ender == 0)
+			return true;
+		
+		int rad = 5;
+		Block temp;
+		if(s instanceof Player)
+		{
+			Player p = (Player)s;
+			Block b = p.getLocation().getBlock();
+			for(int i$ = (rad * -1); i$ < rad; i$++)
+	        {
+	        	for(int j$ = (rad * -1); j$ < rad; j$++)
+	            {
+	        		for(int k$ = (rad * -1); k$ < rad; k$++)
+	        		{
+	        			temp = b.getRelative(i$, j$, k$);
+	        			if(temp.getType() == Material.ENDER_CHEST)
+	        				return true;
+	        		} 
+	            }
+	        }
+		}
+		return false;
+	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String args[])
     {

@@ -76,7 +76,8 @@ public class Main  extends JavaPlugin
     	
     	RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-        	System.out.println((new StringBuilder()).append("[KSALE] !!! NO MONEY SYSTEM FOUND").toString()); 
+        	System.out.println((new StringBuilder()).append("[KSALE] !!! NO MONEY SYSTEM FOUND! DISABLING!").toString()); 
+        	Bukkit.getServer().getPluginManager().disablePlugin(this);
         } else
         	econ = rsp.getProvider();
         
