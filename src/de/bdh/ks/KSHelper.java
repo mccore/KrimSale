@@ -121,4 +121,10 @@ public class KSHelper
 		}
 		return taken;
 	}
+	
+	//Sende die Infos über das Item wie zb aktueller Preis usw
+	public void sendInfos(Player p, int itemid)
+	{
+		
+	}
 }

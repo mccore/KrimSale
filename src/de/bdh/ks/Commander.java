@@ -40,6 +40,19 @@ public class Commander implements CommandExecutor {
 		return false;
 	}
 	
+	public int parseName(String nam)
+	{
+		int i = 0;
+		try
+		{
+			i = Integer.parseInt(nam);
+		} catch(Exception e)
+		{
+			i = KrimBlockName.getIdByName(nam);
+		}
+		return i;
+	}
+	
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String args[])
     {
 		//Admin Commands
@@ -63,8 +76,11 @@ public class Commander implements CommandExecutor {
         				//Entferne unendliches Angebot
         			}
         		}
+			} else
+			{
+				sender.sendMessage("You don't have permissions for that");
 			}
-			
+			return true;
     	} else
 		if(sender instanceof Player)
         {
@@ -85,12 +101,18 @@ public class Commander implements CommandExecutor {
         				}
         				
         				//VERKAUFE
-        				if(args.length == 1)
+        				if(args.length < 3)
                 		{
         					sender.sendMessage("USAGE: /auction sell BLOCK AMOUNT PRICEPERBLOCK");
                 		} else
                 		{
-                			
+                			if(args.length == 3)
+                			{
+                				//Block == IteminHand
+                			} else if(args.length == 4)
+                			{
+                				//Normale Usage
+                			}
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
         			{
@@ -101,12 +123,18 @@ public class Commander implements CommandExecutor {
         				}
         				
         				//KAUFE
-        				if(args.length == 1)
+        				if(args.length < 3)
                 		{
         					sender.sendMessage("USAGE: /auction BUY BLOCK AMOUNT MAXPRICE");
                 		} else
                 		{
-                			
+                			if(args.length == 3)
+                			{
+                				//Block == IteminHand
+                			} else if(args.length == 4)
+                			{
+                				//Normale Usage
+                			}
                 		}
         			} else if(args[0].equalsIgnoreCase("list"))
         			{
@@ -117,12 +145,16 @@ public class Commander implements CommandExecutor {
         				}
         				
         				//ZEIGE
-        				if(args.length == 1)
+        				if(args.length < 2)
                 		{
         					sender.sendMessage("USAGE: /auction list BLOCK");
                 		} else
                 		{
-                			
+                			int id = this.parseName(args[1]);
+                			if(id != -1)
+                				Main.helper.sendInfos((Player)sender, id);
+                			else
+                				sender.sendMessage("ERROR: BlockID '"+args[1]+"' invalid");	
                 		}
         			}
         		}
