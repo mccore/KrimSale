@@ -48,6 +48,18 @@ public class KSHelper
 		return false;
 	}
 	
+	//Entferne Deliverys, welche über 30 Tage zurückliegen
+	public void pruneDelivery()
+	{
+		
+	}
+	
+	//Entferne Auktionen, die über 30 Tage alt sind
+	public void pruneAuctions()
+	{
+		
+	}
+	
 	//Setze in Abarbeitsungstabelle
 	public boolean addDelivery(Player p, int money)
 	{

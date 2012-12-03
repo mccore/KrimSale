@@ -14,6 +14,30 @@ public class Commander implements CommandExecutor {
 	
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String args[])
     {
+		//Admin Commands
+		if(command.getName().equals("ks"))
+    	{
+			if(((sender instanceof Player) && sender.hasPermission("ks.admin")) || !(sender instanceof Player))
+			{
+				if(args.length == 0)
+        		{
+					sender.sendMessage("USAGE: /ks PLAYER/ADD/REMOVE");	
+        		} else
+        		{
+        			if(args[0].equalsIgnoreCase("player"))
+        			{
+        				//Liste von allen Transaktionen des Spielers
+        			} else if(args[0].equalsIgnoreCase("add"))
+        			{
+        				//Füge unendliches Angebot ein
+        			} else if(args[0].equalsIgnoreCase("remove"))
+        			{
+        				//Entferne unendliches Angebot
+        			}
+        		}
+			}
+			
+    	} else
 		if(sender instanceof Player)
         {
         	if(command.getName().equals("auction"))
