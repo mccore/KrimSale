@@ -20,7 +20,7 @@ public class configManager {
     public static String SQLPassword = "";
     public static String SQLDatabase = "minecraft";
     public static String SQLTable = "minecraft";
-    public static Integer useMaps = 1;
+    public static Integer useMaps = 0;
     
     private static File confFile;
     
