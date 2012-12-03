@@ -26,6 +26,12 @@ public class Commander implements CommandExecutor {
         			//Min 1 Parameter
         			if(args[0].equalsIgnoreCase("sell"))
         			{
+        				if(!sender.hasPermission("ks.sell"))
+        				{
+        					sender.sendMessage("You're not allowed to sell stuff");
+        					return true;
+        				}
+        				
         				//VERKAUFE
         				if(args.length == 1)
                 		{
@@ -36,6 +42,12 @@ public class Commander implements CommandExecutor {
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
         			{
+        				if(!sender.hasPermission("ks.buy"))
+        				{
+        					sender.sendMessage("You're not allowed to buy stuff");
+        					return true;
+        				}
+        				
         				//KAUFE
         				if(args.length == 1)
                 		{
@@ -46,6 +58,12 @@ public class Commander implements CommandExecutor {
                 		}
         			} else if(args[0].equalsIgnoreCase("list"))
         			{
+        				if(!sender.hasPermission("ks.list"))
+        				{
+        					sender.sendMessage("You're not allowed to list stuff");
+        					return true;
+        				}
+        				
         				//ZEIGE
         				if(args.length == 1)
                 		{

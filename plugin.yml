@@ -9,6 +9,9 @@ permissions:
     ks.sell:
         description: User permissions for sell
         default: op
+    ks.list:
+        description: User permissions for list
+        default: op
     ks.admin:
         description: User permissions for admin
         default: op
