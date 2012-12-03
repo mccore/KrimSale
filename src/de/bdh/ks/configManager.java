@@ -20,6 +20,7 @@ public class configManager {
     public static String SQLPassword = "";
     public static String SQLDatabase = "minecraft";
     public static String SQLTable = "minecraft";
+    public static Integer useMaps = 1;
     
     private static File confFile;
     
@@ -50,6 +51,7 @@ public class configManager {
         SQLPort = conf.getString("System.Database.Settings.MySQL.Port", SQLPort);
         SQLUsername = conf.getString("System.Database.Settings.MySQL.Username", SQLUsername);
         SQLPassword = conf.getString("System.Database.Settings.MySQL.Password", SQLPassword);
+        useMaps = conf.getInt("System.useMaps", useMaps);
         
         try {
         	if (!confFile.exists())
@@ -89,6 +91,7 @@ public class configManager {
             conf.set("System.Database.Settings.MySQL.Port", SQLPort);
             conf.set("System.Database.Settings.MySQL.Username", SQLUsername);
             conf.set("System.Database.Settings.MySQL.Password", SQLPassword);
+            conf.set("System.useMaps",useMaps);
             
             try {
                 confFile.createNewFile();

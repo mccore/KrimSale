@@ -14,6 +14,6 @@ permissions:
         default: op
 depend: [Vault]
 commands:
-    ks:
-         description: KrimSale Listing
-         usage: /ks params
+    auction:
+         description: KrimSale Command
+         usage: /auction params

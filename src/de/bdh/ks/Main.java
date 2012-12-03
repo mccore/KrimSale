@@ -1,17 +1,39 @@
 package de.bdh.ks;
 
+import java.util.HashMap;
+
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
 public class Main  extends JavaPlugin
 {
 	Database Database;
+	public KSListener listener;
+	public static KSHelper helper;
+	public HashMap<Integer,KSMap> maps = new HashMap<Integer,KSMap>();
+	 
  	public Main()
     {
  		
     }
 
+ 	//Für spätere Funktionen
+ 	public KSMap getMap(int id)
+ 	{
+ 		KSMap m;
+ 		if(this.maps.get(id) == null)
+ 		{
+ 			m = new KSMap(this,id);
+ 			this.maps.put(id,m);
+ 		} else
+ 			m = this.maps.get(id);
+ 		
+ 		return m;
+ 	}
+ 	
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
@@ -41,11 +63,18 @@ public class Main  extends JavaPlugin
             return;
     	}
     	
+    	helper = new KSHelper(this);
         pdf = getDescription();
         name = pdf.getName();
         cmdName = (new StringBuilder("[")).append(name).append("] ").toString();
         version = pdf.getVersion();
         author = "Krim";
+        
+        this.listener = new KSListener(this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.listener, this);
+        
+        Commander c = new Commander(this);
+        getCommand("register").setExecutor(c); 
     }
     public static PluginDescriptionFile pdf;
     public static String name;

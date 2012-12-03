@@ -20,7 +20,7 @@ public class Database
         }
         catch(Exception e)
         {
-            System.out.println((new StringBuilder()).append("[KREG] Driver error: ").append(e).toString());
+            System.out.println((new StringBuilder()).append("[KSALE] Driver error: ").append(e).toString());
         }
 	}
 
@@ -34,7 +34,7 @@ public class Database
 	    	}
 	    } catch(SQLException e)
         {
-            System.out.println((new StringBuilder()).append("[KREG] Could not create connection: ").append(e).toString());
+            System.out.println((new StringBuilder()).append("[KSALE] Could not create connection: ").append(e).toString());
         }
     	
     	return this.con;
@@ -53,7 +53,7 @@ public class Database
         }
         catch(SQLException e)
         {
-            System.out.println((new StringBuilder()).append("[KREG] Could not create connection: ").append(e).toString());
+            System.out.println((new StringBuilder()).append("[KSALE] Could not create connection: ").append(e).toString());
         }
         return null;
     }
@@ -76,13 +76,31 @@ public class Database
         ResultSet rs = null;
 
         DatabaseMetaData dbm = conn.getMetaData();
-        rs = dbm.getTables(null, null, (new StringBuilder()).append(configManager.SQLTable).append("_krimreg").toString(), null);
+        rs = dbm.getTables(null, null, (new StringBuilder()).append(configManager.SQLTable).append("_deliver").toString(), null);
         if(!rs.next())
         {
-            System.out.println((new StringBuilder()).append("[KREG] Creating table: ").append(configManager.SQLTable).append("_krimreg").toString());
-            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_krimreg(").append("`id` int(12) NOT NULL AUTO_INCREMENT,").append("`username` varchar(128) NULL DEFAULT  '0',").append("`passwort` varchar(128) NULL DEFAULT  '0',").append("PRIMARY KEY (`id`)").append(")").toString());
+            System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append(configManager.SQLTable).append("_deliver").toString());
+            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_deliver(").append("`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`money` int(11) NOT NULL,`type` int(11) NOT NULL,`amound` int(11) NOT NULL,`player` varchar(50) NOT NULL, PRIMARY KEY (`id`), KEY `player` (`player`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1").toString());
             ps.executeUpdate();
-            System.out.println("[KREG] Table registration Created.");
+            System.out.println("[KSALE] Table deliver Created.");
+        }
+        
+        rs = dbm.getTables(null, null, (new StringBuilder()).append(configManager.SQLTable).append("_offer").toString(), null);
+        if(!rs.next())
+        {
+            System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append(configManager.SQLTable).append("_offer").toString());
+            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_offer(").append("`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`type` int(11) NOT NULL,`amount` int(11) NOT NULL,`price` int(11) NOT NULL,`player` varchar(50) NOT NULL,PRIMARY KEY (`id`),KEY `player` (`player`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1").toString());
+            ps.executeUpdate();
+            System.out.println("[KSALE] Table offer Created.");
+        }
+        
+        rs = dbm.getTables(null, null, (new StringBuilder()).append(configManager.SQLTable).append("_transaction").toString(), null);
+        if(!rs.next())
+        {
+            System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append(configManager.SQLTable).append("_transaction").toString());
+            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_transaction(").append("`type` int(11) unsigned NOT NULL, `fromplayer` int(11) NOT NULL, `toplayer` int(11) NOT NULL, `amount` int(11) NOT NULL, `price` double unsigned NOT NULL,`zeit` int(10) unsigned NOT NULL DEFAULT '0', KEY `fromplayer` (`fromplayer`), KEY `toplayer` (`toplayer`), KEY `id` (`type`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;").toString());
+            ps.executeUpdate();
+            System.out.println("[KSALE] Table transaction Created.");
         }
         
         if(ps != null)
@@ -115,7 +133,7 @@ public class Database
         rs = dbm.getTables(null, null, (new StringBuilder()).append("mutex").toString(), null);
         if(!rs.next())
         {
-            System.out.println((new StringBuilder()).append("[KREG] Creating table: ").append("mutex").toString());
+            System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append("mutex").toString());
             ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE `mutex` (`i` int(11) NOT NULL,PRIMARY KEY (`i`))").toString());
             ps.executeUpdate();
             
@@ -129,7 +147,7 @@ public class Database
             ps = conn.prepareStatement((new StringBuilder()).append("INSERT INTO `mutex` (`i`) VALUES (0),(1)").toString());
             ps.executeUpdate();
             
-            System.out.println("[KREG] Table mutex Created.");
+            System.out.println("[KSALE] Table mutex Created.");
         }
         
         if(ps != null)
