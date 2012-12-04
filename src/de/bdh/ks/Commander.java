@@ -88,7 +88,7 @@ public class Commander implements CommandExecutor {
         	{
         		if(args.length == 0)
         		{
-        			sender.sendMessage("USAGE: /auction SELL/BUY/LIST");
+        			sender.sendMessage("USAGE: /auction SELL/BUY/LIST/COLLECT");
         		} else
         		{
         			//Min 1 Parameter
@@ -156,6 +156,22 @@ public class Commander implements CommandExecutor {
                 			else
                 				sender.sendMessage("ERROR: BlockID '"+args[1]+"' invalid");	
                 		}
+        			} else if(args[0].equalsIgnoreCase("collect"))
+        			{
+        				if(!sender.hasPermission("ks.buy"))
+        				{
+        					sender.sendMessage("You're not allowed to buy stuff");
+        					return true;
+        				} else
+        				{
+        					if(this.enderChestClose(sender))
+        					{
+        						Main.helper.getDeliver((Player)sender);
+        					} else
+        					{
+        						sender.sendMessage("You've to go to the auction house to collect your items");
+        					}
+        				}
         			}
         		}
         	}

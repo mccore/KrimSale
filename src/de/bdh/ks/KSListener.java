@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -43,10 +44,17 @@ public class KSListener implements Listener
 		
 		if(event.getClickedBlock() != null)
 		{
-			if(event.getClickedBlock().getType() == Material.ENDER_CHEST && event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() != Material.AIR)
+			if(event.getClickedBlock().getType() == Material.ENDER_CHEST)
 			{
-				//Zeige Infos über den Block
-				Main.helper.sendInfos(event.getPlayer(), event.getPlayer().getItemInHand().getTypeId());
+				if(event.getAction() == Action.LEFT_CLICK_BLOCK && event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() != Material.AIR)
+				{
+					//Zeige Infos über den Block
+					Main.helper.sendInfos(event.getPlayer(), event.getPlayer().getItemInHand().getTypeId());
+					
+				}
+				else if(event.getAction() == Action.RIGHT_CLICK_BLOCK)
+					Main.helper.getDeliver(event.getPlayer());
+				
 				event.setCancelled(true);
 			}
 		}

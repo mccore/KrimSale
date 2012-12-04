@@ -15,10 +15,13 @@ public class KSHelper
 		this.m = main;
 	}
 	
-	public void getDeliver(Player p)
+	public int getDeliver(Player p)
 	{
 		//Bearbeite die Delivery Tabelle ab
 		//Und gib dem Spieler Geld/Items
+		//returns menge an Deliveries. Prüfen ob Inventar voll ist ausserdem noch sinnvoll bevor das item rausgedrückt wird
+		
+		return 0;
 	}
 	
 	public Map<Integer,Integer> getPrices(int material)
@@ -63,14 +66,14 @@ public class KSHelper
 		
 	}
 	
-	//Setze in Abarbeitsungstabelle
+	//Setze in Abarbeitsungstabelle - nur Geld
 	public boolean addDelivery(Player p, int money)
 	{
 		return false;
 	}
 	
-	//Setze in Abarbeitungstabelle
-	public boolean addDelivery(Player p, int typeid, int amount)
+	//Setze in Abarbeitungstabelle - Items inkl negativem Geld (0 wenn direkt bezahlt worden, da ingame command - daher money nur nutzen, wenn spieler offline)
+	public boolean addDelivery(Player p, int typeid, int amount, int money)
 	{
 		return false;
 	}
