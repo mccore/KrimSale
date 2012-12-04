@@ -164,12 +164,21 @@ public class Commander implements CommandExecutor {
         					return true;
         				} else
         				{
-        					if(this.enderChestClose(sender))
+        					int am = Main.helper.hasDelivery((Player)sender);
+        					if(am == 0)
+        						sender.sendMessage("There is nothing for delivery");
+        					else
+        						sender.sendMessage("You've '"+am+"' items waiting for delivery");
+        					
+        					if(am > 0)
         					{
-        						Main.helper.getDeliver((Player)sender);
-        					} else
-        					{
-        						sender.sendMessage("You've to go to the auction house to collect your items");
+	        					if(this.enderChestClose(sender))
+	        					{
+	        						Main.helper.getDelivery((Player)sender);
+	        					} else
+	        					{
+	        						sender.sendMessage("You've to go to the auction house to collect your items");
+	        					}
         					}
         				}
         			}

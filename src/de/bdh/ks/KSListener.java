@@ -33,7 +33,7 @@ public class KSListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event)
     {
-		Main.helper.getDeliver(event.getPlayer());
+		Main.helper.hasDelivery(event.getPlayer());
     }
 	
 	@EventHandler
@@ -53,7 +53,7 @@ public class KSListener implements Listener
 					
 				}
 				else if(event.getAction() == Action.RIGHT_CLICK_BLOCK)
-					Main.helper.getDeliver(event.getPlayer());
+					Main.helper.getDelivery(event.getPlayer());
 				
 				event.setCancelled(true);
 			}
