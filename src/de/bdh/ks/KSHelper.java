@@ -21,6 +21,7 @@ public class KSHelper
 		//Und gib dem Spieler Geld/Items
 		//returns menge an Deliveries übrig. Prüfen ob Inventar voll ist ausserdem noch sinnvoll bevor das item rausgedrückt wird
 		
+		//wenn money kleiner 0 => nicht durchführen
 		return 0;
 	}
 	
@@ -75,12 +76,15 @@ public class KSHelper
 	//Setze in Abarbeitsungstabelle - nur Geld
 	public boolean addDelivery(Player p, int money)
 	{
+		if(money < 1)
+			return false;
+		
 		this.pokeDelivery(p);
 		return false;
 	}
 	
-	//Setze in Abarbeitungstabelle - Items inkl negativem Geld (0 wenn direkt bezahlt worden, da ingame command - daher money nur nutzen, wenn spieler offline)
-	public boolean addDelivery(Player p, int typeid, int amount, int money)
+	//Setze in Abarbeitungstabelle - Items
+	public boolean addDelivery(Player p, int typeid, int amount)
 	{
 		this.pokeDelivery(p);
 		return false;

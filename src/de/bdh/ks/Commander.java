@@ -68,12 +68,15 @@ public class Commander implements CommandExecutor {
         			if(args[0].equalsIgnoreCase("player"))
         			{
         				//Liste von allen Transaktionen des Spielers
+        				//TODO
         			} else if(args[0].equalsIgnoreCase("add"))
         			{
         				//Füge unendliches Angebot ein (admin flag + amount = 10000)
+        				//TODO
         			} else if(args[0].equalsIgnoreCase("remove"))
         			{
         				//Entferne unendliches Angebot
+        				//TODO
         			}
         		}
 			} else
@@ -109,9 +112,11 @@ public class Commander implements CommandExecutor {
                 			if(args.length == 3)
                 			{
                 				//Block == IteminHand
+                				//TODO
                 			} else if(args.length == 4)
                 			{
                 				//Normale Usage
+                				//TODO
                 			}
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
@@ -131,9 +136,11 @@ public class Commander implements CommandExecutor {
                 			if(args.length == 3)
                 			{
                 				//Block == IteminHand
+                				//TODO
                 			} else if(args.length == 4)
                 			{
                 				//Normale Usage
+                				//TODO
                 			}
                 		}
         			} else if(args[0].equalsIgnoreCase("list"))
