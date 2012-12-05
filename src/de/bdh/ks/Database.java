@@ -80,7 +80,7 @@ public class Database
         if(!rs.next())
         {
             System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append(configManager.SQLTable).append("_deliver").toString());
-            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_deliver(").append("`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`money` int(11) NOT NULL,`type` int(11) NOT NULL,`amound` int(11) NOT NULL,`player` varchar(50) NOT NULL, PRIMARY KEY (`id`), KEY `player` (`player`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1").toString());
+            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_deliver(").append("`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`money` int(11) NOT NULL,`type` int(11) NOT NULL,`subtype` int(11) NOT NULL,`amount` int(11) NOT NULL,`player` varchar(50) NOT NULL, PRIMARY KEY (`id`), KEY `player` (`player`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1").toString());
             ps.executeUpdate();
             System.out.println("[KSALE] Table deliver Created.");
         }
@@ -89,7 +89,7 @@ public class Database
         if(!rs.next())
         {
             System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append(configManager.SQLTable).append("_offer").toString());
-            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_offer(").append("`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`type` int(11) NOT NULL,`amount` int(11) NOT NULL,`price` int(11) NOT NULL,`player` varchar(50) NOT NULL, `admin` int(1) NOT NULL DEFAULT '0', PRIMARY KEY (`id`),KEY `player` (`player`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1").toString());
+            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_offer(").append("`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`type` int(11) NOT NULL,`amount` int(11) NOT NULL,`subtype` int(11) NOT NULL,`price` int(11) NOT NULL,`player` varchar(50) NOT NULL, `admin` int(1) NOT NULL DEFAULT '0', PRIMARY KEY (`id`),KEY `player` (`player`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1").toString());
             ps.executeUpdate();
             System.out.println("[KSALE] Table offer Created.");
         }
@@ -98,7 +98,7 @@ public class Database
         if(!rs.next())
         {
             System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append(configManager.SQLTable).append("_transaction").toString());
-            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_transaction(").append("`type` int(11) unsigned NOT NULL, `fromplayer` int(11) NOT NULL, `toplayer` int(11) NOT NULL, `amount` int(11) NOT NULL, `price` double unsigned NOT NULL,`zeit` int(10) unsigned NOT NULL DEFAULT '0', KEY `fromplayer` (`fromplayer`), KEY `toplayer` (`toplayer`), KEY `id` (`type`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;").toString());
+            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_transaction(").append("`type` int(11) unsigned NOT NULL, `subtype` int(11) NOT NULL,`fromplayer` int(11) NOT NULL, `toplayer` int(11) NOT NULL, `amount` int(11) NOT NULL, `price` double unsigned NOT NULL,`zeit` int(10) unsigned NOT NULL DEFAULT '0', KEY `fromplayer` (`fromplayer`), KEY `toplayer` (`toplayer`), KEY `id` (`type`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;").toString());
             ps.executeUpdate();
             System.out.println("[KSALE] Table transaction Created.");
         }

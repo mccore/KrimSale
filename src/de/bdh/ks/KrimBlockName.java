@@ -6,29 +6,29 @@ import java.util.Map;
 
 public class KrimBlockName 
 {
-	public static HashMap<String,Integer> names = new HashMap<String,Integer>();
+	public static HashMap<String,String> names = new HashMap<String,String>();
 	
 	public KrimBlockName()
 	{
 		//INIT VALUES
-		names.put("air", 0);
-		names.put("stone", 1);
+		names.put("air", "0");
+		names.put("stone", "1");
 	}
 	
-	public static int getIdByName(String name)
+	public static String getIdByName(String name)
 	{
 		name = name.trim().toLowerCase();
 		if(names.get(name) != null)
 			return names.get(name);
 		else
-			return -1;
+			return "-1";
 	}
 	
-	public static String getNameById(int id)
+	public static String getNameById(String id)
 	{
-		for (Map.Entry<String,Integer> entry : names.entrySet())
+		for (Map.Entry<String,String> entry : names.entrySet())
     	{
-			if(entry.getValue() == id)
+			if(entry.getValue().equalsIgnoreCase(id))
 				return entry.getKey();
     	}
 		return ""+id;

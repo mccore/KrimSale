@@ -49,7 +49,7 @@ public class KSListener implements Listener
 				if(event.getAction() == Action.LEFT_CLICK_BLOCK && event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() != Material.AIR)
 				{
 					//Zeige Infos über den Block
-					Main.helper.sendInfos(event.getPlayer(), event.getPlayer().getItemInHand().getTypeId());
+					Main.helper.sendInfos(event.getPlayer(), event.getPlayer().getItemInHand());
 					
 				}
 				else if(event.getAction() == Action.RIGHT_CLICK_BLOCK)

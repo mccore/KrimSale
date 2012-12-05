@@ -31,32 +31,32 @@ public class KSHelper
 		return 0;
 	}
 	
-	public Map<Integer,Integer> getPrices(int material)
+	public Map<Integer,Integer> getPrices(ItemStack i)
 	{
 		//Hole Liste von 
 		return new HashMap<Integer,Integer>();
 	}
 	
 	//Hole Maximale Angebotsmenge für Material
-	public int getMaxAmount(int material)
+	public int getMaxAmount(ItemStack i)
 	{
-		return this.getMaxAmount(material, 999999999);
+		return this.getMaxAmount(i, 999999999);
 	}
 	
 	//Hole maximale Angebotsmenge für Material mit max. Preis
-	public int getMaxAmount(int material, int maxPrice)
+	public int getMaxAmount(ItemStack i, int maxPrice)
 	{
 		return 0;
 	}
 	
 	//Füge Item in das AH ein
-	public boolean enlistItem(int material, int amount)
+	public boolean enlistItem(ItemStack i)
 	{
 		return false;
 	}
 	
 	//Kaufe Item, gibt zurück wieviele er wirklich gekauft hat
-	public int buyItem(int material, int amount, int maxPrice)
+	public int buyItem(ItemStack i, int maxPrice)
 	{
 		return 0;
 	}
@@ -84,7 +84,7 @@ public class KSHelper
 	}
 	
 	//Setze in Abarbeitungstabelle - Items
-	public boolean addDelivery(Player p, int typeid, int amount)
+	public boolean addDelivery(Player p, ItemStack i)
 	{
 		this.pokeDelivery(p);
 		return false;
@@ -105,10 +105,10 @@ public class KSHelper
 	}
 	
 	//Nimm Items vom Spieler
-	public int takeItemsFromPlayer(Player p, int typeid, int amount)
+	public int takeItemsFromPlayer(Player p, ItemStack i, int amount)
 	{
 		int taken = 0;
-		HashMap<Integer, ? extends ItemStack> stacks = p.getInventory().all(typeid);
+		HashMap<Integer, ? extends ItemStack> stacks = p.getInventory().all(i.getTypeId());
 		for (Entry<Integer, ? extends ItemStack> en : stacks.entrySet())
 		{
 			ItemStack stack = en.getValue();
@@ -138,7 +138,7 @@ public class KSHelper
 	}
 	
 	//Sende die Infos über das Item wie zb aktueller Preis usw
-	public void sendInfos(Player p, int itemid)
+	public void sendInfos(Player p, ItemStack i)
 	{
 		
 	}

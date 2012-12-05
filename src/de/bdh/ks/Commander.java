@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class Commander implements CommandExecutor {
 	
@@ -40,15 +41,47 @@ public class Commander implements CommandExecutor {
 		return false;
 	}
 	
-	public int parseName(String nam)
+	public ItemStack parseName(String nam)
 	{
-		int i = 0;
+		ItemStack i = new ItemStack(Material.AIR);
+		int n = 0;
 		try
 		{
-			i = Integer.parseInt(nam);
-		} catch(Exception e)
+			n = Integer.parseInt(nam);
+			i.setTypeId(n);
+		} catch(NumberFormatException e)
 		{
-			i = KrimBlockName.getIdByName(nam);
+			
+		}
+		
+		if(n == 0)
+		{
+			try
+			{
+				if(nam.split(":").length > 1)
+				{
+					String[] sp = nam.split(":");
+					//Block mit ID
+					i.setTypeId(Integer.parseInt(sp[0]));
+					i.setDurability((short) Integer.parseInt(sp[1]));
+				} else
+				{
+					nam = KrimBlockName.getIdByName(nam);
+					if(nam.split(":").length > 1)
+					{
+						String[] sp = nam.split(":");
+						//Block mit ID
+						i.setTypeId(Integer.parseInt(sp[0]));
+						i.setDurability((short) Integer.parseInt(sp[1]));
+					} else
+					{
+						i.setTypeId(Integer.parseInt(nam));
+					}
+				}
+			} catch(Exception e)
+			{
+				return null;
+			}
 		}
 		return i;
 	}
@@ -157,9 +190,9 @@ public class Commander implements CommandExecutor {
         					sender.sendMessage("USAGE: /auction list BLOCK");
                 		} else
                 		{
-                			int id = this.parseName(args[1]);
-                			if(id != -1)
-                				Main.helper.sendInfos((Player)sender, id);
+                			ItemStack i = this.parseName(args[1]);
+                			if(i != null)
+                				Main.helper.sendInfos((Player)sender, i);
                 			else
                 				sender.sendMessage("ERROR: BlockID '"+args[1]+"' invalid");	
                 		}
