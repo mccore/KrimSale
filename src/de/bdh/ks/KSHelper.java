@@ -620,16 +620,19 @@ public class KSHelper
 				{
 					if(canbeSold(stack))
 					{
-						if(stack.getAmount() <= amount)
+						if(amount > 0)
 						{
-							taken += stack.getAmount();
-							amount -= stack.getAmount();
-							p.getInventory().remove(stack);
-						} else
-						{
-							stack.setAmount(stack.getAmount() - amount);
-							taken += amount;
-							amount = 0;
+							if(stack.getAmount() <= amount)
+							{
+								taken += stack.getAmount();
+								amount -= stack.getAmount();
+								p.getInventory().removeItem(stack);
+							} else
+							{
+								stack.setAmount(stack.getAmount() - amount);
+								taken += amount;
+								amount = 0;
+							}
 						}
 					}
 				}
