@@ -697,17 +697,51 @@ public class KSHelper
 		
 	}
 	
-	//Entferne Deliverys, welche über 30 Tage zurückliegen
+	//Entferne Deliverys, welche über 60 Tage zurückliegen
 	public void pruneDelivery()
 	{
-		//zeit < DATE_ADD(CURDATE(), INTERVAL -30 DAY);
-		//TODO
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_deliver WHERE zeit < DATE_ADD(CURDATE(), INTERVAL -60 DAY)");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.executeUpdate();
+
+    		if(ps != null)
+				ps.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to prune delivery: ").append(e).toString());
+		}
 	}
 	
 	//Entferne Auktionen, die über 30 Tage alt sind
 	public void pruneAuctions()
 	{
-		//TODO
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT id FROM ").append(configManager.SQLTable).append("_offer WHERE zeit < DATE_ADD(CURDATE(), INTERVAL -30 DAY)");
+    		ps = conn.prepareStatement(b.toString());
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next())
+    		{
+    			System.out.println((new StringBuilder()).append("[KS] Prune Auction ID: ").append(rs.getInt("id")).toString());
+    			this.removeAuction(rs.getInt("id"));
+    		}
+
+    		if(ps != null)
+				ps.close();
+    		if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to prune auctions: ").append(e).toString());
+		}
 	}
 	
 	//Setze in Abarbeitsungstabelle - nur Geld
