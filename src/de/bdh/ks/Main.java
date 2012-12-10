@@ -14,7 +14,7 @@ public class Main  extends JavaPlugin
 	static Database Database;
 	public KSListener listener;
 	public static KSHelper helper;
-	public Economy econ;	 
+	public static Economy econ;	 
  	public Main()
     {
  		new KrimBlockName(); //INIT BlockNameLister

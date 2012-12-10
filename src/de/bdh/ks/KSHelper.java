@@ -61,6 +61,18 @@ public class KSHelper
 		return new HashMap<Integer,KSOffer>();
 	}
 	
+	public void giveBack(KSOffer of)
+	{
+		try
+		{
+    		Player plx = Bukkit.getServer().getPlayerExact(of.ply);
+    		plx.getInventory().addItem(of.getItemStack());
+		} catch(Exception e)
+		{	
+		}
+	
+	}
+	
 	public Map<Integer,KSOffer> getPrices(ItemStack i, int rows)
 	{
 		if(canbeSold(i) == false)
@@ -327,7 +339,7 @@ public class KSHelper
 			{
 				for(Map.Entry<Integer,KSOffer> m : this.getPrices(i, 5).entrySet())
 				{
-					p.sendMessage("Offer: "+m.getValue().amount+" for "+m.getKey()+" "+this.m.econ.currencyNamePlural()+" each");
+					p.sendMessage("Offer: "+m.getValue().amount+" for "+m.getKey()+" "+Main.econ.currencyNamePlural()+" each");
 				}
 			}
 		}

@@ -31,6 +31,23 @@ public class KSOffer
 		this.to = to;
 	}
 	
+	public int getFee()
+	{
+		return new Double(this.getFullPrice()*1.0 / 100 * configManager.fee).intValue();
+	}
+	
+	public boolean payFee()
+	{
+		if(configManager.fee > 0)
+		{
+			int fee = this.getFee();
+			return Main.econ.withdrawPlayer(this.ply, fee).transactionSuccess();
+		}
+		else
+			return true;
+
+	}
+	
 	public boolean isDone()
 	{
 		if(this.time == 0) return false; else return true;
@@ -42,6 +59,7 @@ public class KSOffer
 		this.i = i.clone();
 		this.price = priceEach;
 	}
+	
 	public int getAmount()
 	{
 		if(this.amount == 0)

@@ -181,10 +181,20 @@ public class Commander implements CommandExecutor {
                 				ItemStack i = ((Player) sender).getItemInHand();
                 				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
                 				KSOffer of = new KSOffer(i,sender.getName(),price,am);
-                				if(Main.helper.enlistItem(of) == true)
-                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+plugin.econ.currencyNamePlural());
-                				else
-                					sender.sendMessage("Something went wrong");
+                				if(of.payFee() == false)
+                				{
+                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
+                					Main.helper.giveBack(of);	
+                				} else
+                				{
+	                				if(Main.helper.enlistItem(of) == true)
+	                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
+	                				else
+	                				{
+	                					Main.helper.giveBack(of);
+	                					sender.sendMessage("Something went wrong");
+	                				}
+                				}
                 			} else if(args.length > 2)
                 			{
                 				int maxAm = 0;
@@ -221,10 +231,20 @@ public class Commander implements CommandExecutor {
                 				
                 				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, maxAm);
                 				KSOffer of = new KSOffer(i,sender.getName(),price,am);
-                				if(Main.helper.enlistItem(of) == true)
-                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+plugin.econ.currencyNamePlural());
-                				else
-                					sender.sendMessage("Something went wrong");
+                				if(of.payFee() == false)
+                				{
+                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
+                					Main.helper.giveBack(of);	
+                				} else
+                				{
+	                				if(Main.helper.enlistItem(of) == true)
+	                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
+	                				else
+	                				{
+	                					Main.helper.giveBack(of);
+	                					sender.sendMessage("Something went wrong");
+	                				}
+                				}
                 			}
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
