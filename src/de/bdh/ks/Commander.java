@@ -263,13 +263,77 @@ public class Commander implements CommandExecutor {
                 		{
                 			if(args.length == 3)
                 			{
+                				int price, amount;
+                				try
+                				{
+                					amount = Integer.parseInt(args[2]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Amount must be Numeric");
+                					return true;
+                				}
+                				try
+                				{
+                					price = Integer.parseInt(args[3]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Price must be Numeric");
+                					return true;
+                				}
+                				
                 				//Block == IteminHand
-                				//TODO
+                				ItemStack i = ((Player) sender).getItemInHand().clone();
+                				i.setAmount(amount);
+                				int bought = Main.helper.buyItems(i, price, sender.getName());
+                				if(bought == amount)
+                				{
+                					sender.sendMessage("You've bought the amount you wanted");
+                				} else
+                				{
+                					sender.sendMessage("You've only bought "+bought+"/"+amount);
+                				}
                 			} else if(args.length == 4)
                 			{
                 				//Normale Usage
-                				//TODO
-                			}
+                				int price, amount;
+                				try
+                				{
+                					amount = Integer.parseInt(args[3]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Amount must be Numeric");
+                					return true;
+                				}
+                				try
+                				{
+                					price = Integer.parseInt(args[4]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Price must be Numeric");
+                					return true;
+                				}
+                				
+                				//Block == IteminHand
+                				ItemStack i = this.parseName(args[4]);
+                				if(i == null)
+                				{
+                					sender.sendMessage("Item '"+args[2]+"' not found");
+                					return true;
+                				}
+                				i.setAmount(amount);
+                				int bought = Main.helper.buyItems(i, price, sender.getName());
+                				if(bought == amount)
+                				{
+                					sender.sendMessage("You've bought the amount you wanted");
+                				} else
+                				{
+                					sender.sendMessage("You've only bought "+bought+"/"+amount);
+                				}
+                			} 
                 		}
         			} else if(args[0].equalsIgnoreCase("list"))
         			{
