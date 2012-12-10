@@ -227,14 +227,128 @@ public class KSHelper
 		}
 		
 		return true;
+	}
+	
+	public int buyItem(int id, int amount, String p)
+	{
 		
+		try
+		{
+			int ret = 0;
+			KSOffer ks = null;
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps,ps2;
+        	
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,price,type,subtype,player,admin FROM").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, id);
+    		
+    		boolean found = false;
+    		ResultSet rs = ps.executeQuery();
+			
+    		while(rs.next())
+    		{
+    			found = true;
+    			ItemStack i = null;
+    			i = new ItemStack(rs.getInt("type"));
+    			i.setDurability((short) rs.getInt("subtype"));
+    			
+    			
+    			if(rs.getInt("amount") > amount)
+    			{
+    				ret = amount;
+    				//Update angebot
+    				b = (new StringBuilder()).append("UPDATE").append(configManager.SQLTable).append("_offer SET amount = ? WHERE id = ? LIMIT 1");
+    				ps2 = conn.prepareStatement(b.toString());
+    				ps2.setInt(1, (rs.getInt("amount") - amount));
+    				ps2.setInt(2,id);
+    				ps2.executeUpdate();
+
+    			} else
+    			{
+    				ret = rs.getInt("amount");
+    				//Entferne angebot
+    				b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 1");
+    				ps2 = conn.prepareStatement(b.toString());
+    				ps2.setInt(1,id);
+    				ps2.executeUpdate();
+    			}
+
+    			ks = new KSOffer(i,rs.getString("player"),rs.getInt("price"),ret);
+    			break;
+    		}
+
+    		
+    		if(found == true && ks != null)
+    		{
+				b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_transaction (type,subtype,fromplayer,toplayer,amount,price,zeit) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP())");
+				ps2 = conn.prepareStatement(b.toString());
+				ps2.setInt(1,ks.getItemStack().getTypeId());
+				ps2.setInt(2,ks.getItemStack().getDurability());
+				ps2.setString(3, ks.getPlayer());
+				ps2.setString(4,p);
+				ps2.setInt(5,ks.getAmount());
+				ps2.setInt(6,ks.getFullPrice());
+				ps2.executeUpdate();
+				this.addDelivery(p, ks.getItemStack());
+    		}
+    		if(ps != null)
+				ps.close();
+    		if(rs != null)
+				rs.close();
+    		
+    		if(!found)
+    			return -1;
+    		
+    		return ret;
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to buy IDItem: ").append(e).toString());
+			return -1;
+		}
 	}
 	
 	//Kaufe Item, gibt zurück wieviele er wirklich gekauft hat
-	public int buyItem(ItemStack i, int maxPrice)
+	public int buyItems(ItemStack i, int maxPrice, String p)
 	{
-		//TODO
-		return 0;
+		try
+		{
+			int amount = i.getAmount();
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC LIMIT 0,50");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, i.getTypeId());
+    		ps.setInt(2, i.getDurability());
+    		ps.setInt(3, maxPrice);
+    		
+    		ResultSet rs = ps.executeQuery();
+			int tmp = 0;
+    		while(rs.next())
+    		{
+    			if(amount > 0)
+    			{
+    				tmp = this.buyItem(rs.getInt("id"),amount,p);
+    				if(tmp != -1)
+    					amount -= tmp;
+    			} else break;
+    		}
+
+    		if(ps != null)
+				ps.close();
+    		if(rs != null)
+				rs.close();
+    		
+    		return amount;
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to buy Items: ").append(e).toString());
+			return -1;
+		}
+		
+		
 	}
 	
 	//Entferne Deliverys, welche über 30 Tage zurückliegen
