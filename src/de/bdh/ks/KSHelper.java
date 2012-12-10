@@ -163,6 +163,58 @@ public class KSHelper
 		return ret;
 	}
 	
+	public boolean removeAuction(int id)
+	{
+		return this.removeAuction(id,null);
+	}
+	
+	public boolean removeAuction(int id,Player p)
+	{
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps,ps2=null;
+        	boolean ret = false;
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,type,subtype,player FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
+        	ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, id);
+    		ResultSet rs = ps.executeQuery();
+			
+    		while(rs.next())
+    		{
+    			if(p == null || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
+    			{
+    				ret = true;
+	    			System.out.println((new StringBuilder()).append("[KS] abort auction with id: ").append(id).toString());
+	    			ItemStack i = new ItemStack(rs.getInt("type"));
+	    			if(rs.getInt("subtype") != 0)
+	    				i.setDurability((short) rs.getInt("subtype"));
+	    			i.setAmount(rs.getInt("amount"));
+	    			
+	    			this.addDelivery(rs.getString("player"), i);
+	    			b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 1");
+	            	ps2 = conn.prepareStatement(b.toString());
+	            	ps2.setInt(1, id);
+	            	ps2.executeUpdate();
+    			} 
+            	
+    		}
+    		
+    		if(ps2 != null)
+				ps2.close();
+        	if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+			
+			return ret;
+		} catch(SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to remove auction: ").append(e).toString());
+		}
+		return false;
+	}
+	
 	//Hat er was im AH?
 	public int hasDelivery(Player p)
 	{

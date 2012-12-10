@@ -141,7 +141,28 @@ public class Commander implements CommandExecutor {
         			//Min 1 Parameter
         			if(args[0].equalsIgnoreCase("abort"))
         			{
-        				//TODO - abbruch der laufenden Auktion
+        				if(args.length < 2)
+                		{
+        					sender.sendMessage("USAGE: /auction abort ID - you can get the id by using list");
+                		} else
+                		{
+                			int id = 0;
+                			try
+            				{
+            					id = Integer.parseInt(args[1]);
+            				}
+            				catch(Exception e) 
+            				{ 
+            					sender.sendMessage("ID must be numeric");
+            					return true;
+            				}
+                			if(Main.helper.removeAuction(id,(Player)sender))
+                			{
+                				sender.sendMessage("Your auction has been cancelled. You can pick it up at the auction house");
+                			} else 
+                				sender.sendMessage("This ID was invalid or you dont have the permissions to do that");
+
+                		}
         			}
         			else if(args[0].equalsIgnoreCase("list"))
         			{
