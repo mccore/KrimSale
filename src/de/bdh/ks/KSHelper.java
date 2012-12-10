@@ -28,6 +28,7 @@ public class KSHelper
 		//returns menge an Deliveries übrig. Prüfen ob Inventar voll ist ausserdem noch sinnvoll bevor das item rausgedrückt wird
 		
 		//wenn money kleiner 0 => nicht durchführen
+		//TODO
 		return 0;
 	}
 	
@@ -133,7 +134,7 @@ public class KSHelper
         	PreparedStatement ps;
         	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as am FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ?");
     		if(maxPrice != -1)
-    			b.append(" AND price < ? ");
+    			b.append(" AND price <= ? ");
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
     		ps.setInt(1, i.getTypeId());

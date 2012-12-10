@@ -238,7 +238,7 @@ public class Commander implements CommandExecutor {
         				//KAUFE
         				if(args.length < 3)
                 		{
-        					sender.sendMessage("USAGE: /auction BUY BLOCK AMOUNT MAXPRICE");
+        					sender.sendMessage("USAGE: /auction BUY (BLOCK) AMOUNT MAXPRICE");
                 		} else
                 		{
                 			if(args.length == 3)
