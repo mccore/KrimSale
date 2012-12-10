@@ -5,25 +5,43 @@ import org.bukkit.inventory.ItemStack;
 public class KBOffer 
 {
 	ItemStack i;
-	String ply;
+	String ply,to;
 	int amount = 0;
 	int price = 0;
+	int time = 0;
 	public KBOffer(ItemStack i,String ply, int priceEach)
 	{
-		this.ply = ply;
-		this.i = i.clone();
-		this.price = priceEach;
+		this.reg(i, ply, priceEach);
 	}
 	
 	public KBOffer(ItemStack i,String ply,int priceEach, int am)
 	{
-		this.ply = ply;
-		this.i = i.clone();
+		this.reg(i, ply, priceEach);
 		this.amount = am;
 		this.i.setAmount(am);
-		this.price = priceEach;
 	}
 	
+	//Vergangenheitseintrag
+	public KBOffer(ItemStack i,String ply, String to, int priceEach, int am, int time)
+	{
+		this.reg(i, ply, priceEach);
+		this.amount = am;
+		this.i.setAmount(am);
+		this.time = time;
+		this.to = to;
+	}
+	
+	public boolean isDone()
+	{
+		if(this.time == 0) return false; else return true;
+	}
+	
+	public void reg(ItemStack i,String ply, int priceEach)
+	{
+		this.ply = ply;
+		this.i = i.clone();
+		this.price = priceEach;
+	}
 	public int getAmount()
 	{
 		if(this.amount == 0)

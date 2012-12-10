@@ -100,7 +100,7 @@ public class Commander implements CommandExecutor {
         		{
         			if(args[0].equalsIgnoreCase("player"))
         			{
-        				//Liste von allen Transaktionen des Spielers
+        				//Liste von allen Transaktionen des Spielers oder alle Verkäufe
         				//TODO
         			} else if(args[0].equalsIgnoreCase("addoffer"))
         			{

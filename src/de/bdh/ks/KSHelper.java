@@ -39,6 +39,28 @@ public class KSHelper
 		return 0;
 	}
 	
+	public Map<Integer,KBOffer> getOffersFromPlayer(Player p)
+	{
+		return this.getOffersFromPlayer(p, null);
+	}
+	
+	public Map<Integer,KBOffer> getOffersFromPlayer(Player p, ItemStack i)
+	{
+		//TODO - gebe alle Angebote eines Spielers aus
+		return new HashMap<Integer,KBOffer>();
+	}
+	
+	public Map<Integer,KBOffer> getTransactionsFromPlayer(Player p)
+	{
+		return this.getTransactionsFromPlayer(p,null);
+	}
+	
+	public Map<Integer,KBOffer> getTransactionsFromPlayer(Player p, ItemStack i)
+	{
+		//TODO - gebe alle Transaktionen eines Spielers aus
+		return new HashMap<Integer,KBOffer>();
+	}
+	
 	public Map<Integer,KBOffer> getPrices(ItemStack i, int rows)
 	{
 		if(canbeSold(i) == false)
