@@ -194,13 +194,25 @@ public class KSHelper
 		return 0;
 	}
 	
-	public Map<Integer,KSOffer> getOffersFromPlayer(Player p)
+	public int getOfferAmountFromPlayer(Player p)
 	{
-		return this.getOffersFromPlayer(p, null);
+		return this.getOfferAmountFromPlayer(p,null);
 	}
 	
-	public Map<Integer,KSOffer> getOffersFromPlayer(Player p, ItemStack i)
+	public int getOfferAmountFromPlayer(Player p, ItemStack i)
 	{
+		//TODO
+		return 0;
+	}
+	
+	public Map<Integer,KSOffer> getOffersFromPlayer(Player p,int am, int begin)
+	{
+		return this.getOffersFromPlayer(p, null,am,begin);
+	}
+	
+	public Map<Integer,KSOffer> getOffersFromPlayer(Player p, ItemStack i, int am, int begin)
+	{
+		//KSOffer muss ID gesetzt bekommen
 		//TODO - gebe alle Angebote eines Spielers aus
 		return new HashMap<Integer,KSOffer>();
 	}

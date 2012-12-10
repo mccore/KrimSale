@@ -1,5 +1,7 @@
 package de.bdh.ks;
 
+import java.util.Map;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.*;
@@ -143,7 +145,31 @@ public class Commander implements CommandExecutor {
         			}
         			else if(args[0].equalsIgnoreCase("list"))
         			{
-        				//TODO - Liste aller eigenen Auktionen
+        				int page = 1;
+        				try
+        				{
+        					page = Integer.parseInt(args[1]);
+        				}
+        				catch(Exception e) { }
+        				
+        				
+        				int amount = Main.helper.getOfferAmountFromPlayer((Player)sender);
+        				int maxpage = amount / 5;
+        				if(amount == 0)
+        				{
+        					sender.sendMessage("You don't have items for sale");
+        				} else
+        					sender.sendMessage("You've "+amount+" transactions. Page: "+page+" of "+maxpage);
+        				
+        				page = page -1;
+        				page = page * 5;
+        				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer((Player)sender,5,page);
+        				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
+        				{
+        					sender.sendMessage("ID: "+e.getValue().id+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice());
+        				}
+        				
+        				
         			}
         			else if(args[0].equalsIgnoreCase("sell"))
         			{
