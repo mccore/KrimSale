@@ -392,7 +392,7 @@ public class Commander implements CommandExecutor {
                 				}
                 			} 
                 		}
-        			} else if(args[0].equalsIgnoreCase("list"))
+        			} else if(args[0].equalsIgnoreCase("detail"))
         			{
         				if(!sender.hasPermission("ks.list"))
         				{
