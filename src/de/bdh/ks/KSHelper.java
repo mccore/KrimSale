@@ -239,8 +239,8 @@ public class KSHelper
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps,ps2;
         	
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,price,type,subtype,player,admin FROM").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
-    		ps = conn.prepareStatement(b.toString());
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
+        	ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, id);
     		
     		boolean found = false;
@@ -258,7 +258,7 @@ public class KSHelper
     			{
     				ret = amount;
     				//Update angebot
-    				b = (new StringBuilder()).append("UPDATE").append(configManager.SQLTable).append("_offer SET amount = ? WHERE id = ? LIMIT 1");
+    				b = (new StringBuilder()).append("UPDATE ").append(configManager.SQLTable).append("_offer SET amount = ? WHERE id = ? LIMIT 1");
     				ps2 = conn.prepareStatement(b.toString());
     				ps2.setInt(1, (rs.getInt("amount") - amount));
     				ps2.setInt(2,id);
@@ -275,13 +275,12 @@ public class KSHelper
     			}
 
     			ks = new KSOffer(i,rs.getString("player"),rs.getInt("price"),ret);
-    			break;
     		}
 
     		
     		if(found == true && ks != null)
     		{
-				b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_transaction (type,subtype,fromplayer,toplayer,amount,price,zeit) VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP())");
+				b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_transaction (type,subtype,fromplayer,toplayer,amount,price) VALUES (?,?,?,?,?,?)");
 				ps2 = conn.prepareStatement(b.toString());
 				ps2.setInt(1,ks.getItemStack().getTypeId());
 				ps2.setInt(2,ks.getItemStack().getDurability());
@@ -290,7 +289,12 @@ public class KSHelper
 				ps2.setInt(5,ks.getAmount());
 				ps2.setInt(6,ks.getFullPrice());
 				ps2.executeUpdate();
+				
+				//Käufer
 				this.addDelivery(p, ks.getItemStack());
+				
+				//Verkäufer
+				this.addDelivery(ks.ply, ks.getFullPrice());
     		}
     		if(ps != null)
 				ps.close();
@@ -329,10 +333,11 @@ public class KSHelper
     		{
     			if(amount > 0)
     			{
+    				System.out.println("Buying "+rs.getInt("id")+" - "+amount+"/"+rs.getInt("amount") + " by player "+p);
     				tmp = this.buyItem(rs.getInt("id"),amount,p);
     				if(tmp != -1)
     					amount -= tmp;
-    			} else break;
+    			} 
     		}
 
     		if(ps != null)
@@ -340,7 +345,7 @@ public class KSHelper
     		if(rs != null)
 				rs.close();
     		
-    		return amount;
+    		return i.getAmount() - amount;
 
 		} catch (SQLException e)
 		{
@@ -422,17 +427,22 @@ public class KSHelper
 	
 	public boolean canbeSold(ItemStack i)
 	{
-		if(i != null)
+		if(i != null && i.getType() != null)
 		{
 			//Keine benutzten Gegenstände verkaufbar
-			if((i.getType().getMaxDurability() != 0) && i.getType().getMaxDurability() * 0.1f < i.getDurability())
-				return false;
-			
+			if(i.getType().getMaxDurability() != 0)
+			{
+				if(i.getType().getMaxDurability() * 0.1f < i.getDurability())
+					return false;
+			}
 			//Keine Verzauberten Gegenstände verkaufbar
-			if(i.getEnchantments().size() > 0)
+			if(i.getEnchantments() != null && i.getEnchantments().size() > 0)
 				return false;
 			
 			if(i.getType() == Material.AIR)
+				return false;
+			
+			if(i.getAmount() == 0)
 				return false;
 			
 		} else return false;

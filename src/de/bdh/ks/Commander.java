@@ -266,7 +266,7 @@ public class Commander implements CommandExecutor {
                 				int price, amount;
                 				try
                 				{
-                					amount = Integer.parseInt(args[2]);
+                					amount = Integer.parseInt(args[1]);
                 				}
                 				catch(Exception e)
                 				{
@@ -275,7 +275,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				try
                 				{
-                					price = Integer.parseInt(args[3]);
+                					price = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
@@ -300,7 +300,7 @@ public class Commander implements CommandExecutor {
                 				int price, amount;
                 				try
                 				{
-                					amount = Integer.parseInt(args[3]);
+                					amount = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
@@ -309,7 +309,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				try
                 				{
-                					price = Integer.parseInt(args[4]);
+                					price = Integer.parseInt(args[3]);
                 				}
                 				catch(Exception e)
                 				{
@@ -318,10 +318,10 @@ public class Commander implements CommandExecutor {
                 				}
                 				
                 				//Block == IteminHand
-                				ItemStack i = this.parseName(args[4]);
+                				ItemStack i = this.parseName(args[1]);
                 				if(i == null)
                 				{
-                					sender.sendMessage("Item '"+args[2]+"' not found");
+                					sender.sendMessage("Item '"+args[1]+"' not found");
                 					return true;
                 				}
                 				i.setAmount(amount);
