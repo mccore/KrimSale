@@ -246,38 +246,159 @@ public class KSHelper
 		return 0;
 	}
 	
-	public int getOfferAmountFromPlayer(Player p)
+	public int getOfferAmountFromPlayer(String p)
 	{
 		return this.getOfferAmountFromPlayer(p,null);
 	}
 	
-	public int getOfferAmountFromPlayer(Player p, ItemStack i)
+	public int getOfferAmountFromPlayer(String p, ItemStack i)
 	{
-		//TODO
-		return 0;
+		int ret = 0;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_offer WHERE player = ?");
+        	if(i != null)
+        		b.append(" AND type = ? AND subtype = ?");
+        	
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setString(1, p);
+    		if(i != null)
+    		{
+    			ps.setInt(2, i.getTypeId());
+    			ps.setInt(3, i.getDurability());
+    		}
+    		
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			ret = rs.getInt("c");
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get offer amount: ").append(e).toString());
+			ret = -1;
+		}
+		
+		return ret;
 	}
 	
-	public Map<Integer,KSOffer> getOffersFromPlayer(Player p,int am, int begin)
+	public Map<Integer,KSOffer> getOffersFromPlayer(String p,int am, int begin)
 	{
 		return this.getOffersFromPlayer(p, null,am,begin);
 	}
 	
-	public Map<Integer,KSOffer> getOffersFromPlayer(Player p, ItemStack i, int am, int begin)
+	public Map<Integer,KSOffer> getOffersFromPlayer(String p, ItemStack i, int am, int begin)
 	{
-		//KSOffer muss ID gesetzt bekommen
-		//TODO - gebe alle Angebote eines Spielers aus
-		return new HashMap<Integer,KSOffer>();
+		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT id,type,subtype,amount,price FROM ").append(configManager.SQLTable).append("_offer WHERE player = ? ");
+        	if(i != null)
+        		b.append("AND type = ? AND subtype = ? ");
+        	
+        	b.append("LIMIT ").append(begin).append(",").append(am);
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setString(1, p);
+    		if(i != null)
+    		{
+    			ps.setInt(2, i.getTypeId());
+    			ps.setInt(3, i.getDurability());
+    		}
+    		
+    		ResultSet rs = ps.executeQuery();
+    		
+    		KSOffer f;
+    		ItemStack is;
+    		while(rs.next())
+    		{
+    			is = new ItemStack(rs.getInt("type"));
+    			if(rs.getInt("subtype") != 0)
+    				is.setDurability((short) rs.getInt("subtype"));
+    			
+    			f = new KSOffer(is,p,rs.getInt("price"), rs.getInt("amount"));
+    			hm.put(rs.getInt("id"), f);
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get offers from player: ").append(e).toString());
+		}
+		return hm;
 	}
 	
-	public Map<Integer,KSOffer> getTransactionsFromPlayer(Player p)
+	public Map<Integer,KSOffer> getTransactionsByPlayer(String p,boolean from, int am, int begin)
 	{
-		return this.getTransactionsFromPlayer(p,null);
+		return this.getTransactionsByPlayer(p,null,from,am,begin);
 	}
 	
-	public Map<Integer,KSOffer> getTransactionsFromPlayer(Player p, ItemStack i)
+	//Name, Itemlimiter, FROMPLAYER/TOPLAYER, Einträge, Einträge beginnend bei
+	public Map<Integer,KSOffer> getTransactionsByPlayer(String p, ItemStack i, boolean from, int am, int begin)
 	{
-		//TODO - gebe alle Transaktionen eines Spielers aus
-		return new HashMap<Integer,KSOffer>();
+		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT type,subtype,amount,price,fromplayer,toplayer,zeit FROM ").append(configManager.SQLTable).append("_transaction WHERE ");
+        	if(from == true)
+        		b.append("fromplayer = ? ");
+        	else
+        		b.append("toplayer = ? ");
+        	if(i != null)
+        		b.append("AND type = ? AND subtype = ? ");
+        	
+        	b.append("ORDER BY zeit DESC LIMIT ").append(begin).append(",").append(am);
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setString(1, p);
+    		if(i != null)
+    		{
+    			ps.setInt(2, i.getTypeId());
+    			ps.setInt(3, i.getDurability());
+    		}
+    		
+    		ResultSet rs = ps.executeQuery();
+    		
+    		KSOffer f;
+    		ItemStack is;
+    		while(rs.next())
+    		{
+    			is = new ItemStack(rs.getInt("type"));
+    			if(rs.getInt("subtype") != 0)
+    				is.setDurability((short) rs.getInt("subtype"));
+
+    			f = new KSOffer(is,rs.getString("fromplayer"),rs.getString("toplayer"),rs.getInt("price"), rs.getInt("amount"),rs.getInt("zeit"));
+    			hm.put(rs.getInt("id"), f);
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get transactions from player: ").append(e).toString());
+		}
+		return hm;
 	}
 	
 	public void giveBack(KSOffer of)
@@ -579,6 +700,7 @@ public class KSHelper
 	//Entferne Deliverys, welche über 30 Tage zurückliegen
 	public void pruneDelivery()
 	{
+		//zeit < DATE_ADD(CURDATE(), INTERVAL -30 DAY);
 		//TODO
 	}
 	

@@ -174,7 +174,7 @@ public class Commander implements CommandExecutor {
         				catch(Exception e) { }
         				
         				
-        				int amount = Main.helper.getOfferAmountFromPlayer((Player)sender);
+        				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
         				int maxpage = amount / 5;
         				if(amount == 0)
         				{
@@ -184,10 +184,10 @@ public class Commander implements CommandExecutor {
         				
         				page = page -1;
         				page = page * 5;
-        				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer((Player)sender,5,page);
+        				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer(sender.getName(),5,page);
         				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
         				{
-        					sender.sendMessage("ID: "+e.getValue().id+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice());
+        					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice());
         				}
         				
         				

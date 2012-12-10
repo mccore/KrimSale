@@ -9,7 +9,6 @@ public class KSOffer
 	int amount = 0;
 	int price = 0;
 	int time = 0;
-	int id = 0;
 	public KSOffer(ItemStack i,String ply, int priceEach)
 	{
 		this.reg(i, ply, priceEach);
