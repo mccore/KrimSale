@@ -18,6 +18,17 @@ public class KrimBlockName
 		names.put("stone", "1");
 	}
 	
+	
+	public static String searchName(String name)
+	{
+		for (Map.Entry<String,String> entry : names.entrySet())
+    	{
+			if(entry.getKey().contains(name))
+				return entry.getKey();
+    	}
+		return "null";
+	}
+	
 	public static String getIdByName(String name)
 	{
 		name = name.trim().toLowerCase();
