@@ -39,37 +39,37 @@ public class KSHelper
 		return 0;
 	}
 	
-	public Map<Integer,KBOffer> getOffersFromPlayer(Player p)
+	public Map<Integer,KSOffer> getOffersFromPlayer(Player p)
 	{
 		return this.getOffersFromPlayer(p, null);
 	}
 	
-	public Map<Integer,KBOffer> getOffersFromPlayer(Player p, ItemStack i)
+	public Map<Integer,KSOffer> getOffersFromPlayer(Player p, ItemStack i)
 	{
 		//TODO - gebe alle Angebote eines Spielers aus
-		return new HashMap<Integer,KBOffer>();
+		return new HashMap<Integer,KSOffer>();
 	}
 	
-	public Map<Integer,KBOffer> getTransactionsFromPlayer(Player p)
+	public Map<Integer,KSOffer> getTransactionsFromPlayer(Player p)
 	{
 		return this.getTransactionsFromPlayer(p,null);
 	}
 	
-	public Map<Integer,KBOffer> getTransactionsFromPlayer(Player p, ItemStack i)
+	public Map<Integer,KSOffer> getTransactionsFromPlayer(Player p, ItemStack i)
 	{
 		//TODO - gebe alle Transaktionen eines Spielers aus
-		return new HashMap<Integer,KBOffer>();
+		return new HashMap<Integer,KSOffer>();
 	}
 	
-	public Map<Integer,KBOffer> getPrices(ItemStack i, int rows)
+	public Map<Integer,KSOffer> getPrices(ItemStack i, int rows)
 	{
 		if(canbeSold(i) == false)
 			return null;
 		
-		HashMap<Integer,KBOffer> ret = new HashMap<Integer,KBOffer>();
+		HashMap<Integer,KSOffer> ret = new HashMap<Integer,KSOffer>();
 		try
 		{
-			KBOffer k;
+			KSOffer k;
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
         	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as m, price, player FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? GROUP BY price ORDER BY price ASC limit 0,?");
@@ -83,7 +83,7 @@ public class KSHelper
     			
     		while(rs.next())
     		{
-    			k = new KBOffer(i,rs.getString("player"),rs.getInt("price"),rs.getInt("m"));
+    			k = new KSOffer(i,rs.getString("player"),rs.getInt("price"),rs.getInt("m"));
     			ret.put(rs.getInt("price"), k);
     		}
     		
@@ -187,7 +187,7 @@ public class KSHelper
 	}
 	
 	//Füge Item in das AH ein
-	public boolean enlistItem(KBOffer of)
+	public boolean enlistItem(KSOffer of)
 	{
 		if(this.canbeSold(of.getItemStack()) == false)
 			return false;
@@ -325,7 +325,7 @@ public class KSHelper
 			
 			if(am > 0)
 			{
-				for(Map.Entry<Integer,KBOffer> m : this.getPrices(i, 5).entrySet())
+				for(Map.Entry<Integer,KSOffer> m : this.getPrices(i, 5).entrySet())
 				{
 					p.sendMessage("Offer: "+m.getValue().amount+" for "+m.getKey()+" "+this.m.econ.currencyNamePlural()+" each");
 				}

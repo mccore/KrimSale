@@ -2,19 +2,19 @@ package de.bdh.ks;
 
 import org.bukkit.inventory.ItemStack;
 
-public class KBOffer 
+public class KSOffer 
 {
 	ItemStack i;
 	String ply,to;
 	int amount = 0;
 	int price = 0;
 	int time = 0;
-	public KBOffer(ItemStack i,String ply, int priceEach)
+	public KSOffer(ItemStack i,String ply, int priceEach)
 	{
 		this.reg(i, ply, priceEach);
 	}
 	
-	public KBOffer(ItemStack i,String ply,int priceEach, int am)
+	public KSOffer(ItemStack i,String ply,int priceEach, int am)
 	{
 		this.reg(i, ply, priceEach);
 		this.amount = am;
@@ -22,7 +22,7 @@ public class KBOffer
 	}
 	
 	//Vergangenheitseintrag
-	public KBOffer(ItemStack i,String ply, String to, int priceEach, int am, int time)
+	public KSOffer(ItemStack i,String ply, String to, int priceEach, int am, int time)
 	{
 		this.reg(i, ply, priceEach);
 		this.amount = am;

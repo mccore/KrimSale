@@ -180,7 +180,7 @@ public class Commander implements CommandExecutor {
                 				
                 				ItemStack i = ((Player) sender).getItemInHand();
                 				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
-                				KBOffer of = new KBOffer(i,sender.getName(),price,am);
+                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
                 				if(Main.helper.enlistItem(of) == true)
                 					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+plugin.econ.currencyNamePlural());
                 				else
@@ -220,7 +220,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				
                 				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, maxAm);
-                				KBOffer of = new KBOffer(i,sender.getName(),price,am);
+                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
                 				if(Main.helper.enlistItem(of) == true)
                 					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+plugin.econ.currencyNamePlural());
                 				else
