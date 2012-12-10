@@ -171,10 +171,12 @@ public class Commander implements CommandExecutor {
                 				}
                 				
                 				ItemStack i = ((Player) sender).getItemInHand();
-                				int am = Main.helper.takeItemsFromPlayer((Player) sender, i, i.getAmount());
-                				System.out.println(am);
-                				//Block == IteminHand
-                				//TODO
+                				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
+                				KBOffer of = new KBOffer(i,sender.getName(),price,am);
+                				if(Main.helper.enlistItem(of) == true)
+                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+plugin.econ.currencyNamePlural());
+                				else
+                					sender.sendMessage("Something went wrong");
                 			} else if(args.length == 4)
                 			{
                 				int maxAm = 0;
@@ -205,10 +207,12 @@ public class Commander implements CommandExecutor {
                 					return true;
                 				}
                 				
-                				int am = Main.helper.takeItemsFromPlayer((Player) sender, i, maxAm);
-                				System.out.println(am);
-                				//Normale Usage
-                				//TODO
+                				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, maxAm);
+                				KBOffer of = new KBOffer(i,sender.getName(),price,am);
+                				if(Main.helper.enlistItem(of) == true)
+                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+plugin.econ.currencyNamePlural());
+                				else
+                					sender.sendMessage("Something went wrong");
                 			}
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))

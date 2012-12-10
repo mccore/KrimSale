@@ -171,7 +171,7 @@ public class KSHelper
 			
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_offer (type,subtype,amout,price,player) VALUES (?,?,?,?,?)");
+        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_offer (type,subtype,amount,price,player) VALUES (?,?,?,?,?)");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, of.getItemStack().getTypeId());
     		ps.setInt(2,of.getItemStack().getDurability());
@@ -232,7 +232,6 @@ public class KSHelper
 	{
 		if(i != null)
 		{
-			System.out.println(i.getDurability());
 			//Keine benutzten Gegenstände verkaufbar
 			if((i.getType().getMaxDurability() != 0) && i.getType().getMaxDurability() * 0.1f < i.getDurability())
 				return false;
@@ -240,12 +239,17 @@ public class KSHelper
 			//Keine Verzauberten Gegenstände verkaufbar
 			if(i.getEnchantments().size() > 0)
 				return false;
-		}
+			
+			if(i.getType() == Material.AIR)
+				return false;
+			
+		} else return false;
+		
 		return true;
 	}
 	
 	//Nimm Items vom Spieler
-	public int takeItemsFromPlayer(Player p, ItemStack i, int amount)
+	public int removeItemsFromPlayer(Player p, ItemStack i, int amount)
 	{
 		int taken = 0;
 		HashMap<Integer, ? extends ItemStack> stacks = p.getInventory().all(i.getTypeId());
@@ -262,8 +266,7 @@ public class KSHelper
 						{
 							taken += stack.getAmount();
 							amount -= stack.getAmount();
-							stack.setType(Material.AIR);
-							stack.setAmount(0);
+							p.getInventory().remove(stack);
 						} else
 						{
 							stack.setAmount(stack.getAmount() - amount);
