@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 
 public class KSHelper 
@@ -21,21 +22,175 @@ public class KSHelper
 		this.m = main;
 	}
 	
+	public int giveItem(Player p, ItemStack is)
+	{
+		PlayerInventory inv = p.getInventory();
+		int blockType = is.getTypeId();
+		int subType = is.getDurability();
+		int amount = is.getAmount();
+
+		int addedAmount = 0;
+		int stackSize = Material.getMaterial(blockType).getMaxStackSize();
+		int freeslot = -1;
+		while(amount - addedAmount > 0)
+		{
+			freeslot = -1;
+			for (int i =  0; i < 36; i++) 
+	    	{
+				ItemStack tmp = inv.getItem(i);
+	    		if(tmp != null)
+	    		{
+	    			if(tmp.getEnchantments().size() == 0 && tmp.getTypeId() == blockType && tmp.getDurability() == subType && tmp.getAmount() < tmp.getMaxStackSize())
+	    			{
+	    				freeslot = i;
+	    			}
+	    		}
+	    	}	 
+			
+			if (freeslot == -1)
+			{
+				freeslot = inv.firstEmpty();
+				if (freeslot == -1)
+				{
+					break;
+				}
+				else
+				{
+					if (amount - addedAmount >= stackSize)
+					{
+						inv.setItem(freeslot, new ItemStack(blockType, stackSize, (short) subType));
+						addedAmount += stackSize;
+					}
+					else
+					{
+						inv.setItem(freeslot, new ItemStack(blockType, amount - addedAmount, (short) subType));
+						addedAmount += amount - addedAmount;
+					}
+				}
+			}
+			else
+			{
+				ItemStack stack = inv.getItem(freeslot);
+				int diff = Math.min(stackSize - stack.getAmount(), amount - addedAmount);
+				addedAmount += diff;
+				stack.setAmount(stack.getAmount() + diff);
+			}
+		}
+		return addedAmount;
+	}
+	
 	public int getDelivery(Player p)
 	{
-		//Bearbeite die Delivery Tabelle ab
-		//Und gib dem Spieler Geld/Items
-		//returns menge an Deliveries übrig. Prüfen ob Inventar voll ist ausserdem noch sinnvoll bevor das item rausgedrückt wird
-		
-		//wenn money kleiner 0 => nicht durchführen
-		//TODO
-		return 0;
+		int ret = 0;
+		try
+		{
+			ItemStack i = null;
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps,ps2 = null;
+        	StringBuilder b = (new StringBuilder()).append("SELECT id,money,type,subtype,amount FROM ").append(configManager.SQLTable).append("_deliver WHERE player = ?");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setString(1, p.getName());
+    		ResultSet rs = ps.executeQuery();
+    		boolean remove = false;
+    		boolean fisent = false;
+    		while(rs.next())
+    		{
+    			remove = false;
+    			if(rs.getInt("money") > 0)
+    			{
+    				System.out.println("[KS] Delivering to User "+p.getName()+ " Money: "+rs.getInt("money"));
+    				Main.econ.withdrawPlayer(p.getName(), rs.getInt("money"));
+    				++ret;
+    				remove = true;
+    			} else if(rs.getInt("type") > 0 && rs.getInt("amount") > 0)
+    			{
+    				i = new ItemStack(rs.getInt("type"));
+    				if(rs.getInt("subtype") != 0)
+    					i.setDurability((short) rs.getInt("subtype"));
+    				i.setAmount(rs.getInt("amount"));
+    				
+    				int given = this.giveItem(p, i);
+    				if(given == rs.getInt("amount"))
+    				{
+        				System.out.println("[KS] Delivering to User "+p.getName()+ " Item: "+rs.getInt("type")+":"+rs.getInt("subtype")+" Amount: "+rs.getInt("amount"));
+    					remove = true;
+    					++ret;
+    				} else 
+    				{
+    					//Inventar voll - müssen die Delivery anpassen
+        				if(given > 0)
+        				{
+        					//ein Teil wurde gegeben
+            				System.out.println("[KS] Part-Delivering to User "+p.getName()+ " Item: "+rs.getInt("type")+":"+rs.getInt("subtype")+" Amount: "+given+"/"+rs.getInt("amount"));
+            				b = (new StringBuilder()).append("UPDATE ").append(configManager.SQLTable).append("_deliver SET amount = ? WHERE id = ? LIMIT 1");
+            				ps2 = conn.prepareStatement(b.toString());
+            				ps2.setInt(1, rs.getInt("amount") - given);
+            				ps2.setInt(2, rs.getInt("id"));
+            				ps2.executeUpdate();
+        				} 
+        				
+        				if(fisent == false)
+    					{
+    						fisent = true;
+    						p.sendMessage("Your inventory is full");
+    					}
+    				}
+    			} else remove = true;
+    			
+    			if(remove == true)
+    			{
+    				b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_deliver WHERE id = ? LIMIT 1");
+    				ps2 = conn.prepareStatement(b.toString());
+    				ps2.setInt(1, rs.getInt("id"));
+    				ps2.executeUpdate();
+    				
+    			}
+    		}
+    		
+    		if(ps2 != null)
+				ps2.close();
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+			
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get prices: ").append(e).toString());
+		}
+		return ret;
 	}
 	
 	//Hat er was im AH?
 	public int hasDelivery(Player p)
 	{
-		//TODO
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_deliver WHERE player = ?");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setString(1, p.getName());
+    		ResultSet rs = ps.executeQuery();
+    		int am = 0;	
+    		while(rs.next())
+    		{
+    			am = rs.getInt("c");
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+			
+			return am;
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get prices: ").append(e).toString());
+		}
 		return 0;
 	}
 	
@@ -106,7 +261,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to get prices: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to get prices: ").append(e).toString());
 		}
 		
 		return ret;
@@ -149,7 +304,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to get lowest price: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to get lowest price: ").append(e).toString());
 		}
 		
 		return ret;
@@ -192,7 +347,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to get max amount: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to get max amount: ").append(e).toString());
 		}
 		
 		return ret;
@@ -222,7 +377,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to enlist Item: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to enlist Item: ").append(e).toString());
 			return false;
 		}
 		
@@ -237,7 +392,7 @@ public class KSHelper
 			int ret = 0;
 			KSOffer ks = null;
     		Connection conn = Main.Database.getConnection();
-        	PreparedStatement ps,ps2;
+        	PreparedStatement ps,ps2=null;
         	
         	StringBuilder b = (new StringBuilder()).append("SELECT amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
         	ps = conn.prepareStatement(b.toString());
@@ -300,7 +455,8 @@ public class KSHelper
 				ps.close();
     		if(rs != null)
 				rs.close();
-    		
+    		if(ps2 != null)
+				ps2.close();
     		if(!found)
     			return -1;
     		
@@ -308,7 +464,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to buy IDItem: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to buy IDItem: ").append(e).toString());
 			return -1;
 		}
 	}
@@ -333,7 +489,7 @@ public class KSHelper
     		{
     			if(amount > 0)
     			{
-    				System.out.println("Buying "+rs.getInt("id")+" - "+amount+"/"+rs.getInt("amount") + " by player "+p);
+    				System.out.println("[KS] Buying "+rs.getInt("id")+" - "+amount+"/"+rs.getInt("amount") + " by player "+p);
     				tmp = this.buyItem(rs.getInt("id"),amount,p);
     				if(tmp != -1)
     					amount -= tmp;
@@ -349,7 +505,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to buy Items: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to buy Items: ").append(e).toString());
 			return -1;
 		}
 		
@@ -392,7 +548,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to add money delivery: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to add money delivery: ").append(e).toString());
 			return false;
 		}
 	}
@@ -420,7 +576,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KB] unable to add item delivery: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to add item delivery: ").append(e).toString());
 			return false;
 		}
 	}

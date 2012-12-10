@@ -290,7 +290,11 @@ public class Commander implements CommandExecutor {
                 				if(bought == amount)
                 				{
                 					sender.sendMessage("You've bought the amount you wanted");
-                				} else
+                				} else if(bought == 0)
+                				{
+                					sender.sendMessage("There is no offer which fulfills your options");
+                				}
+                				else
                 				{
                 					sender.sendMessage("You've only bought "+bought+"/"+amount);
                 				}
