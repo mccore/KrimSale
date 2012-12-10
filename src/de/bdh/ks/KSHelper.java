@@ -366,20 +366,58 @@ public class KSHelper
 	//Setze in Abarbeitsungstabelle - nur Geld
 	public boolean addDelivery(String p, int money)
 	{
-		//TODO
 		if(money < 1)
 			return false;
 		
-		this.pokeDelivery(p);
-		return false;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_deliver (money,player) VALUES (?,?)");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, money);
+    		ps.setString(2, p);
+    		ps.executeUpdate();
+    		
+    		if(ps != null)
+				ps.close();
+    		
+    		this.pokeDelivery(p);
+    		return true;
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to add money delivery: ").append(e).toString());
+			return false;
+		}
 	}
 	
 	//Setze in Abarbeitungstabelle - Items
 	public boolean addDelivery(String p, ItemStack i)
 	{
-		//TODO
-		this.pokeDelivery(p);
-		return false;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_deliver (type,subtype,amount,player) VALUES (?,?,?,?)");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, i.getTypeId());
+    		ps.setInt(2, i.getDurability());
+    		ps.setInt(3, i.getAmount());
+    		ps.setString(4, p);
+    		ps.executeUpdate();
+    		
+    		if(ps != null)
+				ps.close();
+    		
+    		this.pokeDelivery(p);
+    		return true;
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to add item delivery: ").append(e).toString());
+			return false;
+		}
 	}
 	
 	public boolean canbeSold(ItemStack i)
