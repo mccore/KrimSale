@@ -95,20 +95,29 @@ public class Commander implements CommandExecutor {
 			{
 				if(args.length == 0)
         		{
-					sender.sendMessage("USAGE: /ks PLAYER/ADD/REMOVE");	
+					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY");	
         		} else
         		{
         			if(args[0].equalsIgnoreCase("player"))
         			{
         				//Liste von allen Transaktionen des Spielers
         				//TODO
-        			} else if(args[0].equalsIgnoreCase("add"))
+        			} else if(args[0].equalsIgnoreCase("addoffer"))
         			{
         				//Füge unendliches Angebot ein (admin flag + amount = 10000)
         				//TODO
-        			} else if(args[0].equalsIgnoreCase("remove"))
+        			} else if(args[0].equalsIgnoreCase("removeoffer"))
         			{
         				//Entferne unendliches Angebot
+        				//TODO
+        			} else if(args[0].equalsIgnoreCase("addbuy"))
+        			{
+        				//füge automatisches kaufen ein
+        				//TODO
+        			}
+        			else if(args[0].equalsIgnoreCase("removebuy"))
+        			{
+        				//Entferne automatisches kaufen
         				//TODO
         			}
         		}
@@ -136,18 +145,68 @@ public class Commander implements CommandExecutor {
         					return true;
         				}
         				
+        				if(this.enderChestClose(sender) == false)
+    					{
+        					sender.sendMessage("You've to go to an auction house to sell items");	
+    					}
+        				
         				//VERKAUFE
-        				if(args.length < 3)
+        				if(args.length < 2)
                 		{
-        					sender.sendMessage("USAGE: /auction sell BLOCK AMOUNT PRICEPERBLOCK");
+        					sender.sendMessage("USAGE: /auction sell BLOCK AMOUNT PRICEPERBLOCK OR /auction sell PRICE for Item in Hand");
                 		} else
                 		{
-                			if(args.length == 3)
+                			if(args.length == 2)
                 			{
+                				//KBOffer of;
+                				int price = 0;
+                				try
+                				{
+                					price = Integer.parseInt(args[1]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Price must be Numeric");
+                					return true;
+                				}
+                				
+                				ItemStack i = ((Player) sender).getItemInHand();
+                				int am = Main.helper.takeItemsFromPlayer((Player) sender, i, i.getAmount());
+                				System.out.println(am);
                 				//Block == IteminHand
                 				//TODO
                 			} else if(args.length == 4)
                 			{
+                				int maxAm = 0;
+                				int price = 0;
+                				
+                				try
+                				{
+                					maxAm = Integer.parseInt(args[2]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Amount must be Numeric");
+                					return true;
+                				}
+                				try
+                				{
+                					price = Integer.parseInt(args[3]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Price must be Numeric");
+                					return true;
+                				}
+                				ItemStack i = this.parseName(args[1]);
+                				if(i == null)
+                				{
+                					sender.sendMessage("Block with Name/ID '"+args[1]+"' not found");
+                					return true;
+                				}
+                				
+                				int am = Main.helper.takeItemsFromPlayer((Player) sender, i, maxAm);
+                				System.out.println(am);
                 				//Normale Usage
                 				//TODO
                 			}

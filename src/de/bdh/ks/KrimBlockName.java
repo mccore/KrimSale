@@ -3,6 +3,8 @@ package de.bdh.ks;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.inventory.ItemStack;
+
 
 public class KrimBlockName 
 {
@@ -32,5 +34,14 @@ public class KrimBlockName
 				return entry.getKey();
     	}
 		return ""+id;
+	}
+	
+	public static String getNameByItemStack(ItemStack i)
+	{
+		String str = "";
+		str += i.getTypeId();
+		if(i.getDurability() > 0 && i.getType().getMaxDurability() == 0)
+			str += ":"+i.getDurability();
+		return getNameById(str);
 	}
 }

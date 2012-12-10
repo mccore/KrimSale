@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main  extends JavaPlugin
 {
-	Database Database;
+	static Database Database;
 	public KSListener listener;
 	public static KSHelper helper;
 	public Economy econ;
@@ -92,7 +92,8 @@ public class Main  extends JavaPlugin
         Bukkit.getServer().getPluginManager().registerEvents(this.listener, this);
         
         Commander c = new Commander(this);
-        getCommand("register").setExecutor(c); 
+        getCommand("auction").setExecutor(c); 
+        getCommand("ks").setExecutor(c); 
         Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new KSTimer(this), 1, 20*60);
     }
     

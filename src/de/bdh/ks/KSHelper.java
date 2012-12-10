@@ -1,5 +1,9 @@
 package de.bdh.ks;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -7,6 +11,7 @@ import java.util.Map.Entry;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 
 public class KSHelper 
 {
@@ -31,28 +36,161 @@ public class KSHelper
 		return 0;
 	}
 	
-	public Map<Integer,Integer> getPrices(ItemStack i)
+	public Map<Integer,KBOffer> getPrices(ItemStack i, int rows)
 	{
-		//Hole Liste von 
-		return new HashMap<Integer,Integer>();
+		if(canbeSold(i) == false)
+			return null;
+		
+		HashMap<Integer,KBOffer> ret = new HashMap<Integer,KBOffer>();
+		try
+		{
+			KBOffer k;
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as m, price, player FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? GROUP BY price ORDER BY price ASC limit 0,?");
+
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setInt(1, i.getTypeId());
+    		ps.setInt(2, i.getDurability());
+    		ps.setInt(3, rows);
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			k = new KBOffer(i,rs.getString("player"),rs.getInt("price"),rs.getInt("m"));
+    			ret.put(rs.getInt("price"), k);
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to get prices: ").append(e).toString());
+		}
+		
+		return ret;
+	
 	}
 	
 	//Hole Maximale Angebotsmenge für Material
 	public int getMaxAmount(ItemStack i)
 	{
-		return this.getMaxAmount(i, 999999999);
+		return this.getMaxAmount(i, -1);
+	}
+	
+	public int getLowestPrice(ItemStack i)
+	{
+		if(canbeSold(i) == false)
+			return -1;
+		
+		int ret = 0;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT price as pr FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? ORDER BY price ASC limit 0,1");
+
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setInt(1, i.getTypeId());
+    		ps.setInt(2, i.getDurability());
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			ret = rs.getInt("pr");
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to get lowest price: ").append(e).toString());
+		}
+		
+		return ret;
 	}
 	
 	//Hole maximale Angebotsmenge für Material mit max. Preis
 	public int getMaxAmount(ItemStack i, int maxPrice)
 	{
-		return 0;
+		if(canbeSold(i) == false)
+			return -1;
+		
+		int ret = 0;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as am FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ?");
+    		if(maxPrice != -1)
+    			b.append(" AND price < ? ");
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setInt(1, i.getTypeId());
+    		
+    		ps.setInt(2, i.getDurability());
+    		
+    		if(maxPrice != -1)
+    			ps.setInt(3, maxPrice);
+    		
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			ret = rs.getInt("am");
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to get max amount: ").append(e).toString());
+		}
+		
+		return ret;
 	}
 	
 	//Füge Item in das AH ein
-	public boolean enlistItem(ItemStack i)
+	public boolean enlistItem(KBOffer of)
 	{
-		return false;
+		if(this.canbeSold(of.getItemStack()) == false)
+			return false;
+		try
+		{
+			
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_offer (type,subtype,amout,price,player) VALUES (?,?,?,?,?)");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, of.getItemStack().getTypeId());
+    		ps.setInt(2,of.getItemStack().getDurability());
+    		ps.setInt(3, of.getAmount());
+    		ps.setInt(4, of.getPrice());
+    		ps.setString(5, of.getPlayer());
+    		ps.executeUpdate();
+    		
+    		if(ps != null)
+				ps.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KB] unable to enlist Item: ").append(e).toString());
+			return false;
+		}
+		
+		return true;
+		
 	}
 	
 	//Kaufe Item, gibt zurück wieviele er wirklich gekauft hat
@@ -94,9 +232,11 @@ public class KSHelper
 	{
 		if(i != null)
 		{
+			System.out.println(i.getDurability());
 			//Keine benutzten Gegenstände verkaufbar
-			if((i.getType().getMaxDurability() != -1 || i.getType() == Material.MAP) && i.getType().getMaxDurability() * 0.1f < i.getDurability())
+			if((i.getType().getMaxDurability() != 0) && i.getType().getMaxDurability() * 0.1f < i.getDurability())
 				return false;
+			
 			//Keine Verzauberten Gegenstände verkaufbar
 			if(i.getEnchantments().size() > 0)
 				return false;
@@ -114,19 +254,22 @@ public class KSHelper
 			ItemStack stack = en.getValue();
 			if(stack != null)
 			{
-				if(canbeSold(stack))
+				if(stack.getDurability() == i.getDurability())
 				{
-					if(stack.getAmount() <= amount)
+					if(canbeSold(stack))
 					{
-						taken += stack.getAmount();
-						amount -= stack.getAmount();
-						stack.setType(Material.AIR);
-						stack.setAmount(0);
-					} else
-					{
-						stack.setAmount(stack.getAmount() - amount);
-						taken += amount;
-						amount = 0;
+						if(stack.getAmount() <= amount)
+						{
+							taken += stack.getAmount();
+							amount -= stack.getAmount();
+							stack.setType(Material.AIR);
+							stack.setAmount(0);
+						} else
+						{
+							stack.setAmount(stack.getAmount() - amount);
+							taken += amount;
+							amount = 0;
+						}
 					}
 				}
 			}
@@ -140,7 +283,23 @@ public class KSHelper
 	//Sende die Infos über das Item wie zb aktueller Preis usw
 	public void sendInfos(Player p, ItemStack i)
 	{
-		
+		String name = KrimBlockName.getNameByItemStack(i);
+		p.sendMessage("Details about: "+name);
+		if(this.canbeSold(i) == false)
+			p.sendMessage("Cannot be traded");
+		else
+		{
+			int am = this.getMaxAmount(i);
+			p.sendMessage("Amount for sale: "+am);
+			
+			if(am > 0)
+			{
+				for(Map.Entry<Integer,KBOffer> m : this.getPrices(i, 5).entrySet())
+				{
+					p.sendMessage("Offer: "+m.getValue().amount+" for "+m.getKey()+" "+this.m.econ.currencyNamePlural()+" each");
+				}
+			}
+		}
 	}
 	
 	//Player hat nun etwas im Delivery
