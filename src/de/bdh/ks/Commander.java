@@ -133,11 +133,19 @@ public class Commander implements CommandExecutor {
         	{
         		if(args.length == 0)
         		{
-        			sender.sendMessage("USAGE: /auction SELL/BUY/LIST/COLLECT");
+        			sender.sendMessage("USAGE: /auction SELL/BUY/DETAIL/LIST/COLLECT/ABORT");
         		} else
         		{
         			//Min 1 Parameter
-        			if(args[0].equalsIgnoreCase("sell"))
+        			if(args[0].equalsIgnoreCase("abort"))
+        			{
+        				//TODO - abbruch der laufenden Auktion
+        			}
+        			else if(args[0].equalsIgnoreCase("list"))
+        			{
+        				//TODO - Liste aller eigenen Auktionen
+        			}
+        			else if(args[0].equalsIgnoreCase("sell"))
         			{
         				if(!sender.hasPermission("ks.sell"))
         				{
@@ -254,7 +262,7 @@ public class Commander implements CommandExecutor {
         				//ZEIGE
         				if(args.length < 2)
                 		{
-        					sender.sendMessage("USAGE: /auction list BLOCK");
+        					sender.sendMessage("USAGE: /auction detail BLOCK");
                 		} else
                 		{
                 			ItemStack i = this.parseName(args[1]);

@@ -17,11 +17,8 @@ public class Main  extends JavaPlugin
 	public Economy econ;	 
  	public Main()
     {
- 		//INIT
- 		new KrimBlockName();
+ 		new KrimBlockName(); //INIT BlockNameLister
     }
-
-
  	
  	public void Prune()
  	{
@@ -53,7 +50,7 @@ public class Main  extends JavaPlugin
     		
     	} catch(Exception e)
     	{
-    		System.out.println((new StringBuilder()).append("[KSALE] Database initialization failed: ").append(e).toString());
+    		System.out.println((new StringBuilder()).append("[KSALE] !!! Database initialization failed: ").append(e).toString());
             getServer().getPluginManager().disablePlugin(this);
             return;
     	}
