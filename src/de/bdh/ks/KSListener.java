@@ -17,18 +17,6 @@ public class KSListener implements Listener
 		this.m = main;
 	}
 
-	/* für später reserviert
-	@EventHandler
-	public void onMapLoad(MapInitializeEvent event)
-	{
-		List<MapRenderer> l = event.getMap().getRenderers();
-		for (MapRenderer r: l)
-    	{
-			event.getMap().removeRenderer(r);
-    	}
-		
-		event.getMap().addRenderer(this.m.getMap(event.getMap().getId()));
-	}*/
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event)

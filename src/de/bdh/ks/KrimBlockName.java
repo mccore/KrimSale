@@ -13,6 +13,7 @@ public class KrimBlockName
 	public KrimBlockName()
 	{
 		//INIT VALUES
+		//TODO
 		names.put("air", "0");
 		names.put("stone", "1");
 	}

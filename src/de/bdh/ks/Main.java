@@ -1,7 +1,5 @@
 package de.bdh.ks;
 
-import java.util.HashMap;
-
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
@@ -16,28 +14,14 @@ public class Main  extends JavaPlugin
 	static Database Database;
 	public KSListener listener;
 	public static KSHelper helper;
-	public Economy econ;
-	public HashMap<Integer,KSMap> maps = new HashMap<Integer,KSMap>();
-	 
+	public Economy econ;	 
  	public Main()
     {
  		//INIT
  		new KrimBlockName();
     }
 
- 	//Für spätere Funktionen eingeplant
- 	public KSMap getMap(int id)
- 	{
- 		KSMap m;
- 		if(this.maps.get(id) == null)
- 		{
- 			m = new KSMap(this,id);
- 			this.maps.put(id,m);
- 		} else
- 			m = this.maps.get(id);
- 		
- 		return m;
- 	}
+
  	
  	public void Prune()
  	{

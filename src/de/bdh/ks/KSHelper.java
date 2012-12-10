@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +34,7 @@ public class KSHelper
 	//Hat er was im AH?
 	public int hasDelivery(Player p)
 	{
+		//TODO
 		return 0;
 	}
 	
@@ -196,24 +198,26 @@ public class KSHelper
 	//Kaufe Item, gibt zurück wieviele er wirklich gekauft hat
 	public int buyItem(ItemStack i, int maxPrice)
 	{
+		//TODO
 		return 0;
 	}
 	
 	//Entferne Deliverys, welche über 30 Tage zurückliegen
 	public void pruneDelivery()
 	{
-		
+		//TODO
 	}
 	
 	//Entferne Auktionen, die über 30 Tage alt sind
 	public void pruneAuctions()
 	{
-		
+		//TODO
 	}
 	
 	//Setze in Abarbeitsungstabelle - nur Geld
-	public boolean addDelivery(Player p, int money)
+	public boolean addDelivery(String p, int money)
 	{
+		//TODO
 		if(money < 1)
 			return false;
 		
@@ -222,8 +226,9 @@ public class KSHelper
 	}
 	
 	//Setze in Abarbeitungstabelle - Items
-	public boolean addDelivery(Player p, ItemStack i)
+	public boolean addDelivery(String p, ItemStack i)
 	{
+		//TODO
 		this.pokeDelivery(p);
 		return false;
 	}
@@ -306,8 +311,15 @@ public class KSHelper
 	}
 	
 	//Player hat nun etwas im Delivery
-	public void pokeDelivery(Player p)
+	public void pokeDelivery(String p)
 	{
-		p.sendMessage("You can collect some items in the auction house");
+		try
+		{
+    		Player plx = Bukkit.getServer().getPlayerExact(p);
+    		plx.sendMessage("You can collect some items in the auction house");
+		} catch(Exception e)
+		{
+			
+		}
 	}
 }

@@ -153,7 +153,7 @@ public class Commander implements CommandExecutor {
         				//VERKAUFE
         				if(args.length < 2)
                 		{
-        					sender.sendMessage("USAGE: /auction sell BLOCK AMOUNT PRICEPERBLOCK OR /auction sell PRICE for Item in Hand");
+        					sender.sendMessage("USAGE: /auction sell BLOCK PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE for Item in Hand");
                 		} else
                 		{
                 			if(args.length == 2)
@@ -177,23 +177,27 @@ public class Commander implements CommandExecutor {
                 					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+plugin.econ.currencyNamePlural());
                 				else
                 					sender.sendMessage("Something went wrong");
-                			} else if(args.length == 4)
+                			} else if(args.length > 2)
                 			{
                 				int maxAm = 0;
                 				int price = 0;
                 				
+                				if(args.length == 4)
+                				{
+	                				try
+	                				{
+	                					maxAm = Integer.parseInt(args[3]);
+	                				}
+	                				catch(Exception e)
+	                				{
+	                					sender.sendMessage("Amount must be Numeric");
+	                					return true;
+	                				}
+                				} else maxAm = 999999;
+                				
                 				try
                 				{
-                					maxAm = Integer.parseInt(args[2]);
-                				}
-                				catch(Exception e)
-                				{
-                					sender.sendMessage("Amount must be Numeric");
-                					return true;
-                				}
-                				try
-                				{
-                					price = Integer.parseInt(args[3]);
+                					price = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
