@@ -1,5 +1,7 @@
 package de.bdh.ks;
 
+import java.sql.Timestamp;
+
 import org.bukkit.inventory.ItemStack;
 
 public class KSOffer 
@@ -8,7 +10,7 @@ public class KSOffer
 	String ply,to;
 	int amount = 0;
 	int price = 0;
-	int time = 0;
+	Timestamp time = null;
 	public KSOffer(ItemStack i,String ply, int priceEach)
 	{
 		this.reg(i, ply, priceEach);
@@ -22,7 +24,7 @@ public class KSOffer
 	}
 	
 	//Vergangenheitseintrag
-	public KSOffer(ItemStack i,String ply, String to, int priceEach, int am, int time)
+	public KSOffer(ItemStack i,String ply, String to, int priceEach, int am, Timestamp time)
 	{
 		this.reg(i, ply, priceEach);
 		this.amount = am;
@@ -50,7 +52,7 @@ public class KSOffer
 	
 	public boolean isDone()
 	{
-		if(this.time == 0) return false; else return true;
+		if(this.time == null) return false; else return true;
 	}
 	
 	public void reg(ItemStack i,String ply, int priceEach)

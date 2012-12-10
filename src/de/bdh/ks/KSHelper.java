@@ -384,8 +384,7 @@ public class KSHelper
     			is = new ItemStack(rs.getInt("type"));
     			if(rs.getInt("subtype") != 0)
     				is.setDurability((short) rs.getInt("subtype"));
-
-    			f = new KSOffer(is,rs.getString("fromplayer"),rs.getString("toplayer"),rs.getInt("price"), rs.getInt("amount"),rs.getInt("zeit"));
+    			f = new KSOffer(is,rs.getString("fromplayer"),rs.getString("toplayer"),rs.getInt("price"), rs.getInt("amount"),rs.getTimestamp("zeit"));
     			hm.put(rs.getInt("id"), f);
     		}
     		
