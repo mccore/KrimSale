@@ -188,7 +188,13 @@ public class Commander implements CommandExecutor {
                 				} else
                 				{
 	                				if(Main.helper.enlistItem(of) == true)
+	                				{
 	                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
+	                					if(of.getFee() > 0)
+	                					{
+	                						sender.sendMessage("You've paid an auction-fee of '"+of.getFee()+"' "+Main.econ.currencyNamePlural());
+	                					}
+	                				}
 	                				else
 	                				{
 	                					Main.helper.giveBack(of);
