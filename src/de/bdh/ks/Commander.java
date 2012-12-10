@@ -97,7 +97,7 @@ public class Commander implements CommandExecutor {
 			{
 				if(args.length == 0)
         		{
-					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY");	
+					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY/ABORT");	
         		} else
         		{
         			if(args[0].equalsIgnoreCase("player"))
@@ -120,6 +120,11 @@ public class Commander implements CommandExecutor {
         			else if(args[0].equalsIgnoreCase("removebuy"))
         			{
         				//Entferne automatisches kaufen
+        				//TODO
+        			}
+        			else if(args[0].equalsIgnoreCase("abort"))
+        			{
+        				//Entferne auktion
         				//TODO
         			}
         		}
@@ -187,7 +192,7 @@ public class Commander implements CommandExecutor {
         				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer(sender.getName(),5,page);
         				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
         				{
-        					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice());
+        					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
         				}
         				
         				
@@ -423,8 +428,8 @@ public class Commander implements CommandExecutor {
         					int am = Main.helper.hasDelivery((Player)sender);
         					if(am == 0)
         						sender.sendMessage("There is nothing for delivery");
-        					else
-        						sender.sendMessage("You've '"+am+"' items waiting for delivery");
+        					/*else
+        						sender.sendMessage("You've '"+am+"' items waiting for delivery");*/
         					
         					if(am > 0)
         					{

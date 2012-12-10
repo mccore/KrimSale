@@ -93,6 +93,8 @@ public class KSHelper
     		ResultSet rs = ps.executeQuery();
     		boolean remove = false;
     		boolean fisent = false;
+    		int money = 0;
+    		int blocks = 0;
     		while(rs.next())
     		{
     			remove = false;
@@ -101,6 +103,8 @@ public class KSHelper
     				System.out.println("[KS] Delivering to User "+p.getName()+ " Money: "+rs.getInt("money"));
     				Main.econ.withdrawPlayer(p.getName(), rs.getInt("money"));
     				++ret;
+    				money += rs.getInt("money");
+    				
     				remove = true;
     			} else if(rs.getInt("type") > 0 && rs.getInt("amount") > 0)
     			{
@@ -110,6 +114,7 @@ public class KSHelper
     				i.setAmount(rs.getInt("amount"));
     				
     				int given = this.giveItem(p, i);
+    				blocks += given;
     				if(given == rs.getInt("amount"))
     				{
         				System.out.println("[KS] Delivering to User "+p.getName()+ " Item: "+rs.getInt("type")+":"+rs.getInt("subtype")+" Amount: "+rs.getInt("amount"));
@@ -146,6 +151,11 @@ public class KSHelper
     				
     			}
     		}
+    		
+    		if(money > 0)
+    			p.sendMessage("You've received "+money+ " "+Main.econ.currencyNamePlural());
+    		if(blocks > 0)
+    			p.sendMessage("You've received "+blocks+ " Items");
     		
     		if(ps2 != null)
 				ps2.close();

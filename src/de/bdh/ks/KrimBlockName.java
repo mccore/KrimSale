@@ -21,6 +21,7 @@ public class KrimBlockName
 	
 	public static String searchName(String name)
 	{
+		name = name.toLowerCase();
 		for (Map.Entry<String,String> entry : names.entrySet())
     	{
 			if(entry.getKey().contains(name))
