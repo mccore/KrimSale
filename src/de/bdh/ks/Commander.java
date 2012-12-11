@@ -97,7 +97,7 @@ public class Commander implements CommandExecutor {
 			{
 				if(args.length == 0)
         		{
-					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY/ABORT");	
+					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY/ABORT/CLEARDEPOSIT");	
         		} else
         		{
         			if(args[0].equalsIgnoreCase("player"))
@@ -120,6 +120,11 @@ public class Commander implements CommandExecutor {
         			else if(args[0].equalsIgnoreCase("removebuy"))
         			{
         				//Entferne automatisches kaufen
+        				//TODO
+        			}
+        			else if(args[0].equalsIgnoreCase("cleardeposit"))
+        			{
+        				//Entferne alle deposits von einem user
         				//TODO
         			}
         			else if(args[0].equalsIgnoreCase("abort"))
