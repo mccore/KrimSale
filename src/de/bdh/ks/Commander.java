@@ -1,5 +1,8 @@
 package de.bdh.ks;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Map;
 
 import org.bukkit.Material;
@@ -97,12 +100,12 @@ public class Commander implements CommandExecutor {
 			{
 				if(args.length == 0)
         		{
-					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY/ABORT/CLEARDEPOSIT");	
+					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY/ABORT/CLEARDELIVERY");	
         		} else
         		{
         			if(args[0].equalsIgnoreCase("player"))
         			{
-        				//Liste von allen Transaktionen des Spielers oder alle Verkäufe
+        				//Liste von allen Transaktionen des Spielers oder alle Verkäufe oder alle Deposits
         				//TODO
         			} else if(args[0].equalsIgnoreCase("addoffer"))
         			{
@@ -122,10 +125,33 @@ public class Commander implements CommandExecutor {
         				//Entferne automatisches kaufen
         				//TODO
         			}
-        			else if(args[0].equalsIgnoreCase("cleardeposit"))
+        			else if(args[0].equalsIgnoreCase("cleardelivery"))
         			{
-        				//Entferne alle deposits von einem user
-        				//TODO
+        				//Entferne alle deliveries von einem user
+        				if(args.length < 2)
+                		{
+        					sender.sendMessage("USAGE: /ks cleardelivery PLAYER");
+                		} 
+        				else
+        				{
+	        				try
+	        				{
+	        		    		Connection conn = Main.Database.getConnection();
+	        		        	PreparedStatement ps;
+	        		        	StringBuilder b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_deliver WHERE player = ?");
+	        		    		ps = conn.prepareStatement(b.toString());
+	        		    		ps.setString(1, args[1]);
+	        		    		int am = ps.executeUpdate();
+	        		    		
+	        		    		if(ps != null)
+	        						ps.close();
+	        					
+	        		    		sender.sendMessage("Cleared "+am+" deliveries");
+	        				} catch (SQLException e)
+	        				{
+	        					System.out.println((new StringBuilder()).append("[KS] unable to clear delivery: ").append(e).toString());
+	        				}
+        				}
         			}
         			else if(args[0].equalsIgnoreCase("abort"))
         			{
@@ -338,8 +364,13 @@ public class Commander implements CommandExecutor {
         					sender.sendMessage("You're not allowed to buy stuff");
         					return true;
         				}
-        				//TODO
-        				
+        				if(args.length < 3)
+                		{
+        					sender.sendMessage("USAGE: /auction request (BLOCK) AMOUNT MAXPRICE");
+                		} else
+                		{
+                			//TODO
+                		}
         			} else if(args[0].equalsIgnoreCase("buy"))
         			{
         				if(!sender.hasPermission("ks.buy"))
@@ -351,7 +382,7 @@ public class Commander implements CommandExecutor {
         				//KAUFE
         				if(args.length < 3)
                 		{
-        					sender.sendMessage("USAGE: /auction BUY (BLOCK) AMOUNT MAXPRICE");
+        					sender.sendMessage("USAGE: /auction buy (BLOCK) AMOUNT MAXPRICE");
                 		} else
                 		{
                 			if(args.length == 3)
