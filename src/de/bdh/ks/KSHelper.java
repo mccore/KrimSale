@@ -550,6 +550,7 @@ public class KSHelper
 	//Füge Item in das AH ein
 	public boolean enlistItem(KSOffer of)
 	{
+		//TODO: request func
 		if(this.canbeSold(of.getItemStack()) == false)
 			return false;
 		try
@@ -713,6 +714,26 @@ public class KSHelper
 		}
 		
 		
+	}
+	
+	//Entferne Requests, welche über 15 Tage zurückliegen
+	public void pruneRequests()
+	{
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_request WHERE zeit < DATE_ADD(CURDATE(), INTERVAL -15 DAY)");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.executeUpdate();
+
+    		if(ps != null)
+				ps.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to prune delivery: ").append(e).toString());
+		}
 	}
 	
 	//Entferne Deliverys, welche über 60 Tage zurückliegen
@@ -896,11 +917,13 @@ public class KSHelper
 			
 			if(am > 0)
 			{
-				for(Map.Entry<Integer,KSOffer> m : this.getPrices(i, 5).entrySet())
+				for(Map.Entry<Integer,KSOffer> m : this.getPrices(i, 4).entrySet())
 				{
 					p.sendMessage("Offer: "+m.getValue().amount+" for "+m.getKey()+" "+Main.econ.currencyNamePlural()+" each");
 				}
 			}
+			
+			//TODO: requests
 		}
 	}
 	

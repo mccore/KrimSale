@@ -140,7 +140,7 @@ public class Commander implements CommandExecutor {
         	{
         		if(args.length == 0)
         		{
-        			sender.sendMessage("USAGE: /auction SELL/BUY/DETAIL/LIST/COLLECT/ABORT");
+        			sender.sendMessage("USAGE: /auction REQUEST/SELL/BUY/DETAIL/LIST/COLLECT/ABORT");
         		} else
         		{
         			//Min 1 Parameter
@@ -305,6 +305,15 @@ public class Commander implements CommandExecutor {
                 				}
                 			}
                 		}
+        			} else if(args[0].equalsIgnoreCase("request"))
+        			{
+        				if(!sender.hasPermission("ks.buy"))
+        				{
+        					sender.sendMessage("You're not allowed to buy stuff");
+        					return true;
+        				}
+        				//TODO
+        				
         			} else if(args[0].equalsIgnoreCase("buy"))
         			{
         				if(!sender.hasPermission("ks.buy"))

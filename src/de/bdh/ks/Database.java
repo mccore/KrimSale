@@ -94,6 +94,15 @@ public class Database
             System.out.println("[KSALE] Table offer Created.");
         }
         
+        rs = dbm.getTables(null, null, (new StringBuilder()).append(configManager.SQLTable).append("_request").toString(), null);
+        if(!rs.next())
+        {
+            System.out.println((new StringBuilder()).append("[KSALE] Creating table: ").append(configManager.SQLTable).append("_request").toString());
+            ps = conn.prepareStatement((new StringBuilder()).append("CREATE TABLE ").append(configManager.SQLTable).append("_request(").append("`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`type` int(11) NOT NULL,`amount` int(11) NOT NULL,`subtype` int(11) NOT NULL,`price` int(11) NOT NULL,`player` varchar(50) NOT NULL, `admin` int(1) NOT NULL DEFAULT '0',`zeit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`),KEY `player` (`player`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1").toString());
+            ps.executeUpdate();
+            System.out.println("[KSALE] Table offer Created.");
+        }
+        
         rs = dbm.getTables(null, null, (new StringBuilder()).append(configManager.SQLTable).append("_transaction").toString(), null);
         if(!rs.next())
         {

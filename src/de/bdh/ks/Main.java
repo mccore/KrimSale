@@ -24,6 +24,7 @@ public class Main  extends JavaPlugin
  	{
  		helper.pruneAuctions();
  		helper.pruneDelivery();
+ 		helper.pruneRequests();
  	}
  	
     public void onDisable()
