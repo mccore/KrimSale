@@ -374,6 +374,12 @@ public class Commander implements CommandExecutor {
         					sender.sendMessage("You're not allowed to buy stuff");
         					return true;
         				}
+        				
+        				if(this.enderChestClose(sender) == false)
+    					{
+        					sender.sendMessage("You've to go to an auction house to request items");	
+    					}
+        				
         				if(args.length < 3)
                 		{
         					sender.sendMessage("USAGE: /auction request (BLOCK) AMOUNT MAXPRICE");
@@ -395,6 +401,11 @@ public class Commander implements CommandExecutor {
         					sender.sendMessage("USAGE: /auction buy (BLOCK) AMOUNT MAXPRICE");
                 		} else
                 		{
+                			if(this.enderChestClose(sender) == false)
+        					{
+            					sender.sendMessage("You've to go to an auction house to buy items");	
+        					}
+                			
                 			if(args.length == 3)
                 			{
                 				int price, amount;
