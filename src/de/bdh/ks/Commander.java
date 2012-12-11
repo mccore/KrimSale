@@ -379,7 +379,7 @@ public class Commander implements CommandExecutor {
         					sender.sendMessage("USAGE: /auction request (BLOCK) AMOUNT MAXPRICE");
                 		} else
                 		{
-                			//TODO
+                			//TODO (erst BUY dann, wenn erfolglos, request)
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
         			{
@@ -467,6 +467,9 @@ public class Commander implements CommandExecutor {
                 				if(bought == amount)
                 				{
                 					sender.sendMessage("You've bought the amount you wanted");
+                				} else if(bought == 0)
+                				{
+                					sender.sendMessage("There is no offer which fulfills your options");
                 				} else
                 				{
                 					sender.sendMessage("You've only bought "+bought+"/"+amount);

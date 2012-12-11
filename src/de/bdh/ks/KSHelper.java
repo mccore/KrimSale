@@ -547,10 +547,16 @@ public class KSHelper
 		return ret;
 	}
 	
+	//Füge Request ein
+	public void enlistRequest(KSOffer of)
+	{
+		//TODO
+	}
+	
 	//Füge Item in das AH ein
 	public boolean enlistItem(KSOffer of)
 	{
-		//TODO: request func
+		//TODO: request func linken
 		if(this.canbeSold(of.getItemStack()) == false)
 			return false;
 		try
@@ -926,6 +932,7 @@ public class KSHelper
 			//TODO: requests
 		}
 	}
+
 	
 	//Player hat nun etwas im Delivery
 	public void pokeDelivery(String p)
