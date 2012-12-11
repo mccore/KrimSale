@@ -125,7 +125,28 @@ public class Commander implements CommandExecutor {
         			else if(args[0].equalsIgnoreCase("abort"))
         			{
         				//Entferne auktion
-        				//TODO
+        				if(args.length < 2)
+                		{
+        					sender.sendMessage("USAGE: /ks abort ID");
+                		} else
+                		{
+                			int id = 0;
+                			try
+            				{
+            					id = Integer.parseInt(args[1]);
+            				}
+            				catch(Exception e) 
+            				{ 
+            					sender.sendMessage("ID must be numeric");
+            					return true;
+            				}
+                			if(Main.helper.removeAuction(id))
+                			{
+                				sender.sendMessage("This auction has been cancelled");
+                			} else 
+                				sender.sendMessage("This ID was invalid");
+
+                		}
         			}
         		}
 			} else
