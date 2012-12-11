@@ -100,7 +100,7 @@ public class Commander implements CommandExecutor {
 			{
 				if(args.length == 0)
         		{
-					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/ADDBUY/REMOVEBUY/ABORT/CLEARDELIVERY");	
+					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/LISTOFFER/ADDBUY/REMOVEBUY/LISTBUY/ABORT/CLEARDELIVERY");	
         		} else
         		{
         			if(args[0].equalsIgnoreCase("player"))
@@ -123,6 +123,16 @@ public class Commander implements CommandExecutor {
         			else if(args[0].equalsIgnoreCase("removebuy"))
         			{
         				//Entferne automatisches kaufen
+        				//TODO
+        			}
+        			else if(args[0].equalsIgnoreCase("listoffer"))
+        			{
+        				//Zeige alle Adminoffers
+        				//TODO
+        			}
+        			else if(args[0].equalsIgnoreCase("listbuy"))
+        			{
+        				//Zeige alle Adminkäufe
         				//TODO
         			}
         			else if(args[0].equalsIgnoreCase("cleardelivery"))
