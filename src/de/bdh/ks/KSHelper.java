@@ -593,6 +593,7 @@ public class KSHelper
     		ps.setInt(1, id);
     		
     		boolean found = false;
+    		boolean admin = false;
     		ResultSet rs = ps.executeQuery();
 			
     		while(rs.next())
@@ -603,7 +604,13 @@ public class KSHelper
     			i.setDurability((short) rs.getInt("subtype"));
     			
     			
-    			if(rs.getInt("amount") > amount)
+    			if(rs.getInt("admin") == 1)
+    			{
+    				admin = true;
+    				//Admin angebote sind immer unlimited.
+    				ret = amount;
+    			}
+    			else if(rs.getInt("amount") > amount)
     			{
     				ret = amount;
     				//Update angebot
@@ -643,7 +650,9 @@ public class KSHelper
 				this.addDelivery(p, ks.getItemStack());
 				
 				//Verkäufer
-				this.addDelivery(ks.ply, ks.getFullPrice());
+				if(admin == false)
+					this.addDelivery(ks.ply, ks.getFullPrice());
+				
     		}
     		if(ps != null)
 				ps.close();
@@ -671,7 +680,7 @@ public class KSHelper
 			int amount = i.getAmount();
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC LIMIT 0,50");
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC, admin ASC LIMIT 0,50");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, i.getTypeId());
     		ps.setInt(2, i.getDurability());
