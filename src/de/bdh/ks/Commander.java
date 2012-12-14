@@ -278,10 +278,13 @@ public class Commander implements CommandExecutor {
         					sender.sendMessage("USAGE: /auction sell BLOCK PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE for Item in Hand");
                 		} else
                 		{
-                			if(args.length == 2)
+                			ItemStack i = null;
+                			int price = 0;
+                			int maxAm = 0;
+                			
+                			//Verkaufe Item in der Hand
+                			if(args.length == 2) 
                 			{
-                				//KBOffer of;
-                				int price = 0;
                 				try
                 				{
                 					price = Integer.parseInt(args[1]);
@@ -292,39 +295,11 @@ public class Commander implements CommandExecutor {
                 					return true;
                 				}
                 				
-                				ItemStack i = ((Player) sender).getItemInHand();
-                				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
-                				if(am <= 0)
-                				{
-                					sender.sendMessage("You dont own this item");
-                				} else
-                				{
-	                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
-	                				if(of.payFee() == false)
-	                				{
-	                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
-	                					Main.helper.giveBack(of);	
-	                				} else
-	                				{
-		                				if(Main.helper.enlistItem(of) == true)
-		                				{
-		                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
-		                					if(of.getFee() > 0)
-		                					{
-		                						sender.sendMessage("You've paid an auction-fee of '"+of.getFee()+"' "+Main.econ.currencyNamePlural());
-		                					}
-		                				}
-		                				else
-		                				{
-		                					Main.helper.giveBack(of);
-		                					sender.sendMessage("Something went wrong");
-		                				}
-	                				}
-                				}
+                				i = ((Player) sender).getItemInHand();
+
+                			//Verkaufe Gegenstand aus dem Chat
                 			} else if(args.length > 2)
                 			{
-                				int maxAm = 0;
-                				int price = 0;
                 				
                 				if(args.length == 4)
                 				{
@@ -348,36 +323,44 @@ public class Commander implements CommandExecutor {
                 					sender.sendMessage("Price must be Numeric");
                 					return true;
                 				}
-                				ItemStack i = this.parseName(args[1]);
-                				if(i == null)
-                				{
-                					sender.sendMessage("Block with Name/ID '"+args[1]+"' not found");
-                					return true;
-                				}
+                				i = this.parseName(args[1]);
                 				
-                				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, maxAm);
-                				if(am <= 0)
+                			}
+                			
+                			if(i == null)
+            				{
+            					sender.sendMessage("Block with Name/ID '"+args[1]+"' not found");
+            					return true;
+            				}
+                			
+            				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
+            				if(am <= 0)
+            				{
+            					sender.sendMessage("You dont own that item");
+            				} else
+            				{
+                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
+                				if(of.payFee() == false)
                 				{
-                					sender.sendMessage("You dont own this item");
+                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
+                					Main.helper.giveBack(of);	
                 				} else
                 				{
-	                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
-	                				if(of.payFee() == false)
+	                				if(Main.helper.enlistItem(of) == true)
 	                				{
-	                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
-	                					Main.helper.giveBack(of);	
-	                				} else
+	                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
+	                					if(of.getFee() > 0)
+	                					{
+	                						sender.sendMessage("You've paid an auction-fee of '"+of.getFee()+"' "+Main.econ.currencyNamePlural());
+	                					}
+	                				}
+	                				else
 	                				{
-		                				if(Main.helper.enlistItem(of) == true)
-		                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
-		                				else
-		                				{
-		                					Main.helper.giveBack(of);
-		                					sender.sendMessage("Something went wrong");
-		                				}
+	                					Main.helper.giveBack(of);
+	                					sender.sendMessage("Something went wrong");
 	                				}
                 				}
-                			}
+            				}
                 		}
         			} else if(args[0].equalsIgnoreCase("request"))
         			{
@@ -395,9 +378,33 @@ public class Commander implements CommandExecutor {
         				if(args.length < 3)
                 		{
         					sender.sendMessage("USAGE: /auction request (BLOCK) AMOUNT MAXPRICE");
-                		} else
+                		} else if(args.length == 3)
                 		{
+                			int price, amount;
+            				try
+            				{
+            					amount = Integer.parseInt(args[1]);
+            				}
+            				catch(Exception e)
+            				{
+            					sender.sendMessage("Amount must be Numeric");
+            					return true;
+            				}
+            				try
+            				{
+            					price = Integer.parseInt(args[2]);
+            				}
+            				catch(Exception e)
+            				{
+            					sender.sendMessage("Price must be Numeric");
+            					return true;
+            				}
+            				
+            				
                 			//TODO (erst BUY dann, wenn erfolglos, request)
+                		} else if(args.length == 4)
+                		{
+                			
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
         			{
@@ -416,11 +423,15 @@ public class Commander implements CommandExecutor {
                 			if(this.enderChestClose(sender) == false)
         					{
             					sender.sendMessage("You've to go to an auction house to buy items");	
+            					return true;
         					}
                 			
+                			int price=0, amount=0;
+                			ItemStack i = null;
+                			
+                			//Kaufe Gegenstand in der Hand
                 			if(args.length == 3)
                 			{
-                				int price, amount;
                 				try
                 				{
                 					amount = Integer.parseInt(args[1]);
@@ -441,24 +452,12 @@ public class Commander implements CommandExecutor {
                 				}
                 				
                 				//Block == IteminHand
-                				ItemStack i = ((Player) sender).getItemInHand().clone();
-                				i.setAmount(amount);
-                				int bought = Main.helper.buyItems(i, price, sender.getName());
-                				if(bought == amount)
-                				{
-                					sender.sendMessage("You've bought the amount you wanted");
-                				} else if(bought == 0)
-                				{
-                					sender.sendMessage("There is no offer which fulfills your options");
-                				}
-                				else
-                				{
-                					sender.sendMessage("You've only bought "+bought+"/"+amount);
-                				}
+                				i = ((Player) sender).getItemInHand().clone();
+                			//Kaufe Gegenstand aus dem Chat
                 			} else if(args.length == 4)
                 			{
                 				//Normale Usage
-                				int price, amount;
+                				
                 				try
                 				{
                 					amount = Integer.parseInt(args[2]);
@@ -479,25 +478,26 @@ public class Commander implements CommandExecutor {
                 				}
                 				
                 				//Block == IteminHand
-                				ItemStack i = this.parseName(args[1]);
-                				if(i == null)
-                				{
-                					sender.sendMessage("Item '"+args[1]+"' not found");
-                					return true;
-                				}
-                				i.setAmount(amount);
-                				int bought = Main.helper.buyItems(i, price, sender.getName());
-                				if(bought == amount)
-                				{
-                					sender.sendMessage("You've bought the amount you wanted");
-                				} else if(bought == 0)
-                				{
-                					sender.sendMessage("There is no offer which fulfills your options");
-                				} else
-                				{
-                					sender.sendMessage("You've only bought "+bought+"/"+amount);
-                				}
+                				i = this.parseName(args[1]);
                 			} 
+                			
+            				if(i == null)
+            				{
+            					sender.sendMessage("Item '"+args[1]+"' not found");
+            					return true;
+            				}
+            				i.setAmount(amount);
+            				int bought = Main.helper.buyItems(i, price, sender.getName());
+            				if(bought == amount)
+            				{
+            					sender.sendMessage("You've bought the amount you wanted");
+            				} else if(bought == 0)
+            				{
+            					sender.sendMessage("There is no offer which fulfills your options");
+            				} else
+            				{
+            					sender.sendMessage("You've only bought "+bought+"/"+amount);
+            				}
                 		}
         			} else if(args[0].equalsIgnoreCase("detail"))
         			{

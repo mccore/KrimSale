@@ -548,7 +548,7 @@ public class KSHelper
 	}
 	
 	//Füge Request ein
-	public void enlistRequest(KSOffer of)
+	public void enlistRequest(KSOffer of, String p)
 	{
 		//TODO
 	}
