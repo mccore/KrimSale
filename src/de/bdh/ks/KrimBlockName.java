@@ -40,6 +40,15 @@ public class KrimBlockName
 			return "-1";
 	}
 	
+	public static String getNameById(int type, int typeid)
+	{
+		String strg = "";
+		strg += type;
+		if(typeid > 0)
+			strg += ":"+typeid;
+		
+		return getNameById(strg);
+	}
 	public static String getNameById(String id)
 	{
 		for (Map.Entry<String,String> entry : names.entrySet())
