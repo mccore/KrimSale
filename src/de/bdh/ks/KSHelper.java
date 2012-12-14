@@ -548,9 +548,35 @@ public class KSHelper
 	}
 	
 	//Füge Request ein
-	public void enlistRequest(KSOffer of, String p)
+	public boolean enlistRequest(KSOffer of)
 	{
-		//TODO
+		if(this.canbeSold(of.getItemStack()) == false)
+			return false;
+		try
+		{
+			
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_request (type,subtype,amount,price,player,admin) VALUES (?,?,?,?,?,?)");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, of.getItemStack().getTypeId());
+    		ps.setInt(2,of.getItemStack().getDurability());
+    		ps.setInt(3, of.getAmount());
+    		ps.setInt(4, of.getPrice());
+    		ps.setString(5, of.getPlayer());
+    		ps.setInt(6, of.admin);
+    		ps.executeUpdate();
+    		
+    		if(ps != null)
+				ps.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to request Item: ").append(e).toString());
+			return false;
+		}
+		
+		return true;
 	}
 	
 	//Füge Item in das AH ein
@@ -725,7 +751,7 @@ public class KSHelper
     		if(rs != null)
 				rs.close();
     		
-    		if(! Main.econ.withdrawPlayer(p, pay).transactionSuccess())
+    		if(! Main.econ.withdrawPlayer(p, pay).transactionSuccess() || Main.econ.getBalance(p) < 0)
     		{
     			System.out.println("[KS] FAULT! This should never happen! Player "+p+" didn't have enough money to pay: "+pay);
     		}

@@ -451,8 +451,16 @@ public class Commander implements CommandExecutor {
             					if(bought > 0)
             						sender.sendMessage("You've instantly bought "+bought+" of "+amount);
             					int req = amount - bought;
-            					sender.sendMessage("You've requested "+req+" items for "+(req*price)+" "+Main.econ.currencyNamePlural());
-            					//Main.helper.enlistRequest();
+            					
+            					
+            					KSOffer o = new KSOffer(i,sender.getName(),price);
+            					if(Main.helper.enlistRequest(o))
+            					{
+            						sender.sendMessage("You've requested "+req+" items for "+(req*price)+" "+Main.econ.currencyNamePlural());
+            					} else
+            					{
+            						sender.sendMessage("You're not allowed to request this item");
+            					}
             				}
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
