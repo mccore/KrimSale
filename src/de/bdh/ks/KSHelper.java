@@ -548,12 +548,18 @@ public class KSHelper
 	}
 	
 	//Füge Request ein
-	public boolean enlistRequest(KSOffer of)
+	public int enlistRequest(KSOffer of)
 	{
 		if(this.canbeSold(of.getItemStack()) == false)
-			return false;
+			return -2;
 		try
 		{
+			double money = Main.econ.getBalance(of.ply);
+			if(money < of.getFullPrice())
+				return -1;
+			
+			if(!Main.econ.withdrawPlayer(of.ply, of.getFullPrice()).transactionSuccess())
+				return -1;
 			
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
@@ -573,30 +579,177 @@ public class KSHelper
 		} catch (SQLException e)
 		{
 			System.out.println((new StringBuilder()).append("[KS] unable to request Item: ").append(e).toString());
-			return false;
+			return -3;
 		}
 		
-		return true;
+		return 1;
+	}
+	
+	//Returns Served Amount
+	public int serveRequests(KSOffer of)
+	{
+		try
+		{
+			int amount = of.getAmount();
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_request WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC, admin ASC LIMIT 0,50");
+    		ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, of.i.getTypeId());
+    		ps.setInt(2, of.i.getDurability());
+    		ps.setInt(3, of.price);
+    		
+    		ResultSet rs = ps.executeQuery();
+			int tmp = 0;
+    		while(rs.next())
+    		{
+    			if(amount > 0)
+    			{
+    				System.out.println("[KS] Serving "+rs.getInt("id")+" - "+amount+"/"+rs.getInt("amount") + " by player "+of.ply);
+    				tmp = this.serveRequest(rs.getInt("id"),of,amount);
+    				if(tmp != -1)
+    				{
+    					amount -= tmp;
+    				}
+    			} 
+    		}
+
+    		if(ps != null)
+				ps.close();
+    		if(rs != null)
+				rs.close();
+    		
+    		return of.getAmount() - amount;
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to serve requests: ").append(e).toString());
+			return -2;
+		}
+	}
+	
+	public int serveRequest(int id, KSOffer of, int amount)
+	{
+		try
+		{
+			int ret = 0;
+			KSOffer ks = null;
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps,ps2=null;
+        	
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 0,1");
+        	ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, id);
+    		
+    		boolean found = false;
+    		boolean admin = false;
+    		ResultSet rs = ps.executeQuery();
+			
+    		while(rs.next())
+    		{
+    			found = true;
+    			ItemStack i = null;
+    			i = new ItemStack(rs.getInt("type"));
+    			i.setDurability((short) rs.getInt("subtype"));
+    			
+    			
+    			if(rs.getInt("admin") == 1)
+    			{
+    				admin = true;
+    				//Admin angebote sind immer unlimited.
+    				ret = amount;
+    			}
+    			else if(rs.getInt("amount") > amount)
+    			{
+    				ret = amount;
+    				//Update angebot
+    				b = (new StringBuilder()).append("UPDATE ").append(configManager.SQLTable).append("_request SET amount = ? WHERE id = ? LIMIT 1");
+    				ps2 = conn.prepareStatement(b.toString());
+    				ps2.setInt(1, (rs.getInt("amount") - amount));
+    				ps2.setInt(2,id);
+    				ps2.executeUpdate();
+
+    			} else
+    			{
+    				ret = rs.getInt("amount");
+    				//Entferne angebot
+    				b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 1");
+    				ps2 = conn.prepareStatement(b.toString());
+    				ps2.setInt(1,id);
+    				ps2.executeUpdate();
+    			}
+
+    			ks = new KSOffer(i,rs.getString("player"),rs.getInt("price"),ret);
+    		}
+
+    		
+    		if(found == true && ks != null)
+    		{
+				b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_transaction (type,subtype,fromplayer,toplayer,amount,price) VALUES (?,?,?,?,?,?)");
+				ps2 = conn.prepareStatement(b.toString());
+				ps2.setInt(1,ks.getItemStack().getTypeId());
+				ps2.setInt(2,ks.getItemStack().getDurability());
+				ps2.setString(4, ks.getPlayer());
+				ps2.setString(3, of.getPlayer());
+				ps2.setInt(5,ks.getAmount());
+				ps2.setInt(6,ks.getFullPrice());
+				ps2.executeUpdate();
+				
+				//Käufer
+				this.addDelivery(ks.getPlayer(), ks.getItemStack());
+				
+				//Verkäufer
+				if(admin == false)
+					this.addDelivery(of.getPlayer(), ks.getFullPrice());
+				
+    		}
+    		if(ps != null)
+				ps.close();
+    		if(rs != null)
+				rs.close();
+    		if(ps2 != null)
+				ps2.close();
+    		
+    		if(!found)
+    			return -1;
+    		
+    		return ret;
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to buy IDItem: ").append(e).toString());
+			return -1;
+		}
 	}
 	
 	//Füge Item in das AH ein
 	public boolean enlistItem(KSOffer of)
 	{
-		//TODO: request func linken
+
 		if(this.canbeSold(of.getItemStack()) == false)
 			return false;
+		
+		int srvd = this.serveRequests(of);
+		if(of.getAmount() > srvd)
+		{
+			//Rest verkaufen
+			of.setAmount(of.getAmount() - srvd);
+		} else //schon verkauft.
+			return true;
+		
 		try
 		{
 			
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_offer (type,subtype,amount,price,player) VALUES (?,?,?,?,?)");
+        	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_offer (type,subtype,amount,price,player,admin) VALUES (?,?,?,?,?,?)");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, of.getItemStack().getTypeId());
     		ps.setInt(2,of.getItemStack().getDurability());
     		ps.setInt(3, of.getAmount());
     		ps.setInt(4, of.getPrice());
     		ps.setString(5, of.getPlayer());
+    		ps.setInt(6, of.admin);
     		ps.executeUpdate();
     		
     		if(ps != null)
@@ -763,8 +916,6 @@ public class KSHelper
 			System.out.println((new StringBuilder()).append("[KS] unable to buy Items: ").append(e).toString());
 			return -2;
 		}
-		
-		
 	}
 	
 	//Entferne Requests, welche über 15 Tage zurückliegen

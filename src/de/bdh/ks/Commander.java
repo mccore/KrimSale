@@ -454,12 +454,16 @@ public class Commander implements CommandExecutor {
             					
             					
             					KSOffer o = new KSOffer(i,sender.getName(),price);
-            					if(Main.helper.enlistRequest(o))
+            					int resp = Main.helper.enlistRequest(o);
+            					if(resp == 1)
             					{
             						sender.sendMessage("You've requested "+req+" items for "+(req*price)+" "+Main.econ.currencyNamePlural());
-            					} else
+            					} else if(resp == -2)
             					{
             						sender.sendMessage("You're not allowed to request this item");
+            					} else if(resp == -1)
+            					{
+            						sender.sendMessage("You dont have enough money");
             					}
             				}
                 		}

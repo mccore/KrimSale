@@ -20,16 +20,14 @@ public class KSOffer
 	public KSOffer(ItemStack i,String ply,int priceEach, int am)
 	{
 		this.reg(i, ply, priceEach);
-		this.amount = am;
-		this.i.setAmount(am);
+		this.setAmount(am);
 	}
 	
 	//Vergangenheitseintrag
 	public KSOffer(ItemStack i,String ply, String to, int priceEach, int am, Timestamp time)
 	{
 		this.reg(i, ply, priceEach);
-		this.amount = am;
-		this.i.setAmount(am);
+		this.setAmount(am);
 		this.time = time;
 		this.to = to;
 	}
@@ -49,6 +47,12 @@ public class KSOffer
 		else
 			return true;
 
+	}
+	
+	public void setAmount(int i)
+	{
+		this.amount = i;
+		this.i.setAmount(i);
 	}
 	
 	public boolean isDone()
