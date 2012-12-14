@@ -40,7 +40,28 @@ public class AdminCommander implements CommandExecutor
         			} else if(args[0].equalsIgnoreCase("removeoffer"))
         			{
         				//Entferne unendliches Angebot
-        				//TODO
+        				if(args.length < 2)
+                		{
+        					sender.sendMessage("USAGE: /auction abort ID - you can get the id by using list");
+                		} else
+                		{
+                			int id = 0;
+                			try
+            				{
+            					id = Integer.parseInt(args[1]);
+            				}
+            				catch(Exception e) 
+            				{ 
+            					sender.sendMessage("ID must be numeric");
+            					return true;
+            				}
+                			if(Main.helper.removeAuction(id))
+                			{
+                				sender.sendMessage("This offer has been cancelled");
+                			} else 
+                				sender.sendMessage("This ID was invalid");
+
+                		}
         			} else if(args[0].equalsIgnoreCase("addbuy"))
         			{
         				//füge automatisches kaufen ein
@@ -85,7 +106,6 @@ public class AdminCommander implements CommandExecutor
         		    		{
         		    			found = true;
         		    			sender.sendMessage("ID: "+rs.getInt("id")+" BLOCK: "+KrimBlockName.getNameById(rs.getInt("type"),rs.getInt("subtype"))+" PRICE:"+rs.getInt("price"));
-        		    			//TODO
         		    		}
         		    		if(!found)
         		    			sender.sendMessage("Nothing found");
@@ -133,7 +153,6 @@ public class AdminCommander implements CommandExecutor
         		    		{
         		    			found = true;
         		    			sender.sendMessage("ID: "+rs.getInt("id")+" BLOCK: "+KrimBlockName.getNameById(rs.getInt("type"),rs.getInt("subtype"))+" PRICE:"+rs.getInt("price"));
-        		    			//TODO
         		    		}
         		    		if(!found)
         		    			sender.sendMessage("Nothing found");

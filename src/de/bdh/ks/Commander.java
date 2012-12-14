@@ -307,6 +307,7 @@ public class Commander implements CommandExecutor {
             					if(resp == 1)
             					{
             						sender.sendMessage("You've requested "+req+" items for "+(req*price)+" "+Main.econ.currencyNamePlural());
+            						sender.sendMessage("Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
             					} else if(resp == -2)
             					{
             						sender.sendMessage("You're not allowed to request this item");

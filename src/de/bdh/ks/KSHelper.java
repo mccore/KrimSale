@@ -172,6 +172,54 @@ public class KSHelper
 		}
 		return ret;
 	}
+
+	public boolean removeRequest(int id)
+	{
+		return this.removeRequest(id,null);
+	}
+	
+	public boolean removeRequest(int id,Player p)
+	{
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps,ps2=null;
+        	boolean ret = false;
+        	StringBuilder b = (new StringBuilder()).append("SELECT price,amount,type,subtype,player FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 0,1");
+        	ps = conn.prepareStatement(b.toString());
+    		ps.setInt(1, id);
+    		ResultSet rs = ps.executeQuery();
+			
+    		while(rs.next())
+    		{
+    			if(p == null || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
+    			{
+    				ret = true;
+	    			System.out.println((new StringBuilder()).append("[KS] abort request with id: ").append(id).toString());
+	    			int money = rs.getInt("amount")*rs.getInt("price");
+	    			this.addDelivery(rs.getString("player"),money);
+	    			b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 1");
+	            	ps2 = conn.prepareStatement(b.toString());
+	            	ps2.setInt(1, id);
+	            	ps2.executeUpdate();
+    			} 
+            	
+    		}
+    		
+    		if(ps2 != null)
+				ps2.close();
+        	if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+			
+			return ret;
+		} catch(SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to remove request: ").append(e).toString());
+		}
+		return false;
+	}
 	
 	public boolean removeAuction(int id)
 	{
@@ -918,23 +966,30 @@ public class KSHelper
 		}
 	}
 	
-	//Entferne Requests, welche über 15 Tage zurückliegen
+	//Entferne Requests, welche über 14 Tage zurückliegen
 	public void pruneRequests()
 	{
 		try
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_request WHERE zeit < DATE_ADD(CURDATE(), INTERVAL -15 DAY)");
+        	StringBuilder b = (new StringBuilder()).append("SELECT id FROM ").append(configManager.SQLTable).append("_request WHERE zeit < DATE_ADD(CURDATE(), INTERVAL -14 DAY)");
     		ps = conn.prepareStatement(b.toString());
-    		ps.executeUpdate();
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next())
+    		{
+    			System.out.println((new StringBuilder()).append("[KS] Prune Request ID: ").append(rs.getInt("id")).toString());
+    			this.removeRequest(rs.getInt("id"));
+    		}
 
     		if(ps != null)
 				ps.close();
+    		if(rs != null)
+				rs.close();
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KS] unable to prune requests: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to prune auctions: ").append(e).toString());
 		}
 	}
 	
