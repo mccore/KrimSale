@@ -101,7 +101,7 @@ public class KSHelper
     			if(rs.getInt("money") > 0)
     			{
     				System.out.println("[KS] Delivering to User "+p.getName()+ " Money: "+rs.getInt("money"));
-    				Main.econ.withdrawPlayer(p.getName(), rs.getInt("money"));
+    				Main.econ.depositPlayer(p.getName(), rs.getInt("money"));
     				++ret;
     				money += rs.getInt("money");
     				
@@ -685,9 +685,20 @@ public class KSHelper
 		try
 		{
 			int amount = i.getAmount();
+			int pay = 0;
+			double money = Main.econ.getBalance(p);
+			int maxbuy = (int) (money / maxPrice);
+			
+			if(maxbuy < 1)
+				return -1;
+			else if(maxbuy < amount)
+			{
+				amount = maxbuy;
+			}
+			
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC, admin ASC LIMIT 0,50");
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC, admin ASC LIMIT 0,50");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, i.getTypeId());
     		ps.setInt(2, i.getDurability());
@@ -702,7 +713,10 @@ public class KSHelper
     				System.out.println("[KS] Buying "+rs.getInt("id")+" - "+amount+"/"+rs.getInt("amount") + " by player "+p);
     				tmp = this.buyItem(rs.getInt("id"),amount,p);
     				if(tmp != -1)
+    				{
+    					pay += tmp * rs.getInt("price");
     					amount -= tmp;
+    				}
     			} 
     		}
 
@@ -711,12 +725,17 @@ public class KSHelper
     		if(rs != null)
 				rs.close();
     		
+    		if(! Main.econ.withdrawPlayer(p, pay).transactionSuccess())
+    		{
+    			System.out.println("[KS] FAULT! This should never happen! Player "+p+" didn't have enough money to pay: "+pay);
+    		}
+    		
     		return i.getAmount() - amount;
 
 		} catch (SQLException e)
 		{
 			System.out.println((new StringBuilder()).append("[KS] unable to buy Items: ").append(e).toString());
-			return -1;
+			return -2;
 		}
 		
 		

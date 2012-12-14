@@ -381,33 +381,79 @@ public class Commander implements CommandExecutor {
         				if(args.length < 3)
                 		{
         					sender.sendMessage("USAGE: /auction request (BLOCK) AMOUNT MAXPRICE");
-                		} else if(args.length == 3)
+                		} else 
                 		{
-                			int price, amount;
-            				try
-            				{
-            					amount = Integer.parseInt(args[1]);
-            				}
-            				catch(Exception e)
-            				{
-            					sender.sendMessage("Amount must be Numeric");
-            					return true;
-            				}
-            				try
-            				{
-            					price = Integer.parseInt(args[2]);
-            				}
-            				catch(Exception e)
-            				{
-            					sender.sendMessage("Price must be Numeric");
-            					return true;
-            				}
-            				
-            				
-                			//TODO (erst BUY dann, wenn erfolglos, request)
-                		} else if(args.length == 4)
-                		{
+                			int price=0, amount=0;
+                			ItemStack i = null;
+                			//Requeste aus Hand
+                			if(args.length == 3)
+	                		{
+	            				try
+	            				{
+	            					amount = Integer.parseInt(args[1]);
+	            				}
+	            				catch(Exception e)
+	            				{
+	            					sender.sendMessage("Amount must be Numeric");
+	            					return true;
+	            				}
+	            				try
+	            				{
+	            					price = Integer.parseInt(args[2]);
+	            				}
+	            				catch(Exception e)
+	            				{
+	            					sender.sendMessage("Price must be Numeric");
+	            					return true;
+	            				}
+	            				
+	            				i = ((Player) sender).getItemInHand().clone();
+	            			//Requeste aus Chat
+	                		} else if(args.length == 4)
+	                		{
+	                			try
+                				{
+                					amount = Integer.parseInt(args[2]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Amount must be Numeric");
+                					return true;
+                				}
+                				try
+                				{
+                					price = Integer.parseInt(args[3]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Price must be Numeric");
+                					return true;
+                				}
+                				i = this.parseName(args[1]);
+	                		}
                 			
+                			if(i == null)
+            				{
+            					sender.sendMessage("Item '"+args[1]+"' not found");
+            					return true;
+            				}
+            				i.setAmount(amount);
+            				int bought = Main.helper.buyItems(i, price, sender.getName());
+            				if(bought == -1)
+            				{
+            					sender.sendMessage("You dont have enough money");
+            				}
+            				else if(bought == amount)
+            				{
+            					sender.sendMessage("You've instantly bought the amount you wanted");
+            				} else
+            				{
+            					if(bought > 0)
+            						sender.sendMessage("You've instantly bought "+bought+" of "+amount);
+            					int req = amount - bought;
+            					sender.sendMessage("You've requested "+req+" items for "+(req*price)+" "+Main.econ.currencyNamePlural());
+            					//Main.helper.enlistRequest();
+            				}
                 		}
         			} else if(args[0].equalsIgnoreCase("buy"))
         			{
@@ -479,8 +525,6 @@ public class Commander implements CommandExecutor {
                 					sender.sendMessage("Price must be Numeric");
                 					return true;
                 				}
-                				
-                				//Block == IteminHand
                 				i = this.parseName(args[1]);
                 			} 
                 			
@@ -491,7 +535,11 @@ public class Commander implements CommandExecutor {
             				}
             				i.setAmount(amount);
             				int bought = Main.helper.buyItems(i, price, sender.getName());
-            				if(bought == amount)
+            				if(bought == -1)
+            				{
+            					sender.sendMessage("You dont have enough money");
+            				}
+            				else if(bought == amount)
             				{
             					sender.sendMessage("You've bought the amount you wanted");
             				} else if(bought == 0)
