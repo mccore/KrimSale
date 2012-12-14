@@ -34,6 +34,7 @@ public class AdminCommander implements CommandExecutor
         			{
         				//Liste von allen Transaktionen des Spielers oder alle Verkäufe oder alle Deposits
         				//TODO
+        				sender.sendMessage("Coming soon. Use the Database to check up!");
         			} else if(sender.hasPermission("ks.superadmin")) 
         			{ 
         				if(args[0].equalsIgnoreCase("addoffer"))

@@ -507,8 +507,47 @@ public class KSHelper
 		}
 		
 		return ret;
-	
 	}
+	
+	public Map<Integer,KSOffer> getRequests(ItemStack i, int rows)
+	{
+		if(canbeSold(i) == false)
+			return null;
+		
+		HashMap<Integer,KSOffer> ret = new HashMap<Integer,KSOffer>();
+		try
+		{
+			KSOffer k;
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as m, price, player FROM ").append(configManager.SQLTable).append("_request WHERE type = ? AND subtype = ? GROUP BY price ORDER BY price DESC limit 0,?");
+
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setInt(1, i.getTypeId());
+    		ps.setInt(2, i.getDurability());
+    		ps.setInt(3, rows);
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			k = new KSOffer(i,rs.getString("player"),rs.getInt("price"),rs.getInt("m"));
+    			ret.put(rs.getInt("price"), k);
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get requests: ").append(e).toString());
+		}
+		
+		return ret;
+	}
+	
 	
 	//Hole Maximale Angebotsmenge für Material
 	public int getMaxAmount(ItemStack i)
@@ -1196,7 +1235,11 @@ public class KSHelper
 				}
 			}
 			
-			//TODO: requests
+			
+			for(Map.Entry<Integer,KSOffer> m : this.getRequests(i, 3).entrySet())
+			{
+				p.sendMessage("Request: "+m.getValue().amount+" for "+m.getKey()+" "+Main.econ.currencyNamePlural()+" each");
+			}
 		}
 	}
 
