@@ -333,6 +333,9 @@ public class Commander implements CommandExecutor {
             					return true;
             				}
                 			
+                			if(maxAm != 0)
+                				i.setAmount(maxAm);
+                			
             				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
             				if(am <= 0)
             				{
