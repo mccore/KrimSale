@@ -73,9 +73,8 @@ public class Main  extends JavaPlugin
         this.listener = new KSListener(this);
         Bukkit.getServer().getPluginManager().registerEvents(this.listener, this);
         
-        Commander c = new Commander(this);
-        getCommand("auction").setExecutor(c); 
-        getCommand("ks").setExecutor(c); 
+        getCommand("auction").setExecutor(new Commander(this)); 
+        getCommand("ks").setExecutor(new AdminCommander(this)); 
         Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new KSTimer(this), 1, 20*60);
     }
     
