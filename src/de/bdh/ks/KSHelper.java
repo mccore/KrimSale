@@ -1250,7 +1250,10 @@ public class KSHelper
 		try
 		{
     		Player plx = Bukkit.getServer().getPlayerExact(p);
-    		plx.sendMessage("You can collect some items in the auction house");
+    		if(configManager.ender == 1)
+    			plx.sendMessage("You can collect some items in the auction house");
+    		else
+    			plx.sendMessage("You can collect some items by entering /auction collect");
 		} catch(Exception e)
 		{
 			
