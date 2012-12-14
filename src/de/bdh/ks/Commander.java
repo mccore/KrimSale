@@ -91,7 +91,8 @@ public class Commander implements CommandExecutor {
         				
         				
         				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
-        				int maxpage = amount / 5;
+        				int maxpage = (int) Math.ceil(amount / 5);
+        				
         				if(amount == 0)
         				{
         					sender.sendMessage("You don't have items for sale");
@@ -176,9 +177,9 @@ public class Commander implements CommandExecutor {
                 				
                 			}
                 			
-                			if(i == null)
+                			if(i == null  || i.getType() == Material.AIR)
             				{
-            					sender.sendMessage("Block with Name/ID '"+args[1]+"' not found");
+            					sender.sendMessage("Block not found");
             					return true;
             				}
                 			
@@ -281,9 +282,9 @@ public class Commander implements CommandExecutor {
                 				i = KrimBlockName.parseName(args[1]);
 	                		}
                 			
-                			if(i == null)
+                			if(i == null || i.getType() == Material.AIR)
             				{
-            					sender.sendMessage("Item '"+args[1]+"' not found");
+            					sender.sendMessage("Item not found");
             					return true;
             				}
             				i.setAmount(amount);
@@ -390,9 +391,9 @@ public class Commander implements CommandExecutor {
                 				i = KrimBlockName.parseName(args[1]);
                 			} 
                 			
-            				if(i == null)
+            				if(i == null || i.getType() == Material.AIR)
             				{
-            					sender.sendMessage("Item '"+args[1]+"' not found");
+            					sender.sendMessage("Item not found");
             					return true;
             				}
             				i.setAmount(amount);

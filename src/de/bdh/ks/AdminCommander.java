@@ -47,20 +47,18 @@ public class AdminCommander implements CommandExecutor
 	                		{
 	                			int price=0, amount=999999;
 	                			ItemStack i = null;
+	                			
 	                			//Requeste aus Chat
-	                			if(args.length == 4)
-		                		{
-	                				try
-	                				{
-	                					price = Integer.parseInt(args[2]);
-	                				}
-	                				catch(Exception e)
-	                				{
-	                					sender.sendMessage("Price must be Numeric");
-	                					return true;
-	                				}
-	                				i = KrimBlockName.parseName(args[1]);
-		                		}
+                				try
+                				{
+                					price = Integer.parseInt(args[2]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Price must be Numeric");
+                					return true;
+                				}
+                				i = KrimBlockName.parseName(args[1]);
 	                			
 	                			if(i == null)
 	            				{
@@ -111,27 +109,24 @@ public class AdminCommander implements CommandExecutor
 	        			} else if(args[0].equalsIgnoreCase("addbuy"))
 	        			{
 	        				//füge automatisches kaufen ein
-	        				if(args.length < 4)
+	        				if(args.length < 3)
 	                		{
 	        					sender.sendMessage("USAGE: /ks addbuy BLOCK MAXPRICE");
 	                		} else 
 	                		{
 	                			int price=0, amount=999999;
 	                			ItemStack i = null;
-	                			//Requeste aus Hand
-	                			if(args.length == 4)
-		                		{
-	                				try
-	                				{
-	                					price = Integer.parseInt(args[2]);
-	                				}
-	                				catch(Exception e)
-	                				{
-	                					sender.sendMessage("Price must be Numeric");
-	                					return true;
-	                				}
-	                				i = KrimBlockName.parseName(args[1]);
-		                		}
+	                			
+                				try
+                				{
+                					price = Integer.parseInt(args[2]);
+                				}
+                				catch(Exception e)
+                				{
+                					sender.sendMessage("Price must be Numeric");
+                					return true;
+                				}
+                				i = KrimBlockName.parseName(args[1]);
 	                			
 	                			if(i == null)
 	            				{
@@ -143,10 +138,11 @@ public class AdminCommander implements CommandExecutor
 	
 	        					if(bought > 0)
 	        						sender.sendMessage("You've instantly bought "+bought+" of "+amount);
-	        					int req = amount - bought;
+	        					
+	        					int req = amount;
 	        					
 	        					
-	        					KSOffer o = new KSOffer(i,sender.getName(),price);
+	        					KSOffer o = new KSOffer(i,null,price);
 	        					o.admin = 1;
 	        					int resp = Main.helper.enlistRequest(o);
 	        					if(resp == 1)

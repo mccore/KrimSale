@@ -683,7 +683,7 @@ public class KSHelper
 			int amount = of.getAmount();
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_request WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC, admin ASC LIMIT 0,50");
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_request WHERE type = ? AND subtype = ? AND price >= ? ORDER BY price DESC, admin ASC LIMIT 0,50");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, of.i.getTypeId());
     		ps.setInt(2, of.i.getDurability());
@@ -732,7 +732,6 @@ public class KSHelper
     		ps.setInt(1, id);
     		
     		boolean found = false;
-    		boolean admin = false;
     		ResultSet rs = ps.executeQuery();
 			
     		while(rs.next())
@@ -745,7 +744,6 @@ public class KSHelper
     			
     			if(rs.getInt("admin") == 1)
     			{
-    				admin = true;
     				//Admin angebote sind immer unlimited.
     				ret = amount;
     			}
@@ -770,6 +768,8 @@ public class KSHelper
     			}
 
     			ks = new KSOffer(i,rs.getString("player"),rs.getInt("price"),ret);
+    			if(rs.getInt("admin") == 1)
+    				ks.admin = 1;
     		}
 
     		
@@ -785,11 +785,12 @@ public class KSHelper
 				ps2.setInt(6,ks.getFullPrice());
 				ps2.executeUpdate();
 				
-				//Käufer
-				this.addDelivery(ks.getPlayer(), ks.getItemStack());
+				//Anbieter
+				if(ks.admin == 0)
+					this.addDelivery(ks.getPlayer(), ks.getItemStack());
 				
-				//Verkäufer
-				if(admin == false)
+				//Käufer
+				if(of.admin == 0)
 					this.addDelivery(of.getPlayer(), ks.getFullPrice());
 				
     		}
@@ -962,11 +963,12 @@ public class KSHelper
 		{
 			int amount = i.getAmount();
 			int pay = 0;
-			double money = Main.econ.getBalance(p);
-			int maxbuy = (int) (money / maxPrice);
-			
+		
 			if(p != null)
 			{
+				double money = Main.econ.getBalance(p);
+				int maxbuy = (int) (money / maxPrice);
+				
 				if(maxbuy < 1)
 					return -1;
 				else if(maxbuy < amount)
@@ -1098,6 +1100,10 @@ public class KSHelper
 	//Setze in Abarbeitsungstabelle - nur Geld
 	public boolean addDelivery(String p, int money)
 	{
+		//sollte nie passieren, aber sicher ist sicher
+		if(p.equals("admin"))
+			return true;
+		
 		if(money < 1)
 			return false;
 		
@@ -1127,6 +1133,10 @@ public class KSHelper
 	//Setze in Abarbeitungstabelle - Items
 	public boolean addDelivery(String p, ItemStack i)
 	{
+		//sollte nie passieren, aber sicher ist sicher
+		if(p.equals("admin"))
+			return true;
+		
 		try
 		{
     		Connection conn = Main.Database.getConnection();
