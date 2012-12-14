@@ -294,25 +294,31 @@ public class Commander implements CommandExecutor {
                 				
                 				ItemStack i = ((Player) sender).getItemInHand();
                 				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
-                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
-                				if(of.payFee() == false)
+                				if(am <= 0)
                 				{
-                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
-                					Main.helper.giveBack(of);	
+                					sender.sendMessage("You dont own this item");
                 				} else
                 				{
-	                				if(Main.helper.enlistItem(of) == true)
+	                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
+	                				if(of.payFee() == false)
 	                				{
-	                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
-	                					if(of.getFee() > 0)
-	                					{
-	                						sender.sendMessage("You've paid an auction-fee of '"+of.getFee()+"' "+Main.econ.currencyNamePlural());
-	                					}
-	                				}
-	                				else
+	                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
+	                					Main.helper.giveBack(of);	
+	                				} else
 	                				{
-	                					Main.helper.giveBack(of);
-	                					sender.sendMessage("Something went wrong");
+		                				if(Main.helper.enlistItem(of) == true)
+		                				{
+		                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
+		                					if(of.getFee() > 0)
+		                					{
+		                						sender.sendMessage("You've paid an auction-fee of '"+of.getFee()+"' "+Main.econ.currencyNamePlural());
+		                					}
+		                				}
+		                				else
+		                				{
+		                					Main.helper.giveBack(of);
+		                					sender.sendMessage("Something went wrong");
+		                				}
 	                				}
                 				}
                 			} else if(args.length > 2)
@@ -350,19 +356,25 @@ public class Commander implements CommandExecutor {
                 				}
                 				
                 				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, maxAm);
-                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
-                				if(of.payFee() == false)
+                				if(am <= 0)
                 				{
-                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
-                					Main.helper.giveBack(of);	
+                					sender.sendMessage("You dont own this item");
                 				} else
                 				{
-	                				if(Main.helper.enlistItem(of) == true)
-	                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
-	                				else
+	                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
+	                				if(of.payFee() == false)
 	                				{
-	                					Main.helper.giveBack(of);
-	                					sender.sendMessage("Something went wrong");
+	                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
+	                					Main.helper.giveBack(of);	
+	                				} else
+	                				{
+		                				if(Main.helper.enlistItem(of) == true)
+		                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
+		                				else
+		                				{
+		                					Main.helper.giveBack(of);
+		                					sender.sendMessage("Something went wrong");
+		                				}
 	                				}
                 				}
                 			}

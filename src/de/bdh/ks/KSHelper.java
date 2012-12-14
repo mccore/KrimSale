@@ -738,7 +738,7 @@ public class KSHelper
 
 		} catch (SQLException e)
 		{
-			System.out.println((new StringBuilder()).append("[KS] unable to prune delivery: ").append(e).toString());
+			System.out.println((new StringBuilder()).append("[KS] unable to prune requests: ").append(e).toString());
 		}
 	}
 	
