@@ -82,7 +82,10 @@ public class KSOffer
 	
 	public String getPlayer()
 	{
-		return this.ply;
+		if(this.ply != null)
+			return this.ply;
+		else
+			return "admin";
 	}
 	
 	public int getFullPrice()

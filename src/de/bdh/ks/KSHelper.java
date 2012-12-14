@@ -602,12 +602,15 @@ public class KSHelper
 			return -2;
 		try
 		{
-			double money = Main.econ.getBalance(of.ply);
-			if(money < of.getFullPrice())
-				return -1;
-			
-			if(!Main.econ.withdrawPlayer(of.ply, of.getFullPrice()).transactionSuccess())
-				return -1;
+			if(of.admin == 0)
+			{
+				double money = Main.econ.getBalance(of.ply);
+				if(money < of.getFullPrice())
+					return -1;
+				
+				if(!Main.econ.withdrawPlayer(of.ply, of.getFullPrice()).transactionSuccess())
+					return -1;
+			}
 			
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
@@ -655,7 +658,7 @@ public class KSHelper
     			{
     				System.out.println("[KS] Serving "+rs.getInt("id")+" - "+amount+"/"+rs.getInt("amount") + " by player "+of.ply);
     				tmp = this.serveRequest(rs.getInt("id"),of,amount);
-    				if(tmp != -1)
+    				if(tmp != -1 && of.admin == 0)
     				{
     					amount -= tmp;
     				}
@@ -778,12 +781,15 @@ public class KSHelper
 			return false;
 		
 		int srvd = this.serveRequests(of);
-		if(of.getAmount() > srvd)
+		if(of.admin == 0)
 		{
-			//Rest verkaufen
-			of.setAmount(of.getAmount() - srvd);
-		} else //schon verkauft.
-			return true;
+			if(of.getAmount() > srvd)
+			{
+				//Rest verkaufen
+				of.setAmount(of.getAmount() - srvd);
+			} else //schon verkauft.
+				return true;
+		}
 		
 		try
 		{
@@ -875,13 +881,17 @@ public class KSHelper
 				ps2.setInt(1,ks.getItemStack().getTypeId());
 				ps2.setInt(2,ks.getItemStack().getDurability());
 				ps2.setString(3, ks.getPlayer());
-				ps2.setString(4,p);
+				if(p == null)
+					ps2.setString(4,"admin");
+				else
+					ps2.setString(4,p);
 				ps2.setInt(5,ks.getAmount());
 				ps2.setInt(6,ks.getFullPrice());
 				ps2.executeUpdate();
 				
 				//Käufer
-				this.addDelivery(p, ks.getItemStack());
+				if(p != null)
+					this.addDelivery(p, ks.getItemStack());
 				
 				//Verkäufer
 				if(admin == false)
@@ -916,11 +926,14 @@ public class KSHelper
 			double money = Main.econ.getBalance(p);
 			int maxbuy = (int) (money / maxPrice);
 			
-			if(maxbuy < 1)
-				return -1;
-			else if(maxbuy < amount)
+			if(p != null)
 			{
-				amount = maxbuy;
+				if(maxbuy < 1)
+					return -1;
+				else if(maxbuy < amount)
+				{
+					amount = maxbuy;
+				}
 			}
 			
     		Connection conn = Main.Database.getConnection();
@@ -952,9 +965,12 @@ public class KSHelper
     		if(rs != null)
 				rs.close();
     		
-    		if(! Main.econ.withdrawPlayer(p, pay).transactionSuccess() || Main.econ.getBalance(p) < 0)
+    		if(p != null)
     		{
-    			System.out.println("[KS] FAULT! This should never happen! Player "+p+" didn't have enough money to pay: "+pay);
+	    		if(! Main.econ.withdrawPlayer(p, pay).transactionSuccess() || Main.econ.getBalance(p) < 0)
+	    		{
+	    			System.out.println("[KS] FAULT! This should never happen! Player "+p+" didn't have enough money to pay: "+pay);
+	    		}
     		}
     		
     		return i.getAmount() - amount;
@@ -973,7 +989,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT id FROM ").append(configManager.SQLTable).append("_request WHERE zeit < DATE_ADD(CURDATE(), INTERVAL -14 DAY)");
+        	StringBuilder b = (new StringBuilder()).append("SELECT id FROM ").append(configManager.SQLTable).append("_request WHERE admin = 0 AND zeit < DATE_ADD(CURDATE(), INTERVAL -14 DAY)");
     		ps = conn.prepareStatement(b.toString());
     		ResultSet rs = ps.executeQuery();
     		while(rs.next())
@@ -1020,7 +1036,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT id FROM ").append(configManager.SQLTable).append("_offer WHERE zeit < DATE_ADD(CURDATE(), INTERVAL -30 DAY)");
+        	StringBuilder b = (new StringBuilder()).append("SELECT id FROM ").append(configManager.SQLTable).append("_offer WHERE admin = 0 AND zeit < DATE_ADD(CURDATE(), INTERVAL -30 DAY)");
     		ps = conn.prepareStatement(b.toString());
     		ResultSet rs = ps.executeQuery();
     		while(rs.next())
