@@ -974,6 +974,7 @@ public class KSHelper
 				else if(maxbuy < amount)
 				{
 					amount = maxbuy;
+					i.setAmount(maxbuy);
 				}
 			}
 			

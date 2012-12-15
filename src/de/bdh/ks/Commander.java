@@ -189,7 +189,7 @@ public class Commander implements CommandExecutor {
             				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
             				if(am <= 0)
             				{
-            					sender.sendMessage("You dont own that item");
+            					sender.sendMessage("You dont own that item or it is invalid");
             				} else
             				{
                 				KSOffer of = new KSOffer(i,sender.getName(),price,am);
@@ -284,7 +284,7 @@ public class Commander implements CommandExecutor {
                 			
                 			if(i == null || i.getType() == Material.AIR)
             				{
-            					sender.sendMessage("Item not found");
+            					sender.sendMessage("Item not found or invalid");
             					return true;
             				}
             				i.setAmount(amount);
@@ -397,6 +397,12 @@ public class Commander implements CommandExecutor {
             					return true;
             				}
             				i.setAmount(amount);
+            				
+            				double money = Main.econ.getBalance(sender.getName());
+            				
+            				if((money / price) < amount)
+            					sender.sendMessage("You dont have enough money ");
+            				
             				int bought = Main.helper.buyItems(i, price, sender.getName());
             				if(bought == -1)
             				{
