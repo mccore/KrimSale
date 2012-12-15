@@ -596,7 +596,7 @@ public class KrimBlockName
 		names.put("diamondhelmet","310");
 		names.put("diamondchestplate","311");
 		names.put("diamondleggings","312");
-		names.put("diamond","313");
+		names.put("industrialdiamond","313");
 		names.put("goldenhelmet","314");
 		names.put("goldenchestplate","315");
 		names.put("goldenleggings","316");

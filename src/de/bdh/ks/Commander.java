@@ -230,7 +230,7 @@ public class Commander implements CommandExecutor {
         				
         				if(args.length < 3)
                 		{
-        					sender.sendMessage("USAGE: /auction request (BLOCK) AMOUNT MAXPRICE");
+        					sender.sendMessage("USAGE: /auction request (BLOCK) MAXPRICE AMOUNT");
                 		} else 
                 		{
                 			int price=0, amount=0;
@@ -240,7 +240,7 @@ public class Commander implements CommandExecutor {
 	                		{
 	            				try
 	            				{
-	            					amount = Integer.parseInt(args[1]);
+	            					amount = Integer.parseInt(args[2]);
 	            				}
 	            				catch(Exception e)
 	            				{
@@ -249,7 +249,7 @@ public class Commander implements CommandExecutor {
 	            				}
 	            				try
 	            				{
-	            					price = Integer.parseInt(args[2]);
+	            					price = Integer.parseInt(args[1]);
 	            				}
 	            				catch(Exception e)
 	            				{
@@ -263,7 +263,7 @@ public class Commander implements CommandExecutor {
 	                		{
 	                			try
                 				{
-                					amount = Integer.parseInt(args[2]);
+                					amount = Integer.parseInt(args[3]);
                 				}
                 				catch(Exception e)
                 				{
@@ -272,7 +272,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				try
                 				{
-                					price = Integer.parseInt(args[3]);
+                					price = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
@@ -329,7 +329,7 @@ public class Commander implements CommandExecutor {
         				//KAUFE
         				if(args.length < 3)
                 		{
-        					sender.sendMessage("USAGE: /auction buy (BLOCK) AMOUNT MAXPRICE");
+        					sender.sendMessage("USAGE: /auction buy (BLOCK) MAXPRICE AMOUNT");
                 		} else
                 		{
                 			if(this.enderChestClose(sender) == false)
@@ -346,7 +346,7 @@ public class Commander implements CommandExecutor {
                 			{
                 				try
                 				{
-                					amount = Integer.parseInt(args[1]);
+                					amount = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
@@ -355,7 +355,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				try
                 				{
-                					price = Integer.parseInt(args[2]);
+                					price = Integer.parseInt(args[1]);
                 				}
                 				catch(Exception e)
                 				{
@@ -372,7 +372,7 @@ public class Commander implements CommandExecutor {
                 				
                 				try
                 				{
-                					amount = Integer.parseInt(args[2]);
+                					amount = Integer.parseInt(args[3]);
                 				}
                 				catch(Exception e)
                 				{
@@ -381,7 +381,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				try
                 				{
-                					price = Integer.parseInt(args[3]);
+                					price = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
