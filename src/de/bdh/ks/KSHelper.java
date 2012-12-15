@@ -350,6 +350,59 @@ public class KSHelper
 		return ret;
 	}
 	
+	
+	public Map<Integer,KSOffer> getRequestsFromPlayer(String p,int am, int begin)
+	{
+		return this.getRequestsFromPlayer(p, null,am,begin);
+	}
+	
+	public Map<Integer,KSOffer> getRequestsFromPlayer(String p, ItemStack i, int am, int begin)
+	{
+		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT id,type,subtype,amount,price FROM ").append(configManager.SQLTable).append("_request WHERE player = ? ");
+        	if(i != null)
+        		b.append("AND type = ? AND subtype = ? ");
+        	
+        	b.append("LIMIT ").append(begin).append(",").append(am);
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setString(1, p);
+    		if(i != null)
+    		{
+    			ps.setInt(2, i.getTypeId());
+    			ps.setInt(3, i.getDurability());
+    		}
+    		
+    		ResultSet rs = ps.executeQuery();
+    		
+    		KSOffer f;
+    		ItemStack is;
+    		while(rs.next())
+    		{
+    			is = new ItemStack(rs.getInt("type"));
+    			if(rs.getInt("subtype") != 0)
+    				is.setDurability((short) rs.getInt("subtype"));
+    			
+    			f = new KSOffer(is,p,rs.getInt("price"), rs.getInt("amount"));
+    			hm.put(rs.getInt("id"), f);
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get offers from player: ").append(e).toString());
+		}
+		return hm;
+	}
+	
 	public Map<Integer,KSOffer> getOffersFromPlayer(String p,int am, int begin)
 	{
 		return this.getOffersFromPlayer(p, null,am,begin);

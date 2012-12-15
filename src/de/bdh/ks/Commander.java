@@ -51,7 +51,7 @@ public class Commander implements CommandExecutor {
         	{
         		if(args.length == 0)
         		{
-        			sender.sendMessage("USAGE: /auction REQUEST/SELL/BUY/DETAIL/LIST/COLLECT/ABORT");
+        			sender.sendMessage("USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST");
         		} else
         		{
         			//Min 1 Parameter
@@ -80,6 +80,31 @@ public class Commander implements CommandExecutor {
 
                 		}
         			}
+        			else if(args[0].equalsIgnoreCase("abortrequest"))
+        			{
+        				if(args.length < 2)
+                		{
+        					sender.sendMessage("USAGE: /auction abortrequest ID - you can get the id by using list");
+                		} else
+                		{
+                			int id = 0;
+                			try
+            				{
+            					id = Integer.parseInt(args[1]);
+            				}
+            				catch(Exception e) 
+            				{ 
+            					sender.sendMessage("ID must be numeric");
+            					return true;
+            				}
+                			if(Main.helper.removeRequest(id,(Player)sender))
+                			{
+                				sender.sendMessage("Your auction has been cancelled. You can pick it up at the auction house");
+                			} else 
+                				sender.sendMessage("This ID was invalid or you dont have the permissions to do that");
+
+                		}
+        			}
         			else if(args[0].equalsIgnoreCase("list"))
         			{
         				int page = 1;
@@ -97,11 +122,40 @@ public class Commander implements CommandExecutor {
         				{
         					sender.sendMessage("You don't have items for sale");
         				} else
-        					sender.sendMessage("You've "+amount+" transactions. Page: "+page+" of "+maxpage);
+        					sender.sendMessage("You've "+amount+" auctions. Page: "+page+" of "+maxpage);
         				
         				page = page -1;
         				page = page * 5;
         				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer(sender.getName(),5,page);
+        				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
+        				{
+        					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+        				}
+        				
+        				
+        			}
+        			else if(args[0].equalsIgnoreCase("listrequests"))
+        			{
+        				int page = 1;
+        				try
+        				{
+        					page = Integer.parseInt(args[1]);
+        				}
+        				catch(Exception e) { }
+        				
+        				
+        				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
+        				int maxpage = (int) Math.ceil(amount / 5);
+        				
+        				if(amount == 0)
+        				{
+        					sender.sendMessage("You don't have items for request");
+        				} else
+        					sender.sendMessage("You've "+amount+" requests. Page: "+page+" of "+maxpage);
+        				
+        				page = page -1;
+        				page = page * 5;
+        				Map<Integer,KSOffer> l = Main.helper.getRequestsFromPlayer(sender.getName(),5,page);
         				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
         				{
         					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
