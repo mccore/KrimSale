@@ -177,6 +177,12 @@ public class Commander implements CommandExecutor {
                 				
                 			}
                 			
+                			if(price > 10000000)
+                			{
+                				sender.sendMessage("Price is too high");
+            					return true;
+                			}
+                			
                 			if(i == null  || i.getType() == Material.AIR)
             				{
             					sender.sendMessage("Block not found");
@@ -281,6 +287,12 @@ public class Commander implements CommandExecutor {
                 				}
                 				i = KrimBlockName.parseName(args[1]);
 	                		}
+                			
+                			if(price > 10000000)
+                			{
+                				sender.sendMessage("Price is too high");
+            					return true;
+                			}
                 			
                 			if(i == null || i.getType() == Material.AIR)
             				{
@@ -390,6 +402,12 @@ public class Commander implements CommandExecutor {
                 				}
                 				i = KrimBlockName.parseName(args[1]);
                 			} 
+                			
+                			if(price > 10000000)
+                			{
+                				sender.sendMessage("Price is too high");
+            					return true;
+                			}
                 			
             				if(i == null || i.getType() == Material.AIR)
             				{
