@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,8 +34,102 @@ public class AdminCommander implements CommandExecutor
         			if(args[0].equalsIgnoreCase("player"))
         			{
         				//Liste von allen Transaktionen des Spielers oder alle Verkäufe oder alle Deposits
-        				//TODO
-        				sender.sendMessage("Coming soon. Use the Database to check up!");
+        				if(args.length < 3)
+        				{
+        					sender.sendMessage("USAGE: /ks player USERNAME REQUESTS/AUCTIONS/TRANSACTIONS_TO/TRANSACTIONS_FROM (PAGE)");
+        				} else
+        				{
+        					String p = args[1];
+        					int page = 1;
+        					if(args[2].equalsIgnoreCase("requests"))
+        					{
+                				
+                				try
+                				{
+                					page = Integer.parseInt(args[3]);
+                				}
+                				catch(Exception e) { }
+                				
+                				
+                				int amount = Main.helper.getRequestAmountFromPlayer(p);
+                				int maxpage = (int) Math.ceil(amount / 5);
+                				
+                				if(amount == 0)
+                				{
+                					sender.sendMessage("The player doesn't have items requested");
+                				} else
+                					sender.sendMessage("Player has "+amount+" requests. Page: "+page+" of "+maxpage);
+                				
+                				page = page -1;
+                				page = page * 5;
+                				Map<Integer,KSOffer> l = Main.helper.getRequestsFromPlayer(p,5,page);
+                				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
+                				{
+                					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+                				}
+        					} else if(args[2].equalsIgnoreCase("auctions"))
+        					{
+                				try
+                				{
+                					page = Integer.parseInt(args[1]);
+                				}
+                				catch(Exception e) { }
+                				
+                				
+                				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
+                				int maxpage = (int) Math.ceil(amount / 5);
+                				
+                				if(amount == 0)
+                				{
+                					sender.sendMessage("The player doesn't have items for sale");
+                				} else
+                					sender.sendMessage("Player has "+amount+" auctions. Page: "+page+" of "+maxpage);
+                				
+                				page = page -1;
+                				page = page * 5;
+                				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer(p,5,page);
+                				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
+                				{
+                					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+                				}
+        					} else if(args[2].equalsIgnoreCase("transactions_to"))
+        					{
+        						try
+                				{
+                					page = Integer.parseInt(args[1]);
+                				}
+                				catch(Exception e) { }
+                				
+                			
+                				sender.sendMessage("Transactions to player: "+p+" - Page: "+page);
+                				
+                				page = page -1;
+                				page = page * 5;
+                				Map<Integer,KSOffer> l = Main.helper.getTransactionsByPlayer(p,false,5,page);
+                				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
+                				{
+                					sender.sendMessage("Time: "+e.getValue().time.toString()+" From: "+e.getValue().ply+" Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+                				}
+        					} else if(args[2].equalsIgnoreCase("transactions_from"))
+        					{
+        						try
+                				{
+                					page = Integer.parseInt(args[1]);
+                				}
+                				catch(Exception e) { }
+        						
+                				sender.sendMessage("Transactions from player: "+p+" - Page: "+page);
+                				
+                				page = page -1;
+                				page = page * 5;
+                				Map<Integer,KSOffer> l = Main.helper.getTransactionsByPlayer(p,true,5,page);
+                				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
+                				{
+                					sender.sendMessage("Time: "+e.getValue().time.toString()+" To: "+e.getValue().to+" Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+                				}
+        					}
+        				}
+        				
         			} else if(sender.hasPermission("ks.superadmin")) 
         			{ 
         				if(args[0].equalsIgnoreCase("addoffer"))

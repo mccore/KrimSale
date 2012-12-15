@@ -144,12 +144,12 @@ public class Commander implements CommandExecutor {
         				catch(Exception e) { }
         				
         				
-        				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
+        				int amount = Main.helper.getRequestAmountFromPlayer(sender.getName());
         				int maxpage = (int) Math.ceil(amount / 5);
         				
         				if(amount == 0)
         				{
-        					sender.sendMessage("You don't have items for request");
+        					sender.sendMessage("You don't have items requested");
         				} else
         					sender.sendMessage("You've "+amount+" requests. Page: "+page+" of "+maxpage);
         				

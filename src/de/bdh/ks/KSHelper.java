@@ -304,6 +304,52 @@ public class KSHelper
 		return 0;
 	}
 	
+	public int getRequestAmountFromPlayer(String p)
+	{
+		return this.getRequestAmountFromPlayer(p,null);
+	}
+	
+	public int getRequestAmountFromPlayer(String p, ItemStack i)
+	{
+		int ret = 0;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_request WHERE player = ?");
+        	if(i != null)
+        		b.append(" AND type = ? AND subtype = ?");
+        	
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setString(1, p);
+    		if(i != null)
+    		{
+    			ps.setInt(2, i.getTypeId());
+    			ps.setInt(3, i.getDurability());
+    		}
+    		
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			ret = rs.getInt("c");
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get request amount: ").append(e).toString());
+			ret = -1;
+		}
+		
+		return ret;
+	}
+	
 	public int getOfferAmountFromPlayer(String p)
 	{
 		return this.getOfferAmountFromPlayer(p,null);
