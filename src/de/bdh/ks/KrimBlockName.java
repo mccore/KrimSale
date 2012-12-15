@@ -228,9 +228,9 @@ public class KrimBlockName
 		names.put("dragonegg","122");
 		names.put("redstonelamp_off","123");
 		names.put("redstonelamp","124");
-		names.put("streamplayer,streamplayer","125");
-		names.put("craftingtableiii,werkbankiii","126");
-		names.put("secret-shelfbutton,geheimerregalknopf","128");
+		names.put("streamplayer","125");
+		names.put("craftingtableiii","126");
+		names.put("secretshelfbutton","128");
 		names.put("redalloywire","136:256");
 		names.put("whiteinsulatedwire","136:512");
 		names.put("orangeinsulatedwire","136:513");
