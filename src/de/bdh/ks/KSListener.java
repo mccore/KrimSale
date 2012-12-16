@@ -21,7 +21,8 @@ public class KSListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event)
     {
-		Main.helper.hasDelivery(event.getPlayer());  
+		Main.helper.hasDelivery(event.getPlayer()); 
+		Main.lng.msg(event.getPlayer(), "welcome");
     }
 	
 	/*

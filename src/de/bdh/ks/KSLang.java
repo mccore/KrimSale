@@ -54,6 +54,7 @@ public class KSLang
 		en.put("amount_sale", "Amount for sale: $1");
 		en.put("offer","Offer: $1 for $2 $a each");
 		en.put("request","Request: $1 for $2 $a each");
+		en.put("welcome","Welcome to KrimSale - worldofminecraft.de");
 		en.put("req_info","Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
 		
 		this.lng.put("en", en);
