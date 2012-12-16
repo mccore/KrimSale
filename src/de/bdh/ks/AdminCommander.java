@@ -150,7 +150,7 @@ public class AdminCommander implements CommandExecutor
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Price must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
                 					return true;
                 				}
                 				i = KrimBlockName.parseName(args[1]);
@@ -191,7 +191,7 @@ public class AdminCommander implements CommandExecutor
 	            				}
 	            				catch(Exception e) 
 	            				{ 
-	            					sender.sendMessage("ID must be numeric");
+	            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
 	            					return true;
 	            				}
 	                			if(Main.helper.removeAuction(id))
@@ -218,7 +218,7 @@ public class AdminCommander implements CommandExecutor
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Price must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
                 					return true;
                 				}
                 				i = KrimBlockName.parseName(args[1]);
@@ -243,7 +243,6 @@ public class AdminCommander implements CommandExecutor
 	        					if(resp == 1)
 	        					{
 	        						sender.sendMessage("You've requested "+req+" items for "+(req*price)+" "+Main.econ.currencyNamePlural());
-	        						sender.sendMessage("Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
 	        					} else if(resp == -2)
 	        					{
 	        						sender.sendMessage("You're not allowed to request this item");
@@ -269,7 +268,7 @@ public class AdminCommander implements CommandExecutor
 	            				}
 	            				catch(Exception e) 
 	            				{ 
-	            					sender.sendMessage("ID must be numeric");
+	            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
 	            					return true;
 	            				}
 	                			if(Main.helper.removeRequest(id))
@@ -293,7 +292,7 @@ public class AdminCommander implements CommandExecutor
 	            				}
 	            				catch(Exception e)
 	            				{
-	            					sender.sendMessage("Page must be Numeric");
+	            					Main.lng.msg(sender,"err_num",new Object[]{"Page"});
 	            					return true;
 	            				}
 	    					}
@@ -340,7 +339,7 @@ public class AdminCommander implements CommandExecutor
 	            				}
 	            				catch(Exception e)
 	            				{
-	            					sender.sendMessage("Page must be Numeric");
+	            					Main.lng.msg(sender,"err_num",new Object[]{"Page"});
 	            					return true;
 	            				}
 	    					}
@@ -417,7 +416,7 @@ public class AdminCommander implements CommandExecutor
 	            				}
 	            				catch(Exception e) 
 	            				{ 
-	            					sender.sendMessage("ID must be numeric");
+	            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
 	            					return true;
 	            				}
 	                			if(Main.helper.removeAuction(id))
@@ -429,11 +428,11 @@ public class AdminCommander implements CommandExecutor
 	                		}
 	        			}
 	        		} else 
-	        			sender.sendMessage("You don't have permissions for that");
+	        			Main.lng.msg(sender,"err_noperm");
         		}
 			} else
 			{
-				sender.sendMessage("You don't have permissions for that");
+				Main.lng.msg(sender,"err_noperm");
 			}
 			return true;
     	} 

@@ -51,7 +51,7 @@ public class Commander implements CommandExecutor {
         	{
         		if(args.length == 0)
         		{
-        			sender.sendMessage("USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST");
+        			Main.lng.msg(sender,"usage");
         		} else
         		{
         			//Min 1 Parameter
@@ -59,7 +59,7 @@ public class Commander implements CommandExecutor {
         			{
         				if(args.length < 2)
                 		{
-        					sender.sendMessage("USAGE: /auction abort ID - you can get the id by using list");
+        					Main.lng.msg(sender,"usage_abort");
                 		} else
                 		{
                 			int id = 0;
@@ -69,14 +69,14 @@ public class Commander implements CommandExecutor {
             				}
             				catch(Exception e) 
             				{ 
-            					sender.sendMessage("ID must be numeric");
+            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
             					return true;
             				}
                 			if(Main.helper.removeAuction(id,(Player)sender))
                 			{
-                				sender.sendMessage("Your auction has been cancelled. You can pick it up at the auction house");
+                				Main.lng.msg(sender,"rem_success");
                 			} else 
-                				sender.sendMessage("This ID was invalid or you dont have the permissions to do that");
+                				Main.lng.msg(sender,"err_invalid_id");
 
                 		}
         			}
@@ -84,7 +84,7 @@ public class Commander implements CommandExecutor {
         			{
         				if(args.length < 2)
                 		{
-        					sender.sendMessage("USAGE: /auction abortrequest ID - you can get the id by using list");
+        					Main.lng.msg(sender,"usage_abortrequest");
                 		} else
                 		{
                 			int id = 0;
@@ -94,14 +94,14 @@ public class Commander implements CommandExecutor {
             				}
             				catch(Exception e) 
             				{ 
-            					sender.sendMessage("ID must be numeric");
+            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
             					return true;
             				}
                 			if(Main.helper.removeRequest(id,(Player)sender))
                 			{
-                				sender.sendMessage("Your auction has been cancelled. You can pick it up at the auction house");
+                				Main.lng.msg(sender,"rem_req_success");
                 			} else 
-                				sender.sendMessage("This ID was invalid or you dont have the permissions to do that");
+                				Main.lng.msg(sender,"err_invalid_id");
 
                 		}
         			}
@@ -120,9 +120,9 @@ public class Commander implements CommandExecutor {
         				
         				if(amount == 0)
         				{
-        					sender.sendMessage("You don't have items for sale");
+        					Main.lng.msg(sender,"err_nosale");
         				} else
-        					sender.sendMessage("You've "+amount+" auctions. Page: "+page+" of "+maxpage);
+        					Main.lng.msg(sender,"header_list",new Object[]{amount,"auctions",page,maxpage});
         				
         				page = page -1;
         				page = page * 5;
@@ -149,9 +149,9 @@ public class Commander implements CommandExecutor {
         				
         				if(amount == 0)
         				{
-        					sender.sendMessage("You don't have items requested");
+        					Main.lng.msg(sender,"err_noreq");
         				} else
-        					sender.sendMessage("You've "+amount+" requests. Page: "+page+" of "+maxpage);
+        					Main.lng.msg(sender,"header_list",new Object[]{amount,"requests",page,maxpage});
         				
         				page = page -1;
         				page = page * 5;
@@ -167,19 +167,19 @@ public class Commander implements CommandExecutor {
         			{
         				if(!sender.hasPermission("ks.sell"))
         				{
-        					sender.sendMessage("You're not allowed to sell stuff");
+        					Main.lng.msg(sender,"err_noperm");
         					return true;
         				}
         				
         				if(this.enderChestClose(sender) == false)
     					{
-        					sender.sendMessage("You've to go to an auction house to sell items");	
+        					Main.lng.msg(sender,"err_to_ah");	
     					}
         				
         				//VERKAUFE
         				if(args.length < 2)
                 		{
-        					sender.sendMessage("USAGE: /auction sell BLOCK PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE for Item in Hand");
+        					Main.lng.msg(sender,"usage_sell");
                 		} else
                 		{
                 			ItemStack i = null;
@@ -195,7 +195,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Price must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
                 					return true;
                 				}
                 				
@@ -213,7 +213,7 @@ public class Commander implements CommandExecutor {
 	                				}
 	                				catch(Exception e)
 	                				{
-	                					sender.sendMessage("Amount must be Numeric");
+	                					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
 	                					return true;
 	                				}
                 				} else maxAm = 999999;
@@ -224,7 +224,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Price must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
                 					return true;
                 				}
                 				i = KrimBlockName.parseName(args[1]);
@@ -233,13 +233,13 @@ public class Commander implements CommandExecutor {
                 			
                 			if(price > 10000000)
                 			{
-                				sender.sendMessage("Price is too high");
+                				Main.lng.msg(sender,"err_too_high",new Object[]{"Price"});
             					return true;
                 			}
                 			
                 			if(i == null  || i.getType() == Material.AIR)
             				{
-            					sender.sendMessage("Block not found");
+            					Main.lng.msg(sender,"err_block_404");
             					return true;
             				}
                 			
@@ -249,28 +249,28 @@ public class Commander implements CommandExecutor {
             				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
             				if(am <= 0)
             				{
-            					sender.sendMessage("You dont own that item or it is invalid");
+            					Main.lng.msg(sender,"err_block");
             				} else
             				{
                 				KSOffer of = new KSOffer(i,sender.getName(),price,am);
                 				if(of.payFee() == false)
                 				{
-                					sender.sendMessage("You cannot afford the fee of "+of.getFee()+ " "+ Main.econ.currencyNamePlural());
+                					Main.lng.msg(sender,"err_nomoney_fee",new Object[]{of.getFee()}); 
                 					Main.helper.giveBack(of);	
                 				} else
                 				{
 	                				if(Main.helper.enlistItem(of) == true)
 	                				{
-	                					sender.sendMessage("Success. You're offering "+am+" Blocks for "+of.getFullPrice()+" "+Main.econ.currencyNamePlural());
+	                					Main.lng.msg(sender,"suc_offer",new Object[]{am,of.getFullPrice()});
 	                					if(of.getFee() > 0)
 	                					{
-	                						sender.sendMessage("You've paid an auction-fee of '"+of.getFee()+"' "+Main.econ.currencyNamePlural());
+	                						Main.lng.msg(sender,"suc_fee_paid",new Object[]{of.getFee()});
 	                					}
 	                				}
 	                				else
 	                				{
 	                					Main.helper.giveBack(of);
-	                					sender.sendMessage("Something went wrong");
+	                					Main.lng.msg(sender,"err");
 	                				}
                 				}
             				}
@@ -279,18 +279,18 @@ public class Commander implements CommandExecutor {
         			{
         				if(!sender.hasPermission("ks.buy"))
         				{
-        					sender.sendMessage("You're not allowed to buy stuff");
+        					Main.lng.msg(sender,"err_noperm");
         					return true;
         				}
         				
         				if(this.enderChestClose(sender) == false)
     					{
-        					sender.sendMessage("You've to go to an auction house to request items");	
+        					Main.lng.msg(sender,"err_to_ah");	
     					}
         				
         				if(args.length < 3)
                 		{
-        					sender.sendMessage("USAGE: /auction request (BLOCK) MAXPRICE AMOUNT");
+        					Main.lng.msg(sender,"usage_request");
                 		} else 
                 		{
                 			int price=0, amount=0;
@@ -304,7 +304,7 @@ public class Commander implements CommandExecutor {
 	            				}
 	            				catch(Exception e)
 	            				{
-	            					sender.sendMessage("Amount must be Numeric");
+	            					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
 	            					return true;
 	            				}
 	            				try
@@ -313,7 +313,7 @@ public class Commander implements CommandExecutor {
 	            				}
 	            				catch(Exception e)
 	            				{
-	            					sender.sendMessage("Price must be Numeric");
+	            					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
 	            					return true;
 	            				}
 	            				
@@ -327,7 +327,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Amount must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
                 					return true;
                 				}
                 				try
@@ -336,7 +336,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Price must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
                 					return true;
                 				}
                 				i = KrimBlockName.parseName(args[1]);
@@ -344,28 +344,28 @@ public class Commander implements CommandExecutor {
                 			
                 			if(price > 10000000)
                 			{
-                				sender.sendMessage("Price is too high");
+                				Main.lng.msg(sender,"err_toohigh",new Object[]{"Price"});
             					return true;
                 			}
                 			
                 			if(i == null || i.getType() == Material.AIR)
             				{
-            					sender.sendMessage("Item not found or invalid");
+            					Main.lng.msg(sender,"err_block");
             					return true;
             				}
             				i.setAmount(amount);
             				int bought = Main.helper.buyItems(i, price, sender.getName());
             				if(bought == -1)
             				{
-            					sender.sendMessage("You dont have enough money");
+            					Main.lng.msg(sender,"err_nomoney");
             				}
             				else if(bought == amount)
             				{
-            					sender.sendMessage("You've instantly bought the amount you wanted");
+            					Main.lng.msg(sender,"suc_bought");
             				} else
             				{
             					if(bought > 0)
-            						sender.sendMessage("You've instantly bought "+bought+" of "+amount);
+            						Main.lng.msg(sender,"suc_bought_part",new Object[]{bought,amount});
             					int req = amount - bought;
             					
             					
@@ -373,14 +373,14 @@ public class Commander implements CommandExecutor {
             					int resp = Main.helper.enlistRequest(o);
             					if(resp == 1)
             					{
-            						sender.sendMessage("You've requested "+req+" items for "+(req*price)+" "+Main.econ.currencyNamePlural());
-            						sender.sendMessage("Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
+            						Main.lng.msg(sender,"suc_req",new Object[]{req,(req*price)});
+            						Main.lng.msg(sender,"req_info");
             					} else if(resp == -2)
             					{
-            						sender.sendMessage("You're not allowed to request this item");
+            						Main.lng.msg(sender,"err_noperm");
             					} else if(resp == -1)
             					{
-            						sender.sendMessage("You dont have enough money");
+            						Main.lng.msg(sender,"err_nomoney");
             					}
             				}
                 		}
@@ -388,19 +388,19 @@ public class Commander implements CommandExecutor {
         			{
         				if(!sender.hasPermission("ks.buy"))
         				{
-        					sender.sendMessage("You're not allowed to buy stuff");
+        					Main.lng.msg(sender,"err_noperm");
         					return true;
         				}
         				
         				//KAUFE
         				if(args.length < 3)
                 		{
-        					sender.sendMessage("USAGE: /auction buy (BLOCK) MAXPRICE AMOUNT");
+        					Main.lng.msg(sender,"usage_buy");
                 		} else
                 		{
                 			if(this.enderChestClose(sender) == false)
         					{
-            					sender.sendMessage("You've to go to an auction house to buy items");	
+            					Main.lng.msg(sender,"err_to_ah");	
             					return true;
         					}
                 			
@@ -416,7 +416,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Amount must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
                 					return true;
                 				}
                 				try
@@ -425,7 +425,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Price must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
                 					return true;
                 				}
                 				
@@ -442,7 +442,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Amount must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
                 					return true;
                 				}
                 				try
@@ -451,7 +451,7 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					sender.sendMessage("Price must be Numeric");
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
                 					return true;
                 				}
                 				i = KrimBlockName.parseName(args[1]);
@@ -459,13 +459,13 @@ public class Commander implements CommandExecutor {
                 			
                 			if(price > 10000000)
                 			{
-                				sender.sendMessage("Price is too high");
+                				Main.lng.msg(sender,"err_toohigh",new Object[]{"Price"});
             					return true;
                 			}
                 			
             				if(i == null || i.getType() == Material.AIR)
             				{
-            					sender.sendMessage("Item not found");
+            					Main.lng.msg(sender,"err_block_404");
             					return true;
             				}
             				i.setAmount(amount);
@@ -473,57 +473,57 @@ public class Commander implements CommandExecutor {
             				double money = Main.econ.getBalance(sender.getName());
             				
             				if((money / price) < amount)
-            					sender.sendMessage("You dont have enough money ");
+            					Main.lng.msg(sender,"err_nomoney");
             				
             				int bought = Main.helper.buyItems(i, price, sender.getName());
             				if(bought == -1)
             				{
-            					sender.sendMessage("You dont have enough money");
+            					Main.lng.msg(sender,"err_nomoney");
             				}
             				else if(bought == amount)
             				{
-            					sender.sendMessage("You've bought the amount you wanted");
+            					Main.lng.msg(sender,"suc_bought");
             				} else if(bought == 0)
             				{
-            					sender.sendMessage("There is no offer which fulfills your options");
+            					Main.lng.msg(sender,"err_nooffer");
             				} else
             				{
-            					sender.sendMessage("You've only bought "+bought+"/"+amount);
+            					Main.lng.msg(sender,"suc_bought_part",new Object[]{bought,amount});
             				}
                 		}
         			} else if(args[0].equalsIgnoreCase("detail"))
         			{
         				if(!sender.hasPermission("ks.list"))
         				{
-        					sender.sendMessage("You're not allowed to list stuff");
+        					Main.lng.msg(sender,"err_noperm");
         					return true;
         				}
         				
         				//ZEIGE
         				if(args.length < 2)
                 		{
-        					sender.sendMessage("USAGE: /auction detail BLOCK");
+        					Main.lng.msg(sender,"usage_detail");
                 		} else
                 		{
                 			ItemStack i = KrimBlockName.parseName(args[1]);
                 			if(i != null)
                 				Main.helper.sendInfos((Player)sender, i);
                 			else
-                				sender.sendMessage("ERROR: BlockID '"+args[1]+"' invalid");	
+                				Main.lng.msg(sender,"err_block_404");	
                 		}
         			} else if(args[0].equalsIgnoreCase("collect"))
         			{
         				if(!sender.hasPermission("ks.buy"))
         				{
-        					sender.sendMessage("You're not allowed to buy stuff");
+        					Main.lng.msg(sender,"err_noperm");
         					return true;
         				} else
         				{
         					int am = Main.helper.hasDelivery((Player)sender);
         					if(am == 0)
-        						sender.sendMessage("There is nothing for delivery");
+        						Main.lng.msg(sender,"err_nodeliver");
         					/*else
-        						sender.sendMessage("You've '"+am+"' items waiting for delivery");*/
+        						Main.lng.msg.(sender,"You've '"+am+"' items waiting for delivery");*/
         					
         					if(am > 0)
         					{
@@ -532,7 +532,7 @@ public class Commander implements CommandExecutor {
 	        						Main.helper.getDelivery((Player)sender);
 	        					} else
 	        					{
-	        						sender.sendMessage("You've to go to the auction house to collect your items");
+	        						Main.lng.msg(sender,"err_to_ah");
 	        					}
         					}
         				}

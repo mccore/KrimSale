@@ -14,6 +14,7 @@ public class Main  extends JavaPlugin
 	static Database Database;
 	public KSListener listener;
 	public static KSHelper helper;
+	public static KSLang lng;
 	public static Economy econ;	 
  	public Main()
     {
@@ -38,6 +39,9 @@ public class Main  extends JavaPlugin
     	
     	//Lade Config Datei
     	new configManager(this);
+    	
+    	//Lade Language System
+    	lng = new KSLang();
     	
     	//Lade mySQL Lib - wenn nicht existent
     	//if (!(new File("lib/", "mysql-connector-java-bin.jar")).exists()) Downloader.install(configManager.MySQL_Jar_Location, "mysql-connector-java-bin.jar");

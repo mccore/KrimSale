@@ -23,6 +23,7 @@ public class configManager {
     public static Integer useMaps = 0;
     public static Integer ender = 1;
     public static Integer fee = 0;
+    public static String lang = "de";
     
     private static File confFile;
     
@@ -55,6 +56,7 @@ public class configManager {
         SQLPassword = conf.getString("System.Database.Settings.MySQL.Password", SQLPassword);
         useMaps = conf.getInt("System.useMaps", useMaps);
         fee = conf.getInt("System.fee", fee);
+        lang = conf.getString("System.lang", lang);
         ender = conf.getInt("System.useEnderChests", ender);
         
         try {
@@ -97,6 +99,7 @@ public class configManager {
             conf.set("System.Database.Settings.MySQL.Password", SQLPassword);
             conf.set("System.useMaps",useMaps);
             conf.set("System.fee",fee);
+            conf.set("System.lang",lang);
             conf.set("System.useEnderChests", ender);
             
             try {
