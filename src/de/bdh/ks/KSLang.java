@@ -77,7 +77,7 @@ public class KSLang
 		if(this.lng.get(this.lang).get(el) != null)
 			str = this.lng.get(this.lang).get(el);
 		
-		str.replace("$a", Main.econ.currencyNamePlural());
+		str = str.replace("$a", Main.econ.currencyNamePlural());
 		
 		if(args != null && args.length > 0)
 		{
