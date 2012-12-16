@@ -24,6 +24,7 @@ public class configManager {
     public static Integer ender = 1;
     public static Integer fee = 0;
     public static String lang = "de";
+    public static Integer enderForTransaction = 1;
     
     private static File confFile;
     
@@ -58,6 +59,7 @@ public class configManager {
         fee = conf.getInt("System.fee", fee);
         lang = conf.getString("System.lang", lang);
         ender = conf.getInt("System.useEnderChests", ender);
+        enderForTransaction = conf.getInt("System.useEnderChestsForTransaction", enderForTransaction);
         
         try {
         	if (!confFile.exists())
@@ -101,6 +103,7 @@ public class configManager {
             conf.set("System.fee",fee);
             conf.set("System.lang",lang);
             conf.set("System.useEnderChests", ender);
+            conf.set("System.useEnderChestsForTransaction", enderForTransaction);
             
             try {
                 confFile.createNewFile();
