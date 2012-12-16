@@ -137,7 +137,7 @@ public class KSHelper
         				if(fisent == false)
     					{
     						fisent = true;
-    						p.sendMessage("Your inventory is full");
+    						Main.lng.msg(p, "err_full_inv");
     					}
     				}
     			} else remove = true;
@@ -153,9 +153,9 @@ public class KSHelper
     		}
     		
     		if(money > 0)
-    			p.sendMessage("You've received "+money+ " "+Main.econ.currencyNamePlural());
+    			Main.lng.msg(p, "suc_rec_money",new Object[]{money});
     		if(blocks > 0)
-    			p.sendMessage("You've received "+blocks+ " Items");
+    			Main.lng.msg(p, "suc_rec_item",new Object[]{blocks});
     		
     		if(ps2 != null)
 				ps2.close();
@@ -1329,26 +1329,26 @@ public class KSHelper
 	public void sendInfos(Player p, ItemStack i)
 	{
 		String name = KrimBlockName.getNameByItemStack(i);
-		p.sendMessage("Details about: "+name);
+		Main.lng.msg(p, "info",new Object[]{name});
 		if(this.canbeSold(i) == false)
-			p.sendMessage("Cannot be traded");
+			Main.lng.msg(p, "err_notrade");
 		else
 		{
 			int am = this.getMaxAmount(i);
-			p.sendMessage("Amount for sale: "+am);
+			Main.lng.msg(p, "amount_sale",new Object[]{am});
 			
 			if(am > 0)
 			{
 				for(Map.Entry<Integer,KSOffer> m : this.getPrices(i, 4).entrySet())
 				{
-					p.sendMessage("Offer: "+m.getValue().amount+" for "+m.getKey()+" "+Main.econ.currencyNamePlural()+" each");
+					Main.lng.msg(p, "offer", new Object[]{m.getValue().amount,m.getKey()});
 				}
 			}
 			
 			
 			for(Map.Entry<Integer,KSOffer> m : this.getRequests(i, 3).entrySet())
 			{
-				p.sendMessage("Request: "+m.getValue().amount+" for "+m.getKey()+" "+Main.econ.currencyNamePlural()+" each");
+				Main.lng.msg(p, "request", new Object[]{m.getValue().amount,m.getKey()});
 			}
 		}
 	}
@@ -1361,9 +1361,9 @@ public class KSHelper
 		{
     		Player plx = Bukkit.getServer().getPlayerExact(p);
     		if(configManager.ender == 1)
-    			plx.sendMessage("You can collect some items in the auction house");
+    			Main.lng.msg(plx, "goto_ah");
     		else
-    			plx.sendMessage("You can collect some items by entering /auction collect");
+    			Main.lng.msg(plx, "collect");
 		} catch(Exception e)
 		{
 			

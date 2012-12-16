@@ -35,6 +35,8 @@ public class KSLang
 		en.put("err_nodeliver", "There is nothing for delivery");
 		en.put("err_block_404","Item not found");
 		en.put("err_block","Item is invalid");
+		en.put("err_full_inv", "Your inventory is full");
+		en.put("err_notrade", "Cannot be traded");
 		en.put("err","Something went wrong");
 		en.put("err_nomoney","You don't have enough money");
 		en.put("err_nooffer","There is no offer which fulfills your options");
@@ -44,6 +46,14 @@ public class KSLang
 		en.put("suc_bought","You've bought the amount you wanted");
 		en.put("suc_bought_part","You've bought $1 of $2");
 		en.put("suc_req", "You've requested $1 items for $2 $a");
+		en.put("suc_rec_item","You've received $1 items");
+		en.put("suc_rec_money","You've received $1 $a");
+		en.put("info", "Auction details about $1");
+		en.put("goto_ah", "You can collect some items in the auction house");
+		en.put("collect", "You can collect some items by entering /auction collect");
+		en.put("amount_sale", "Amount for sale: $1");
+		en.put("offer","Offer: $1 for $2 $a each");
+		en.put("request","Request: $1 for $2 $a each");
 		en.put("req_info","Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
 		
 		this.lng.put("en", en);
