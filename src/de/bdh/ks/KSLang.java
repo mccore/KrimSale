@@ -13,7 +13,7 @@ public class KSLang
 	public KSLang()
 	{
 		HashMap<String,String> en = new HashMap<String,String>();
-		HashMap<String,String> de = new HashMap<String,String>();
+		//HashMap<String,String> de = new HashMap<String,String>();
 		
 		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST");
 		en.put("usage_abort","USAGE: /auction abort ID - you can get the id by using list");
@@ -47,7 +47,7 @@ public class KSLang
 		en.put("req_info","Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
 		
 		this.lng.put("en", en);
-		this.lng.put("de", de);
+		//this.lng.put("de", de);
 		
 		if(this.lng.get(configManager.lang) == null)
 			this.lang = "en";
