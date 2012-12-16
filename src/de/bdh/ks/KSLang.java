@@ -17,10 +17,10 @@ public class KSLang
 		
 		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST");
 		en.put("usage_abort","USAGE: /auction abort ID - you can get the id by using list");
-		en.put("usage_request", "USAGE: /auction request (BLOCK) MAXPRICE AMOUNT");
-		en.put("usage_buy","USAGE: /auction buy (BLOCK) MAXPRICE AMOUNT");
-		en.put("usage_detail", "USAGE: /auction detail BLOCK");
-		en.put("usage_sell","USAGE: /auction sell BLOCK PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE for Item in Hand");
+		en.put("usage_request", "USAGE: /auction request (Item) MAXPRICE AMOUNT");
+		en.put("usage_buy","USAGE: /auction buy (Item) MAXPRICE AMOUNT");
+		en.put("usage_detail", "USAGE: /auction detail Item");
+		en.put("usage_sell","USAGE: /auction sell Item PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE for Item in Hand");
 		en.put("usage_abortrequest","USAGE: /auction abortrequest ID - you can get the id by using list");
 		en.put("err_num","$1 must be numeric");
 		en.put("rem_success","Your auction has been cancelled. You can pick it up at the auction house");
@@ -33,13 +33,13 @@ public class KSLang
 		en.put("err_to_ah","You've to go to an auction house to do this");
 		en.put("err_toohigh","$1 is too high");
 		en.put("err_nodeliver", "There is nothing for delivery");
-		en.put("err_block_404","Block not found");
-		en.put("err_block","Block is invalid");
+		en.put("err_block_404","Item not found");
+		en.put("err_block","Item is invalid");
 		en.put("err","Something went wrong");
 		en.put("err_nomoney","You don't have enough money");
 		en.put("err_nooffer","There is no offer which fulfills your options");
 		en.put("err_nomoney_fee", "You cannot afford the fee of $1 $a");
-		en.put("suc_offer", "Success. You're offering $1 Blocks for $2 $a");
+		en.put("suc_offer", "Success. You're offering $1 Items for $2 $a");
 		en.put("suc_fee_paid","You've paid an auction-fee of $1 $a");
 		en.put("suc_bought","You've bought the amount you wanted");
 		en.put("suc_bought_part","You've bought $1 of $2");
