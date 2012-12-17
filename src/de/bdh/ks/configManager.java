@@ -25,7 +25,7 @@ public class configManager {
     public static Integer fee = 0;
     public static String lang = "de";
     public static Integer enderForTransaction = 1;
-    public static Integer interactBlock = 130;
+    public static Integer interactBlock = 130, interactBlockSub=0;
     private static File confFile;
     
 	
@@ -59,6 +59,7 @@ public class configManager {
         fee = conf.getInt("System.fee", fee);
         lang = conf.getString("System.lang", lang);
         interactBlock = conf.getInt("System.interactBlock", interactBlock);
+        interactBlockSub = conf.getInt("System.interactBlockSub", interactBlockSub);
         ender = conf.getInt("System.useEnderChests", ender);
         enderForTransaction = conf.getInt("System.useEnderChestsForTransaction", enderForTransaction);
         
@@ -104,6 +105,7 @@ public class configManager {
             conf.set("System.fee",fee);
             conf.set("System.lang",lang);
             conf.set("System.interactBlock",interactBlock);
+            conf.set("System.interactBlockSub",interactBlockSub);
             conf.set("System.useEnderChests", ender);
             conf.set("System.useEnderChestsForTransaction", enderForTransaction);
             

@@ -74,6 +74,12 @@ public class KSListener implements Listener
 		{  
 	 		if(event.getClickedBlock().getTypeId() == configManager.interactBlock)  
 	 		{  
+	 			if(configManager.interactBlockSub != 0)
+	 			{
+	 				if(event.getClickedBlock().getData() != configManager.interactBlockSub)
+	 					return;
+	 			}
+	 			
 	 			if(event.getAction() == Action.LEFT_CLICK_BLOCK && event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() != Material.AIR)  
 	 			{  
 	 				//Zeige Infos über den Block  

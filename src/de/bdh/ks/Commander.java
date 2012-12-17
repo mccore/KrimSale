@@ -34,7 +34,14 @@ public class Commander implements CommandExecutor {
 	        		{
 	        			temp = b.getRelative(i$, j$, k$);
 	        			if(temp.getTypeId() == configManager.interactBlock)
-	        				return true;
+	        			{
+	        				if(configManager.interactBlockSub != 0)
+	        				{
+	        					if(temp.getData() == configManager.interactBlockSub)
+	        						return true;
+	        				} else
+	        					return true;
+	        			}
 	        		} 
 	            }
 	        }
