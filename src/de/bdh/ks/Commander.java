@@ -33,7 +33,7 @@ public class Commander implements CommandExecutor {
 	        		for(int k$ = (rad * -1); k$ < rad; k$++)
 	        		{
 	        			temp = b.getRelative(i$, j$, k$);
-	        			if(temp.getType() == Material.ENDER_CHEST)
+	        			if(temp.getTypeId() == configManager.interactBlock)
 	        				return true;
 	        		} 
 	            }
