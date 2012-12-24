@@ -181,6 +181,7 @@ public class Commander implements CommandExecutor {
         				if(configManager.enderForTransaction == 1 && this.enderChestClose(sender) == false)
     					{
         					Main.lng.msg(sender,"err_to_ah");	
+        					return true;
     					}
         				
         				//VERKAUFE
@@ -290,10 +291,13 @@ public class Commander implements CommandExecutor {
         					return true;
         				}
         				
+        				
         				if(configManager.enderForTransaction == 1 && this.enderChestClose(sender) == false)
     					{
-        					Main.lng.msg(sender,"err_to_ah");	
+        					Main.lng.msg(sender,"err_to_ah");
+        					return true;
     					}
+    				
         				
         				if(args.length < 3)
                 		{
