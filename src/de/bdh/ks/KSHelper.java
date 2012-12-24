@@ -349,6 +349,7 @@ public class KSHelper
 		
 		return ret;
 	}
+
 	
 	public int getOfferAmountFromPlayer(String p)
 	{
@@ -497,6 +498,83 @@ public class KSHelper
 		} catch (SQLException e)
 		{
 			System.out.println((new StringBuilder()).append("[KS] unable to get offers from player: ").append(e).toString());
+		}
+		return hm;
+	}
+	
+	public int getOfferAmount()
+	{
+		int ret = 0;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_offer");
+        	
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			ret = rs.getInt("c");
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get global offer amount: ").append(e).toString());
+			ret = -1;
+		}
+		
+		return ret;
+	}
+	
+	public Map<Integer,KSOffer> getOffers(int orderby, int am, int begin)
+	{
+		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT id,type,subtype,amount,price FROM ").append(configManager.SQLTable).append("_offer GROUP BY type,subtype ORDER BY ? ");
+
+        	
+        	b.append("LIMIT ").append(begin).append(",").append(am);
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		if(orderby == 1)	
+	    		ps.setString(1, "price ASC");
+    		else
+    			ps.setString(1, "zeit DESC");
+    		
+    		ResultSet rs = ps.executeQuery();
+    		
+    		KSOffer f;
+    		ItemStack is;
+    		while(rs.next())
+    		{
+    			is = new ItemStack(rs.getInt("type"));
+    			if(rs.getInt("subtype") != 0)
+    				is.setDurability((short) rs.getInt("subtype"));
+    			
+    			f = new KSOffer(is,null,rs.getInt("price"), rs.getInt("amount"));
+    			hm.put(rs.getInt("id"), f);
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get offers: ").append(e).toString());
 		}
 		return hm;
 	}

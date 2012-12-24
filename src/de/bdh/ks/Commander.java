@@ -502,6 +502,45 @@ public class Commander implements CommandExecutor {
             					Main.lng.msg(sender,"suc_bought_part",new Object[]{bought,amount});
             				}
                 		}
+        			} else if(args[0].equalsIgnoreCase("overview"))
+        			{
+        				if(!sender.hasPermission("ks.list"))
+        				{
+        					Main.lng.msg(sender,"err_noperm");
+        					return true;
+        				}
+        				
+        				//ZEIGE
+        				if(args.length < 1)
+                		{
+        					Main.lng.msg(sender,"usage_overview");
+                		} else
+                		{
+                			int page = 1;
+            				try
+            				{
+            					page = Integer.parseInt(args[1]);
+            				}
+            				catch(Exception e) { }
+            				
+            				
+            				int amount = Main.helper.getOfferAmount();
+            				int maxpage = (int) Math.ceil(amount / 5);
+            				
+            				if(amount == 0)
+            				{
+            					Main.lng.msg(sender,"err_noreq");
+            				} else
+            					Main.lng.msg(sender,"header_list",new Object[]{amount,"offers",page,maxpage});
+            				
+            				page = page -1;
+            				page = page * 5;
+            				Map<Integer,KSOffer> l = Main.helper.getOffers(1,5,page);
+            				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
+            				{
+            					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+            				}
+                		}
         			} else if(args[0].equalsIgnoreCase("detail"))
         			{
         				if(!sender.hasPermission("ks.list"))

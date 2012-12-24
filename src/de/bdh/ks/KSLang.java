@@ -15,11 +15,12 @@ public class KSLang
 		HashMap<String,String> en = new HashMap<String,String>();
 		//HashMap<String,String> de = new HashMap<String,String>();
 		
-		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST");
+		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW");
 		en.put("usage_abort","USAGE: /auction abort ID - you can get the id by using list");
 		en.put("usage_request", "USAGE: /auction request (Item) MAXPRICE AMOUNT");
 		en.put("usage_buy","USAGE: /auction buy (Item) MAXPRICE AMOUNT");
 		en.put("usage_detail", "USAGE: /auction detail Item");
+		en.put("usage_overview", "USAGE: /auction overview PAGE");
 		en.put("usage_sell","USAGE: /auction sell Item PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE for Item in Hand");
 		en.put("usage_abortrequest","USAGE: /auction abortrequest ID - you can get the id by using list");
 		en.put("err_num","$1 must be numeric");
