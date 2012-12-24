@@ -123,7 +123,7 @@ public class Commander implements CommandExecutor {
         				
         				
         				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
-        				int maxpage = (int) Math.ceil(amount / 5);
+        				int maxpage = (int) Math.ceil(amount / 5.0);
         				
         				if(amount == 0)
         				{
@@ -152,7 +152,7 @@ public class Commander implements CommandExecutor {
         				
         				
         				int amount = Main.helper.getRequestAmountFromPlayer(sender.getName());
-        				int maxpage = (int) Math.ceil(amount / 5);
+        				int maxpage = (int) Math.ceil(amount / 5.0);
         				
         				if(amount == 0)
         				{
@@ -525,7 +525,7 @@ public class Commander implements CommandExecutor {
             				
             				
             				int amount = Main.helper.getOfferAmount();
-            				int maxpage = (int) Math.ceil(amount / 5);
+            				int maxpage = (int) Math.ceil(amount / 5.0);
             				
             				if(amount == 0)
             				{
@@ -538,7 +538,7 @@ public class Commander implements CommandExecutor {
             				Map<Integer,KSOffer> l = Main.helper.getOffers(1,5,page);
             				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
             				{
-            					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+            					sender.sendMessage("Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
             				}
                 		}
         			} else if(args[0].equalsIgnoreCase("detail"))
