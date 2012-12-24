@@ -570,7 +570,7 @@ public class Commander implements CommandExecutor {
             				{
             					Main.lng.msg(sender,"err_noreq");
             				} else
-            					Main.lng.msg(sender,"header_list",new Object[]{amount,"offers",page,maxpage});
+            					Main.lng.msg(sender,"header_list",new Object[]{amount,"requests",page,maxpage});
             				
             				page = page -1;
             				page = page * 5;
