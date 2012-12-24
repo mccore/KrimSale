@@ -15,7 +15,7 @@ public class KSLang
 		HashMap<String,String> en = new HashMap<String,String>();
 		//HashMap<String,String> de = new HashMap<String,String>();
 		
-		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW");
+		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
 		en.put("usage_abort","USAGE: /auction abort ID - you can get the id by using list");
 		en.put("usage_request", "USAGE: /auction request (Item) MAXPRICE AMOUNT");
 		en.put("usage_buy","USAGE: /auction buy (Item) MAXPRICE AMOUNT");

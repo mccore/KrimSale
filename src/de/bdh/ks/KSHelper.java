@@ -579,6 +579,83 @@ public class KSHelper
 		return hm;
 	}
 	
+	public int getRequestsAmount()
+	{
+		int ret = 0;
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_request");
+        	
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			ret = rs.getInt("c");
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get global request amount: ").append(e).toString());
+			ret = -1;
+		}
+		
+		return ret;
+	}
+	
+	public Map<Integer,KSOffer> getRequests(int orderby, int am, int begin)
+	{
+		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT id,type,subtype,amount,price FROM ").append(configManager.SQLTable).append("_request GROUP BY type,subtype ORDER BY ? ");
+
+        	
+        	b.append("LIMIT ").append(begin).append(",").append(am);
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		if(orderby == 1)	
+	    		ps.setString(1, "price DESC");
+    		else
+    			ps.setString(1, "zeit DESC");
+    		
+    		ResultSet rs = ps.executeQuery();
+    		
+    		KSOffer f;
+    		ItemStack is;
+    		while(rs.next())
+    		{
+    			is = new ItemStack(rs.getInt("type"));
+    			if(rs.getInt("subtype") != 0)
+    				is.setDurability((short) rs.getInt("subtype"));
+    			
+    			f = new KSOffer(is,null,rs.getInt("price"), rs.getInt("amount"));
+    			hm.put(rs.getInt("id"), f);
+    		}
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get requests: ").append(e).toString());
+		}
+		return hm;
+	}
+	
 	public Map<Integer,KSOffer> getTransactionsByPlayer(String p,boolean from, int am, int begin)
 	{
 		return this.getTransactionsByPlayer(p,null,from,am,begin);
