@@ -441,7 +441,7 @@ public class Commander implements CommandExecutor {
                 			{
                 				try
                 				{
-                					price = Integer.parseInt(args[1]);
+                					price = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
@@ -451,7 +451,7 @@ public class Commander implements CommandExecutor {
                 				
                 				try
                 				{
-                					amount = Integer.parseInt(args[2]);
+                					amount = Integer.parseInt(args[3]);
                 				}
                 				catch(Exception e)
                 				{
