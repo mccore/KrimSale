@@ -449,9 +449,8 @@ public class Commander implements CommandExecutor {
                 					return true;
                 				}
 
-                				//Block == IteminHand
                 				i = KrimBlockName.parseName(args[1]);
-                			//Kaufe Gegenstand aus dem Chat
+                			//Kaufe Gegenstand aus dem Chat mit maximalpreis
                 			} else if(args.length == 4)
                 			{
                 				//Normale Usage
