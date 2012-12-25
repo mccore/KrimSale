@@ -2,7 +2,6 @@ package de.bdh.ks;
 import java.util.Map;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,36 +16,7 @@ public class Commander implements CommandExecutor {
 
 	public boolean enderChestClose(CommandSender s)
 	{
-		if(configManager.ender == 0)
-			return true;
-		
-		int rad = 5;
-		Block temp;
-		if(s instanceof Player)
-		{
-			Player p = (Player)s;
-			Block b = p.getLocation().getBlock();
-			for(int i$ = (rad * -1); i$ < rad; i$++)
-	        {
-	        	for(int j$ = (rad * -1); j$ < rad; j$++)
-	            {
-	        		for(int k$ = (rad * -1); k$ < rad; k$++)
-	        		{
-	        			temp = b.getRelative(i$, j$, k$);
-	        			if(temp.getTypeId() == configManager.interactBlock)
-	        			{
-	        				if(configManager.interactBlockSub != 0)
-	        				{
-	        					if(temp.getData() == configManager.interactBlockSub)
-	        						return true;
-	        				} else
-	        					return true;
-	        			}
-	        		} 
-	            }
-	        }
-		}
-		return false;
+		return Main.helper.ahNear(s);
 	}
 	
 	

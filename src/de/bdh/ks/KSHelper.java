@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -1509,16 +1511,60 @@ public class KSHelper
 	}
 
 	
+	public boolean ahNear(CommandSender s)
+	{
+		if(s instanceof Player)
+			return this.ahNear((Player)s);
+		else return false;
+	}
+	public boolean ahNear(Player p)
+	{
+		if(configManager.ender == 0)
+			return true;
+		
+		int rad = 5;
+		Block temp;
+
+		Block b = p.getLocation().getBlock();
+		for(int i$ = (rad * -1); i$ < rad; i$++)
+        {
+        	for(int j$ = (rad * -1); j$ < rad; j$++)
+            {
+        		for(int k$ = (rad * -1); k$ < rad; k$++)
+        		{
+        			temp = b.getRelative(i$, j$, k$);
+        			if(temp.getTypeId() == configManager.interactBlock)
+        			{
+        				if(configManager.interactBlockSub != 0)
+        				{
+        					if(temp.getData() == configManager.interactBlockSub)
+        						return true;
+        				} else
+        					return true;
+        			}
+        		} 
+            }
+		}
+		return false;
+	}
 	//Player hat nun etwas im Delivery
 	public void pokeDelivery(String p)
 	{
 		try
 		{
     		Player plx = Bukkit.getServer().getPlayerExact(p);
-    		if(configManager.ender == 1)
-    			Main.lng.msg(plx, "goto_ah");
-    		else
-    			Main.lng.msg(plx, "collect");
+    		
+    		if(ahNear(plx))
+    		{
+    			this.getDelivery(plx);
+    		} else
+    		{
+    			if(configManager.ender == 1)
+        			Main.lng.msg(plx, "goto_ah");
+        		else
+        			Main.lng.msg(plx, "collect");
+    		}
+    		
 		} catch(Exception e)
 		{
 			
