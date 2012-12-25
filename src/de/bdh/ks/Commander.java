@@ -445,20 +445,10 @@ public class Commander implements CommandExecutor {
                 				}
                 				catch(Exception e)
                 				{
-                					Main.lng.msg(sender,"err_num",new Object[]{"Price/Amount"});
+                					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
                 					return true;
                 				}
-                				
-                				try
-                				{
-                					amount = Integer.parseInt(args[3]);
-                				}
-                				catch(Exception e)
-                				{
-                					amount = price;
-                					price = 999999;
-                				}
-                				
+
                 				//Block == IteminHand
                 				i = KrimBlockName.parseName(args[1]);
                 			//Kaufe Gegenstand aus dem Chat
