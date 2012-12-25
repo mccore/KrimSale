@@ -404,7 +404,7 @@ public class Commander implements CommandExecutor {
         				}
         				
         				//KAUFE
-        				if(args.length < 3)
+        				if(args.length < 2)
                 		{
         					Main.lng.msg(sender,"usage_buy");
                 		} else
@@ -418,30 +418,49 @@ public class Commander implements CommandExecutor {
                 			int price=0, amount=0;
                 			ItemStack i = null;
                 			
-                			//Kaufe Gegenstand in der Hand
-                			if(args.length == 3)
+                			//Kaufe Gegenstand in der Hand ohne Preis
+                			if(args.length == 2)
                 			{
+                				price = 99999999;
                 				try
                 				{
-                					amount = Integer.parseInt(args[2]);
+                					amount = Integer.parseInt(args[1]);
                 				}
                 				catch(Exception e)
                 				{
-                					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
+                					Main.lng.msg(sender,"err_num",new Object[]{"amount"});
                 					return true;
                 				}
+                				
+                				//Block == IteminHand
+                				i = ((Player) sender).getItemInHand().clone();
+                			}
+                			
+                			//Kaufe Gegenstand ohne Preis
+                			if(args.length == 3)
+                			{
                 				try
                 				{
                 					price = Integer.parseInt(args[1]);
                 				}
                 				catch(Exception e)
                 				{
-                					Main.lng.msg(sender,"err_num",new Object[]{"Price"});
+                					Main.lng.msg(sender,"err_num",new Object[]{"Price/Amount"});
                 					return true;
                 				}
                 				
+                				try
+                				{
+                					amount = Integer.parseInt(args[2]);
+                				}
+                				catch(Exception e)
+                				{
+                					amount = price;
+                					price = 999999;
+                				}
+                				
                 				//Block == IteminHand
-                				i = ((Player) sender).getItemInHand().clone();
+                				i = KrimBlockName.parseName(args[1]);
                 			//Kaufe Gegenstand aus dem Chat
                 			} else if(args.length == 4)
                 			{
