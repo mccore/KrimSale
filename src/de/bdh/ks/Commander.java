@@ -391,7 +391,7 @@ public class Commander implements CommandExecutor {
                 			//Kaufe Gegenstand in der Hand ohne Preis
                 			if(args.length == 2)
                 			{
-                				price = 99999999;
+                				price = 999999;
                 				try
                 				{
                 					amount = Integer.parseInt(args[1]);
@@ -411,14 +411,15 @@ public class Commander implements CommandExecutor {
                 			{
                 				try
                 				{
-                					price = Integer.parseInt(args[2]);
+                					amount = Integer.parseInt(args[2]);
                 				}
                 				catch(Exception e)
                 				{
                 					Main.lng.msg(sender,"err_num",new Object[]{"Amount"});
                 					return true;
                 				}
-
+                				
+                				price = 999999;
                 				i = KrimBlockName.parseName(args[1]);
                 			//Kaufe Gegenstand aus dem Chat mit maximalpreis
                 			} else if(args.length == 4)
