@@ -79,7 +79,7 @@ public class Main  extends JavaPlugin
         
         getCommand("auction").setExecutor(new Commander(this)); 
         getCommand("ks").setExecutor(new AdminCommander(this)); 
-        Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new KSTimer(this), 1, 20*60);
+        Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new KSTimer(this), 1, 20*60);
     }
     
     public static PluginDescriptionFile pdf;
