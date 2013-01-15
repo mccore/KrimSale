@@ -511,7 +511,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_offer GROUP BY type,subtype");
+        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(c) FROM (SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_offer GROUP BY type,subtype HAVING c) AS A");
         	
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
@@ -588,7 +588,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_request GROUP BY type,subtype");
+        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(c) FROM (SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_request GROUP BY type,subtype HAVING c) AS A");
         	
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
