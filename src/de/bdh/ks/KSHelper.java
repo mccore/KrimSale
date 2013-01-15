@@ -511,7 +511,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_offer");
+        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_offer GROUP BY type,subtype");
         	
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
@@ -588,7 +588,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_request");
+        	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_request GROUP BY type,subtype");
         	
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
@@ -621,7 +621,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT id,type,subtype,amount,price FROM ").append(configManager.SQLTable).append("_request GROUP BY type,subtype ORDER BY ? ");
+        	StringBuilder b = (new StringBuilder()).append("SELECT id,type,subtype,amount,max(price) as price FROM ").append(configManager.SQLTable).append("_request GROUP BY type,subtype ORDER BY ? ");
 
         	
         	b.append("LIMIT ").append(begin).append(",").append(am);
@@ -765,7 +765,7 @@ public class KSHelper
 		return ret;
 	}
 	
-	public Map<Integer,KSOffer> getRequests(ItemStack i, int rows)
+	public Map<Integer,KSOffer> getRequestsOf(ItemStack i, int rows)
 	{
 		if(canbeSold(i) == false)
 			return null;
@@ -1503,7 +1503,7 @@ public class KSHelper
 			}
 			
 			
-			for(Map.Entry<Integer,KSOffer> m : this.getRequests(i, 3).entrySet())
+			for(Map.Entry<Integer,KSOffer> m : this.getRequestsOf(i, 3).entrySet())
 			{
 				Main.lng.msg(p, "request", new Object[]{m.getValue().amount,m.getKey()});
 			}
