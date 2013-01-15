@@ -13,7 +13,7 @@ public class KSLang
 	public KSLang()
 	{
 		HashMap<String,String> en = new HashMap<String,String>();
-		//HashMap<String,String> de = new HashMap<String,String>();
+		HashMap<String,String> de = new HashMap<String,String>();
 		
 		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
 		en.put("usage_abort","USAGE: /auction abort ID - you can get the id by using list");
@@ -58,8 +58,51 @@ public class KSLang
 		en.put("welcome","Welcome to KrimSale - worldofminecraft.de");
 		en.put("req_info","Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
 		
+		de.put("usage", "NUTZUNG: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
+		de.put("usage_abort","NUTZUNG: /auction abort ID - die ID erhaelst du mittels List");
+		de.put("usage_request", "NUTZUNG: /auction request (Item) MAXPREIS MENGE");
+		de.put("usage_buy","NUTZUNG: /auction buy (Item (MAXPREIS)) MENGE");
+		de.put("usage_detail", "NUTZUNG: /auction detail Itemname");
+		de.put("usage_overview", "NUTZUNG: /auction overview [SEITE]");
+		de.put("usage_sell","NUTZUNG: /auction sell Item PREISPROBLOCK (MENGE) oder /auction sell PREIS fuer Gegenstand in der Hand");
+		de.put("usage_abortrequest","NUTZUNG: /auction abortrequest ID - die ID erhaelst du mittels Listrequest");
+		de.put("err_num","$1 muss eine Nummer sein");
+		de.put("rem_success","Deine Auktion wurde abgebrochen. Du kannst deine Gegenstaende im Auktionshaus abholen");
+		de.put("err_invalid_id", "Diese ID ist ungueltig oder du hast keine Berechtigung dies zu tun");
+		de.put("rem_rec_success","Deine Anfrage wurde abgebrochen. Du kannst dein Geld im Auktionshaus abholen");
+		de.put("err_nosale","Du hast nichts zum Verkauf angeboten");
+		de.put("header_list","Du hast $1 $2. Seite: $3 von $4");
+		de.put("err_noreq","Du hast keine Gegenstaende im Ankauf");
+		de.put("err_noperm","Du darfst dies nicht tun");
+		de.put("err_to_ah","Du musst in ein Auktionshaus gehen");
+		de.put("err_toohigh","$1 ist zu hoch");
+		de.put("err_nodeliver", "Dein Postfach ist leer");
+		de.put("err_block_404","Item nicht gefunden");
+		de.put("err_block","Item ist ungueltig");
+		de.put("err_full_inv", "Dein Inventar ist voll");
+		de.put("err_notrade", "Kann nicht verkauft werden");
+		de.put("err","Etwas ist schiefgelaufen");
+		de.put("err_nomoney","Du hast nicht genug Geld");
+		de.put("err_nooffer","Es gibt keine Angebote die deinen Anforderungen entsprechen");
+		de.put("err_nomoney_fee", "Du kannst dir die Gebuehren von $1 $a nicht leisten");
+		de.put("suc_offer", "Erfolgreich eingestellt: $1 Items fuer $2 $a");
+		de.put("suc_fee_paid","Du hast $1 $a an Gebuehren bezahlt");
+		de.put("suc_bought","Du hast alles Gekauft, was du haben wolltest");
+		de.put("suc_bought_part","Du hast $1 von $2 gekauft");
+		de.put("suc_req", "Du hast $1 Gegenstaende zum Ankauf von $2 $a eingetragen");
+		de.put("suc_rec_item","Du hast $1 Items erhalten");
+		de.put("suc_rec_money","Du hast $1 $a erhalten");
+		de.put("info", "Auktionsinformationen ueber $1");
+		de.put("goto_ah", "Einige Waren koennen im Auktionshaus abgeholt werden");
+		de.put("collect", "Du kannst einige Waren via /auction collect empfangen");
+		de.put("amount_sale", "Menge zum Verkauf: $1");
+		de.put("offer","Angebot: $1 fuer je $2 $a");
+		de.put("request","Anfrage: $1 fuer je $2 $a");
+		de.put("welcome","Willkommen bei KrimSale - worldofminecraft.de");
+		de.put("req_info","Deine Anfrage ist fuer 14 Tage gueltig. Wenn dies nicht erfolgreich ist bekommst du dein Geld wieder");
+		
 		this.lng.put("en", en);
-		//this.lng.put("de", de);
+		this.lng.put("de", de);
 		
 		if(this.lng.get(configManager.lang) == null)
 			this.lang = "en";
