@@ -34,7 +34,8 @@ public class Main  extends JavaPlugin
         System.out.println((new StringBuilder(String.valueOf(cmdName))).append("by ").append(author).append(" version ").append(version).append(" disabled.").toString());
     }
     
-    public void onEnable()
+    @SuppressWarnings("deprecation")
+	public void onEnable()
     {	
     	
     	//Lade Config Datei
@@ -79,7 +80,11 @@ public class Main  extends JavaPlugin
         
         getCommand("auction").setExecutor(new Commander(this)); 
         getCommand("ks").setExecutor(new AdminCommander(this)); 
-        Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new KSTimer(this), 1, 20*60);
+        
+        if(configManager.brautec == 1)
+        	Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new KSTimer(this), 1, 20*60);
+        else
+        	Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new KSTimer(this), 1, 20*60);
     }
     
     public static PluginDescriptionFile pdf;
