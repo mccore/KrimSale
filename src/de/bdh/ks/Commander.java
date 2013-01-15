@@ -517,7 +517,7 @@ public class Commander implements CommandExecutor {
             				Map<Integer,KSOffer> l = Main.helper.getOffers(1,5,page);
             				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
             				{
-            					sender.sendMessage("Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+            					sender.sendMessage("Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getPrice()+ " "+Main.econ.currencyNamePlural()+" each");
             				}
                 		}
         			} else if(args[0].equalsIgnoreCase("overviewrequest"))
@@ -556,7 +556,7 @@ public class Commander implements CommandExecutor {
             				Map<Integer,KSOffer> l = Main.helper.getRequests(1,5,page);
             				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
             				{
-            					sender.sendMessage("Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
+            					sender.sendMessage("Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getPrice()+ " "+Main.econ.currencyNamePlural()+ " each");
             				}
                 		}
         			} else if(args[0].equalsIgnoreCase("detail"))
