@@ -21,13 +21,14 @@ public class KSLang
 		en.put("usage_buy","USAGE: /auction buy (Item (MAXPRICE)) AMOUNT");
 		en.put("usage_detail", "USAGE: /auction detail Item");
 		en.put("usage_overview", "USAGE: /auction overview PAGE");
-		en.put("usage_sell","USAGE: /auction sell Item PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE for Item in Hand");
+		en.put("usage_sell","USAGE: /auction sell Item PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE_EACH for Item in Hand");
 		en.put("usage_abortrequest","USAGE: /auction abortrequest ID - you can get the id by using list");
 		en.put("err_num","$1 must be numeric");
 		en.put("rem_success","Your auction has been cancelled. You can pick it up at the auction house");
 		en.put("err_invalid_id", "This ID was invalid or you dont have the permissions to do that");
 		en.put("rem_rec_success","Your request has been cancelled. You can pick it up at the auction house");
 		en.put("err_nosale","You don't have items for sale");
+		en.put("noqsell","Unable to quicksell item - no default price");
 		en.put("header_list","You've $1 $2. Page: $3 of $4");
 		en.put("err_noreq","You don't have items requested");
 		en.put("err_noperm","You're not allowed to do this");
@@ -65,9 +66,10 @@ public class KSLang
 		de.put("usage_buy","NUTZUNG: /auction buy (Item (MAXPREIS)) MENGE");
 		de.put("usage_detail", "NUTZUNG: /auction detail Itemname");
 		de.put("usage_overview", "NUTZUNG: /auction overview [SEITE]");
-		de.put("usage_sell","NUTZUNG: /auction sell Item PREISPROBLOCK (MENGE) oder /auction sell PREIS fuer Gegenstand in der Hand");
+		de.put("usage_sell","NUTZUNG: /auction sell Item PREISPROBLOCK (MENGE) oder /auction sell PREIS_PRO fuer Gegenstand in der Hand");
 		de.put("usage_abortrequest","NUTZUNG: /auction abortrequest ID - die ID erhaelst du mittels Listrequest");
 		de.put("err_num","$1 muss eine Nummer sein");
+		en.put("noqsell","Kann nicht qsell'en. Es ist kein Standardpreis bekannt");
 		de.put("rem_success","Deine Auktion wurde abgebrochen. Du kannst deine Gegenstaende im Auktionshaus abholen");
 		de.put("err_invalid_id", "Diese ID ist ungueltig oder du hast keine Berechtigung dies zu tun");
 		de.put("rem_rec_success","Deine Anfrage wurde abgebrochen. Du kannst dein Geld im Auktionshaus abholen");

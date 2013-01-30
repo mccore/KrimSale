@@ -140,7 +140,7 @@ public class Commander implements CommandExecutor {
         				
         				
         			}
-        			else if(args[0].equalsIgnoreCase("sell"))
+        			else if(args[0].equalsIgnoreCase("sell") || args[0].equalsIgnoreCase("qsell"))
         			{
         				if(!sender.hasPermission("ks.sell"))
         				{
@@ -155,7 +155,7 @@ public class Commander implements CommandExecutor {
     					}
         				
         				//VERKAUFE
-        				if(args.length < 2)
+        				if(args.length < 2 && !args[0].equalsIgnoreCase("qsell"))
                 		{
         					Main.lng.msg(sender,"usage_sell");
                 		} else
@@ -165,7 +165,19 @@ public class Commander implements CommandExecutor {
                 			int maxAm = 0;
                 			
                 			//Verkaufe Item in der Hand
-                			if(args.length == 2) 
+                			if(args.length == 1 &&  args[0].equalsIgnoreCase("qsell"))
+                			{
+                				i = ((Player) sender).getItemInHand();
+                				if(configManager.werte.get(KrimBlockName.getIdByItemStack(i)) == null)
+                				{
+                					Main.lng.msg(sender,"noqsell");
+                					return true;
+                				} else
+                					price = configManager.werte.get(KrimBlockName.getIdByItemStack(i));
+                				
+                			}
+                			
+                			else if(args.length == 2) 
                 			{
                 				try
                 				{
