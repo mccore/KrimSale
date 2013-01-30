@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -1655,5 +1656,14 @@ public class KrimBlockName
 			}
 		}
 		return i;
+	}
+
+	public static String getIdByBlock(Block i) 
+	{
+		String str = "";
+		str += i.getTypeId();
+		if(i.getData() > 0 && i.getType().getMaxDurability() == 0)
+			str += ":"+i.getData();
+		return str;
 	}
 }

@@ -4,13 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 
 public class AdminCommander implements CommandExecutor
 {
@@ -28,10 +36,51 @@ public class AdminCommander implements CommandExecutor
 			{
 				if(args.length == 0)
         		{
-					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/LISTOFFER/ADDBUY/REMOVEBUY/LISTBUY/ABORT/CLEARDELIVERY");	
+					sender.sendMessage("USAGE: /ks PLAYER/ADDOFFER/REMOVEOFFER/LISTOFFER/ADDBUY/REMOVEBUY/LISTBUY/ABORT/CLEARDELIVERY/PRICE");	
         		} else
         		{
-        			if(args[0].equalsIgnoreCase("player"))
+        			if(args[0].equalsIgnoreCase("price") && sender instanceof Player)
+        			{
+        				Selection sel = this.m.we.getSelection((Player) sender);
+        				if (sel == null || !(sel instanceof CuboidSelection))
+        				{
+        					sender.sendMessage(ChatColor.RED+"Please make a cuboid selection with WorldEdit first!");
+        					return true;
+        				}
+        				else if (sel instanceof CuboidSelection)
+        				{
+        					int value = 0;
+        					HashMap<Block,Integer> prices = new HashMap<Block,Integer>();
+        					
+        					Location max = sel.getMaximumPoint();
+        					Location min = sel.getMinimumPoint();
+        					Block b = null;
+        					for(int x = min.getBlockX(); x <= max.getBlockX(); ++x)
+        					{
+        						for(int y = min.getBlockY(); y <= max.getBlockY(); ++y)
+            					{
+        							for(int z = min.getBlockZ(); z <= max.getBlockZ(); ++z)
+                					{
+        								b = min.getWorld().getBlockAt(x,y,z);
+                						if(b != null && b.getType() != Material.AIR)
+                						{
+                							if(prices.get(b) == null)
+                							{
+                								if(configManager.werte.get(KrimBlockName.getIdByBlock(b)) != null)
+                								{
+                									prices.put(b,configManager.werte.get(KrimBlockName.getIdByBlock(b)));
+                								} else
+                									prices.put(b,0);
+                							}
+                							value += prices.get(b);
+                						}
+                					}
+            					}	
+        					}
+        					sender.sendMessage(ChatColor.YELLOW+"Price of selection: "+value);
+        				}
+        			}
+        			else if(args[0].equalsIgnoreCase("player"))
         			{
         				//Liste von allen Transaktionen des Spielers oder alle Verkäufe oder alle Deposits
         				if(args.length < 3)

@@ -4,9 +4,12 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 
 public class Main  extends JavaPlugin
@@ -16,6 +19,7 @@ public class Main  extends JavaPlugin
 	public static KSHelper helper;
 	public static KSLang lng;
 	public static Economy econ;	 
+	WorldEditPlugin we;
  	public Main()
     {
  		new KrimBlockName(); //INIT BlockNameLister
@@ -37,6 +41,8 @@ public class Main  extends JavaPlugin
     @SuppressWarnings("deprecation")
 	public void onEnable()
     {	
+    	Plugin worldEdit = getServer().getPluginManager().getPlugin("WorldEdit");
+    	this.we = (WorldEditPlugin)worldEdit;
     	
     	//Lade Config Datei
     	new configManager(this);
