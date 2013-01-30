@@ -5,8 +5,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 
 public class KSListener implements Listener 
@@ -23,6 +25,12 @@ public class KSListener implements Listener
     {
 		Main.helper.hasDelivery(event.getPlayer()); 
 		Main.lng.msg(event.getPlayer(), "welcome");
+    }
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+    public void onQuit(PlayerQuitEvent event)
+    {
+		this.m.poffer.remove(event.getPlayer());
     }
 	
 	/*
@@ -63,6 +71,32 @@ public class KSListener implements Listener
 			
 		}
 	}*/
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onBlockBreak(BlockBreakEvent event)
+	{
+		if(event.isCancelled() == true)
+			return;
+		
+		if(event.getBlock() != null)
+		{
+			if(event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.SIGN_POST)
+			{
+				if(this.m.poffer.get(event.getPlayer()) != null)
+				{
+					Main.helper.setSign(this.m.poffer.get(event.getPlayer()), event.getBlock());
+					Boolean offer = false;
+					if(this.m.poffer.get(event.getPlayer()).type == 1)
+						offer = true;
+					Main.helper.updateSign(this.m.poffer.get(event.getPlayer()).id, false, offer);
+					
+					this.m.poffer.remove(event.getPlayer());
+					Main.lng.msg(event.getPlayer(), "suc_sign_com");
+					event.setCancelled(true);
+				}
+			}
+		}
+	}
 	
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event)

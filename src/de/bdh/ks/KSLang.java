@@ -15,11 +15,12 @@ public class KSLang
 		HashMap<String,String> en = new HashMap<String,String>();
 		HashMap<String,String> de = new HashMap<String,String>();
 		
-		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
+		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/SIGN/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
 		en.put("usage_abort","USAGE: /auction abort ID - you can get the id by using list");
 		en.put("usage_request", "USAGE: /auction request (Item) MAXPRICE AMOUNT");
 		en.put("usage_buy","USAGE: /auction buy (Item (MAXPRICE)) AMOUNT");
 		en.put("usage_detail", "USAGE: /auction detail Item");
+		en.put("usage_sign", "USAGE: /auction sign REQUEST/OFFER ID - you can get the id by using list/listrequest");
 		en.put("usage_overview", "USAGE: /auction overview PAGE");
 		en.put("usage_sell","USAGE: /auction sell Item PRICEPERBLOCK (AMOUNT) OR /auction sell PRICE_EACH for Item in Hand");
 		en.put("usage_abortrequest","USAGE: /auction abortrequest ID - you can get the id by using list");
@@ -50,6 +51,7 @@ public class KSLang
 		en.put("suc_req", "You've requested $1 items for $2 $a");
 		en.put("suc_rec_item","You've received $1 items");
 		en.put("suc_rec_money","You've received $1 $a");
+		en.put("suc_sign","Now just destroy the sign you want to use");
 		en.put("info", "Auction details about $1");
 		en.put("goto_ah", "You can collect some items in the auction house");
 		en.put("collect", "You can collect some items by entering /auction collect");
@@ -58,13 +60,15 @@ public class KSLang
 		en.put("offer","Offer: $1 for $2 $a each");
 		en.put("request","Request: $1 for $2 $a each");
 		en.put("welcome","Welcome to KrimSale - worldofminecraft.de");
+		en.put("suc_sign_com","Success. The sign has been created");
 		en.put("req_info","Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
 		
-		de.put("usage", "NUTZUNG: /auction SELL/BUY/REQUEST/DETAIL/LIST/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
+		de.put("usage", "NUTZUNG: /auction SELL/BUY/REQUEST/DETAIL/LIST/SIGN/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
 		de.put("usage_abort","NUTZUNG: /auction abort ID - die ID erhaelst du mittels List");
 		de.put("usage_request", "NUTZUNG: /auction request (Item) MAXPREIS MENGE");
 		de.put("usage_buy","NUTZUNG: /auction buy (Item (MAXPREIS)) MENGE");
 		de.put("usage_detail", "NUTZUNG: /auction detail Itemname");
+		de.put("usage_sign", "NUTZUNG: /auction sign REQUEST/OFFER ID - die ID erhaelst du mittels List/Listrequests");
 		de.put("usage_overview", "NUTZUNG: /auction overview [SEITE]");
 		de.put("usage_sell","NUTZUNG: /auction sell Item PREISPROBLOCK (MENGE) oder /auction sell PREIS_PRO fuer Gegenstand in der Hand");
 		de.put("usage_abortrequest","NUTZUNG: /auction abortrequest ID - die ID erhaelst du mittels Listrequest");
@@ -96,6 +100,8 @@ public class KSLang
 		de.put("suc_req", "Du hast $1 Gegenstaende zum Ankauf von $2 $a eingetragen");
 		de.put("suc_rec_item","Du hast $1 Items erhalten");
 		de.put("suc_rec_money","Du hast $1 $a erhalten");
+		de.put("suc_sign","Jetzt zerstoere das Schild, welches du nutzen willst");
+		de.put("suc_sign_com","Erfolgreich. Das Schild wurde angelegt");
 		de.put("info", "Auktionsinformationen ueber $1");
 		de.put("goto_ah", "Einige Waren koennen im Auktionshaus abgeholt werden");
 		de.put("collect", "Du kannst einige Waren via /auction collect empfangen");

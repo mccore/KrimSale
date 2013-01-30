@@ -31,8 +31,38 @@ public class Commander implements CommandExecutor {
         			Main.lng.msg(sender,"usage");
         		} else
         		{
+        			if(args[0].equalsIgnoreCase("sign"))
+        			{
+        				if(args.length < 3)
+                		{
+        					Main.lng.msg(sender,"usage_sign");
+                		} else
+                		{
+                			int of=0,id=0;
+                			if(args[1].equalsIgnoreCase("offer"))
+                				of = 1;
+                			else if(args[1].equalsIgnoreCase("request"))
+                				of = 2;
+                			try
+            				{
+            					id = Integer.parseInt(args[2]);
+            				}
+            				catch(Exception e) 
+            				{ 
+            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
+            					return true;
+            				}
+                			
+                			if(of > 0 && id > 0)
+                			{
+                				this.plugin.poffer.put((Player) sender, new KSId(of,id));
+                				Main.lng.msg(sender,"suc_sign");
+                			} else
+                				Main.lng.msg(sender,"usage_sign");
+                		}
+        			}
         			//Min 1 Parameter
-        			if(args[0].equalsIgnoreCase("abort"))
+        			else if(args[0].equalsIgnoreCase("abort"))
         			{
         				if(args.length < 2)
                 		{
@@ -368,6 +398,7 @@ public class Commander implements CommandExecutor {
             					{
             						Main.lng.msg(sender,"suc_req",new Object[]{req,(req*price)});
             						Main.lng.msg(sender,"req_info");
+
             					} else if(resp == -2)
             					{
             						Main.lng.msg(sender,"err_noperm");

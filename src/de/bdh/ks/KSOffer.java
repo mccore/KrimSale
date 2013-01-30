@@ -10,6 +10,9 @@ public class KSOffer
 	String ply,to;
 	int amount = 0;
 	int price = 0;
+	public int type = 0;
+	public boolean signit = false;
+	
 	Timestamp time = null;
 	int admin = 0;
 	public KSOffer(ItemStack i,String ply, int priceEach)

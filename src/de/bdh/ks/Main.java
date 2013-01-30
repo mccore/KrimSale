@@ -1,9 +1,12 @@
 package de.bdh.ks;
 
+import java.util.HashMap;
+
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -18,7 +21,9 @@ public class Main  extends JavaPlugin
 	public KSListener listener;
 	public static KSHelper helper;
 	public static KSLang lng;
-	public static Economy econ;	 
+	public static Economy econ;	
+	public HashMap<Player,KSId> poffer = new HashMap<Player,KSId>();
+	
 	WorldEditPlugin we;
  	public Main()
     {

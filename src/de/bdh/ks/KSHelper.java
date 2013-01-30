@@ -1124,6 +1124,41 @@ public class KSHelper
 	}
 	
 	
+	public void setSign(KSId id, Block b)
+	{
+		String w = "";
+		if(id.type == 1)
+		{
+			//OFFER
+			w = "_offer";
+		} else if(id.type == 2)
+		{
+			//REQUEST
+			w = "_request";
+		}
+		
+		if(w.length() > 0)
+		{
+			Connection conn = Main.Database.getConnection();
+	    	PreparedStatement ps;
+	    	StringBuilder bld = (new StringBuilder()).append("UPDATE ").append(configManager.SQLTable).append(w).append(" SET signx=?,signy=?,signz=?,sworld=? WHERE id = ? LIMIT 1");
+	    	try 
+	    	{
+				ps = conn.prepareStatement(bld.toString());
+				ps.setInt(1, b.getX());
+				ps.setInt(2, b.getY());
+				ps.setInt(3, b.getZ());
+				ps.setString(4, b.getWorld().getName());
+				ps.setInt(5, id.id);
+				ps.executeUpdate();
+				
+	    	} catch (SQLException e) 
+	    	{
+	    		System.out.println((new StringBuilder()).append("[KS] unable to set sign: ").append(e).toString());
+			}	
+		}
+	}
+	
 	public void updateSign(int id, boolean delete,boolean offer)
 	{
 		Block block = null;
@@ -1174,14 +1209,14 @@ public class KSHelper
     			{
     				String way = "";
     				if(offer)
-    					way = "Sell";
+    					way = "Selling";
     				else
-    					way = "Buy";
+    					way = "Buying";
     				
-    				Sign s = (Sign) block;
+    				Sign s = (Sign) block.getState();
     				s.setLine(0, way+" ID: "+id);
     				s.setLine(1, KrimBlockName.getNameById(type, subtype));
-    				s.setLine(2, "Amount left: "+amount);
+    				s.setLine(2, "Amount: "+amount);
     				s.setLine(3, "Price: "+price);
     				s.update();
     			}
