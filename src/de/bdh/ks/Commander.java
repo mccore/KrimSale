@@ -388,10 +388,11 @@ public class Commander implements CommandExecutor {
                 			int price=0, amount=0;
                 			ItemStack i = null;
                 			
+                			double money = Main.econ.getBalance(sender.getName());
+                			
                 			//Kaufe Gegenstand in der Hand ohne Preis
                 			if(args.length == 2)
                 			{
-                				price = 999999;
                 				try
                 				{
                 					amount = Integer.parseInt(args[1]);
@@ -402,6 +403,7 @@ public class Commander implements CommandExecutor {
                 					return true;
                 				}
                 				
+                				price = (int) (money / amount);
                 				//Block == IteminHand
                 				i = ((Player) sender).getItemInHand().clone();
                 			}
@@ -419,7 +421,7 @@ public class Commander implements CommandExecutor {
                 					return true;
                 				}
                 				
-                				price = 999999;
+                				price = (int) (money / amount);
                 				i = KrimBlockName.parseName(args[1]);
                 			//Kaufe Gegenstand aus dem Chat mit maximalpreis
                 			} else if(args.length == 4)
@@ -460,7 +462,7 @@ public class Commander implements CommandExecutor {
             				}
             				i.setAmount(amount);
             				
-            				double money = Main.econ.getBalance(sender.getName());
+            				
             				
             				if((money / price) < amount)
             					Main.lng.msg(sender,"err_nomoney");

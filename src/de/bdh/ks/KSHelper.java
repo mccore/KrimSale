@@ -1191,7 +1191,6 @@ public class KSHelper
 	
 	public int buyItem(int id, int amount, String p)
 	{
-		
 		try
 		{
 			int ret = 0;
