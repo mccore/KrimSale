@@ -1320,7 +1320,6 @@ public class KSHelper
 								int am = Main.helper.removeItemsFromPlayer(p, i, i.getAmount());
 								if(am > 0)
 								{
-									System.out.println(o.getFee());
 									if(o.payFee())
 									{
 										serveRequest(id, o, 1);
