@@ -189,7 +189,7 @@ public class KSHelper
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps,ps2=null;
         	boolean ret = false;
-        	StringBuilder b = (new StringBuilder()).append("SELECT price,amount,type,subtype,player FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 0,1");
+        	StringBuilder b = (new StringBuilder()).append("SELECT sworld,price,amount,type,subtype,player FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 0,1");
         	ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, id);
     		ResultSet rs = ps.executeQuery();
@@ -198,6 +198,8 @@ public class KSHelper
     		{
     			if(p == null || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
     			{
+    				if(rs.getString("sworld").length() > 0)
+    					updateSign(id,true,false);
     				ret = true;
 	    			System.out.println((new StringBuilder()).append("[KS] abort request with id: ").append(id).toString());
 	    			int money = rs.getInt("amount")*rs.getInt("price");
@@ -237,7 +239,7 @@ public class KSHelper
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps,ps2=null;
         	boolean ret = false;
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,type,subtype,player FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
+        	StringBuilder b = (new StringBuilder()).append("SELECT sworld,amount,type,subtype,player FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
         	ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, id);
     		ResultSet rs = ps.executeQuery();
@@ -246,6 +248,9 @@ public class KSHelper
     		{
     			if(p == null || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
     			{
+    				if(rs.getString("sworld").length() > 0)
+    					updateSign(id,true,true);
+    				
     				ret = true;
 	    			System.out.println((new StringBuilder()).append("[KS] abort auction with id: ").append(id).toString());
 	    			ItemStack i = new ItemStack(rs.getInt("type"));
@@ -1152,6 +1157,9 @@ public class KSHelper
 				ps.setInt(5, id.id);
 				ps.executeUpdate();
 				
+				if(ps != null)
+					ps.close();
+				
 	    	} catch (SQLException e) 
 	    	{
 	    		System.out.println((new StringBuilder()).append("[KS] unable to set sign: ").append(e).toString());
@@ -1193,6 +1201,12 @@ public class KSHelper
 				type = rs.getInt("type");
 				subtype = rs.getInt("subtype");
 			}
+			
+			if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+			
     	} catch (SQLException e) 
     	{
     		System.out.println((new StringBuilder()).append("[KS] unable to update sign: ").append(e).toString());
@@ -1224,6 +1238,122 @@ public class KSHelper
     	}
 	}
 	
+	public boolean serveOfferBySign(Player p, Block b)
+	{
+		if(!p.hasPermission("ks.sign"))
+			return false;
+		
+		if(b != null && b.getState() instanceof Sign)
+		{
+			Sign s = (Sign) b.getState();
+			String line = s.getLine(0).toLowerCase();
+			int id = 0,type=0;
+			try
+			{
+				if(line.startsWith("selling id: "))
+				{
+					line = line.replace("selling id: ", "");
+					//offer
+					
+					if(!p.hasPermission("ks.buy"))
+						return false;
+					
+					id = Integer.parseInt(line);
+					type = 1;
+				} else if(line.startsWith("buying id: "))
+				{
+					line = line.replace("buying id: ", "");
+					//request
+					
+					if(!p.hasPermission("ks.sell"))
+						return false;
+					
+					id = Integer.parseInt(line);
+					type = 2;
+				}
+			} catch (Exception e) { }
+			
+			if(type != 0 && id != 0)
+			{
+				Connection conn = Main.Database.getConnection();
+		    	PreparedStatement ps;
+		    	boolean done = false;
+		    	String what = "";
+		    	if(type == 1)
+		    		what = "_offer";
+		    	else
+		    		what = "_request";
+		    	
+		    	StringBuilder bl = (new StringBuilder()).append("SELECT sworld,signx,signy,signz,amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append(what).append(" WHERE id = ? LIMIT 0,1");
+		    	try 
+		    	{
+					ps = conn.prepareStatement(bl.toString());
+					ps.setInt(1, id);
+
+					ResultSet rs = ps.executeQuery();
+					
+					while(rs.next())
+					{
+						if(b.getX() == rs.getInt("signx") && b.getY() == rs.getInt("signy") && b.getZ() == rs.getInt("signz") && b.getWorld().getName().equalsIgnoreCase(rs.getString("sworld")))
+						{
+							if(type == 1)
+							{
+								//Kaufe
+								if(Main.econ.getBalance(p.getName()) >= rs.getInt("price"))
+								{
+									buyItem(id, 1, p.getName());
+									Main.econ.withdrawPlayer(p.getName(), rs.getInt("price"));
+									done = true;
+								} else
+									Main.lng.msg(p,"err_nomoney");
+							}
+							else	
+							{
+								//Verkaufe
+								ItemStack i = new ItemStack(Material.AIR);
+								i.setTypeId(rs.getInt("type"));
+								if(rs.getInt("subtype") > 0)
+									i.setDurability((byte)rs.getInt("subtype"));
+								i.setAmount(1);
+								
+								KSOffer o = new KSOffer(i,p.getName(),rs.getInt("price"));
+								int am = Main.helper.removeItemsFromPlayer(p, i, i.getAmount());
+								if(am > 0)
+								{
+									System.out.println(o.getFee());
+									if(o.payFee())
+									{
+										serveRequest(id, o, 1);
+										done = true;
+									} else
+									{
+										Main.lng.msg(p,"err_nomoney_fee",new Object[]{o.getFee()}); 
+										Main.helper.giveBack(o);
+									}
+								} else
+	            				{
+	            					Main.lng.msg(p,"err_noitem");
+	            				}
+							}
+							
+						}
+						
+					}
+					
+					if(ps != null)
+						ps.close();
+					if(rs != null)
+						rs.close();
+					
+		    	} catch (SQLException e) 
+		    	{
+		    		System.out.println((new StringBuilder()).append("[KS] unable to serve sign: ").append(e).toString());
+				}
+		    	
+		    	return done;
+			} else return false;
+		} else return false;
+	}
 	public int buyItem(int id, int amount, String p)
 	{
 		try

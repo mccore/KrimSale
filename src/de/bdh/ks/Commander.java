@@ -33,33 +33,40 @@ public class Commander implements CommandExecutor {
         		{
         			if(args[0].equalsIgnoreCase("sign"))
         			{
-        				if(args.length < 3)
-                		{
-        					Main.lng.msg(sender,"usage_sign");
-                		} else
-                		{
-                			int of=0,id=0;
-                			if(args[1].equalsIgnoreCase("offer"))
-                				of = 1;
-                			else if(args[1].equalsIgnoreCase("request"))
-                				of = 2;
-                			try
-            				{
-            					id = Integer.parseInt(args[2]);
-            				}
-            				catch(Exception e) 
-            				{ 
-            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
-            					return true;
-            				}
-                			
-                			if(of > 0 && id > 0)
-                			{
-                				this.plugin.poffer.put((Player) sender, new KSId(of,id));
-                				Main.lng.msg(sender,"suc_sign");
-                			} else
-                				Main.lng.msg(sender,"usage_sign");
-                		}
+        				if(sender.hasPermission("ks.sign"))
+        				{
+	        				if(args.length < 3)
+	                		{
+	        					Main.lng.msg(sender,"usage_sign");
+	                		} else
+	                		{
+	                			int of=0,id=0;
+	                			if(args[1].equalsIgnoreCase("offer"))
+	                				of = 1;
+	                			else if(args[1].equalsIgnoreCase("request"))
+	                				of = 2;
+	                			try
+	            				{
+	            					id = Integer.parseInt(args[2]);
+	            				}
+	            				catch(Exception e) 
+	            				{ 
+	            					Main.lng.msg(sender,"err_num",new Object[]{"ID"});
+	            					return true;
+	            				}
+	                			
+	                			if(of > 0 && id > 0)
+	                			{
+	                				this.plugin.poffer.put((Player) sender, new KSId(of,id));
+	                				Main.lng.msg(sender,"suc_sign");
+	                			} else
+	                				Main.lng.msg(sender,"usage_sign");
+	                		}
+        				} else
+        				{
+        					Main.lng.msg(sender,"err_noperm");
+        					return true;
+        				}
         			}
         			//Min 1 Parameter
         			else if(args[0].equalsIgnoreCase("abort"))
@@ -106,7 +113,7 @@ public class Commander implements CommandExecutor {
             				}
                 			if(Main.helper.removeRequest(id,(Player)sender))
                 			{
-                				Main.lng.msg(sender,"rem_req_success");
+                				Main.lng.msg(sender,"rem_req_suc");
                 			} else 
                 				Main.lng.msg(sender,"err_invalid_id");
 
@@ -269,7 +276,7 @@ public class Commander implements CommandExecutor {
             				int am = Main.helper.removeItemsFromPlayer((Player) sender, i, i.getAmount());
             				if(am <= 0)
             				{
-            					Main.lng.msg(sender,"err_block");
+            					Main.lng.msg(sender,"err_noitem");
             				} else
             				{
                 				KSOffer of = new KSOffer(i,sender.getName(),price,am);

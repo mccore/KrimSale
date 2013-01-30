@@ -27,7 +27,7 @@ public class KSLang
 		en.put("err_num","$1 must be numeric");
 		en.put("rem_success","Your auction has been cancelled. You can pick it up at the auction house");
 		en.put("err_invalid_id", "This ID was invalid or you dont have the permissions to do that");
-		en.put("rem_rec_success","Your request has been cancelled. You can pick it up at the auction house");
+		en.put("rem_rec_suc","Your request has been cancelled. You can pick it up at the auction house");
 		en.put("err_nosale","You don't have items for sale");
 		en.put("noqsell","Unable to quicksell item - no default price");
 		en.put("header_list","You've $1 $2. Page: $3 of $4");
@@ -59,6 +59,7 @@ public class KSLang
 		en.put("default_price", "Suggested retail price: $1");
 		en.put("offer","Offer: $1 for $2 $a each");
 		en.put("request","Request: $1 for $2 $a each");
+		en.put("err_noitem","You dont own this item");
 		en.put("welcome","Welcome to KrimSale - worldofminecraft.de");
 		en.put("suc_sign_com","Success. The sign has been created");
 		en.put("req_info","Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
@@ -76,7 +77,7 @@ public class KSLang
 		en.put("noqsell","Kann nicht qsell'en. Es ist kein Standardpreis bekannt");
 		de.put("rem_success","Deine Auktion wurde abgebrochen. Du kannst deine Gegenstaende im Auktionshaus abholen");
 		de.put("err_invalid_id", "Diese ID ist ungueltig oder du hast keine Berechtigung dies zu tun");
-		de.put("rem_rec_success","Deine Anfrage wurde abgebrochen. Du kannst dein Geld im Auktionshaus abholen");
+		de.put("rem_rec_suc","Deine Anfrage wurde abgebrochen. Du kannst dein Geld im Auktionshaus abholen");
 		de.put("err_nosale","Du hast nichts zum Verkauf angeboten");
 		de.put("header_list","Du hast $1 $2. Seite: $3 von $4");
 		de.put("err_noreq","Du hast keine Gegenstaende im Ankauf");
@@ -90,6 +91,7 @@ public class KSLang
 		de.put("err_full_inv", "Dein Inventar ist voll");
 		de.put("err_notrade", "Kann nicht verkauft werden");
 		de.put("err","Etwas ist schiefgelaufen");
+		de.put("err_noitem","Du besitzt diesen Gegenstand nicht");
 		de.put("err_nomoney","Du hast nicht genug Geld");
 		de.put("err_nooffer","Es gibt keine Angebote die deinen Anforderungen entsprechen");
 		de.put("err_nomoney_fee", "Du kannst dir die Gebuehren von $1 $a nicht leisten");

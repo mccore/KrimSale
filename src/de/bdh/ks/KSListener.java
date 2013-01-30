@@ -1,6 +1,7 @@
 package de.bdh.ks;
 
 import org.bukkit.Material;
+import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -101,12 +102,22 @@ public class KSListener implements Listener
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event)
     {
-		if(configManager.ender == 0)  
-			return;  
-		
 		if(event.getClickedBlock() != null) 
 		{  
-	 		if(event.getClickedBlock().getTypeId() == configManager.interactBlock)  
+			if(event.getClickedBlock().getType() == Material.SIGN || event.getClickedBlock().getType() == Material.SIGN_POST)
+			{
+				//Signshop Implementation
+				if(event.getClickedBlock().getState() instanceof Sign && event.getAction() == Action.RIGHT_CLICK_BLOCK)
+    			{
+					if(Main.helper.serveOfferBySign(event.getPlayer(), event.getClickedBlock()))
+						event.setCancelled(true);
+    			}
+			}
+			
+			if(configManager.ender == 0)  
+				return;  
+			
+			if(event.getClickedBlock().getTypeId() == configManager.interactBlock && !event.getPlayer().isSneaking())  
 	 		{  
 	 			if(configManager.interactBlockSub != 0)
 	 			{
