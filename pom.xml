@@ -38,5 +38,10 @@
   		<artifactId>vault</artifactId>
   		<version>1.0</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.worldedit</groupId>
+  		<artifactId>worldedit</artifactId>
+  		<version>1.4.2</version>
+  	</dependency>
   </dependencies>
 </project>
