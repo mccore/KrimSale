@@ -2,6 +2,7 @@ package de.bdh.ks;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -174,7 +175,6 @@ public class KrimBlockName
 		names.put("ladder","65");
 		names.put("track","66");
 		names.put("cobblestonestairs","67");
-		//TODO: andere Treppen
 		names.put("lever","69");
 		names.put("pressureplate","70");
 		names.put("irondoorblock","71");
@@ -1550,6 +1550,13 @@ public class KrimBlockName
 		}
 	}
 	
+	public static void loadNames(Map<String,String> m)
+	{
+		for(Entry<?, ?> i : m.entrySet())
+		{
+			names.put((String)i.getKey(),(String)i.getValue());
+		}
+	}
 	
 	public static String searchName(String name)
 	{

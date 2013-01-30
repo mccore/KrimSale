@@ -3,7 +3,9 @@ package de.bdh.ks;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 
@@ -27,6 +29,8 @@ public class configManager {
     public static String lang = "de";
     public static Integer enderForTransaction = 1;
     public static Integer interactBlock = 130, interactBlockSub=0;
+    public static HashMap<String, String> names = new HashMap<String,String>();
+    public static HashMap<String,Integer> werte = new HashMap<String,Integer>();
     private static File confFile;
     
 	
@@ -65,6 +69,18 @@ public class configManager {
         brautec = conf.getInt("System.brautec", brautec);
         enderForTransaction = conf.getInt("System.useEnderChestsForTransaction", enderForTransaction);
         
+        ConfigurationSection nsel = conf.getConfigurationSection("Names");
+        for(String s : nsel.getKeys(false))
+        {
+        	names.put(s,nsel.getString(s));
+        }
+        
+        nsel = conf.getConfigurationSection("Values");
+        for(String s : nsel.getKeys(false))
+        {
+        	werte.put(s,nsel.getInt(s));
+        }
+        
         try {
         	if (!confFile.exists())
         		confFile.createNewFile();
@@ -95,7 +111,13 @@ public class configManager {
             File confFile;
             confFile = new File(plugin.getDataFolder(), "config.yml");
             conf = new YamlConfiguration();
-
+            
+            HashMap<String, String> n = new HashMap<String,String>();
+            n.put("stone", "1");
+            
+            HashMap<String, Integer> v = new HashMap<String,Integer>();
+            v.put("264", 8096);
+            
             conf.set("System.Database.Type", DatabaseType);
             conf.set("System.Database.Settings.Name", SQLDatabase);
             conf.set("System.Database.Settings.Table", SQLTable);
@@ -111,6 +133,8 @@ public class configManager {
             conf.set("System.useEnderChests", ender);
             conf.set("System.brautec", brautec);
             conf.set("System.useEnderChestsForTransaction", enderForTransaction);
+            conf.set("Names", n);
+            conf.set("Values", v);
             
             try {
                 confFile.createNewFile();

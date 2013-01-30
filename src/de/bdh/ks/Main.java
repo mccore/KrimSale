@@ -41,6 +41,8 @@ public class Main  extends JavaPlugin
     	//Lade Config Datei
     	new configManager(this);
     	
+    	KrimBlockName.loadNames(configManager.names);
+    	
     	//Lade Language System
     	lng = new KSLang();
     	
