@@ -1599,11 +1599,17 @@ public class KrimBlockName
 	
 	public static String getNameByItemStack(ItemStack i)
 	{
+		String str = getIdByItemStack(i);
+		return getNameById(str);
+	}
+	
+	public static String getIdByItemStack(ItemStack i)
+	{
 		String str = "";
 		str += i.getTypeId();
 		if(i.getDurability() > 0 && i.getType().getMaxDurability() == 0)
 			str += ":"+i.getDurability();
-		return getNameById(str);
+		return str;
 	}
 	
 	public static ItemStack parseName(String nam)

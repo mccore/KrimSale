@@ -53,6 +53,7 @@ public class KSLang
 		en.put("goto_ah", "You can collect some items in the auction house");
 		en.put("collect", "You can collect some items by entering /auction collect");
 		en.put("amount_sale", "Amount for sale: $1");
+		en.put("default_price", "Suggested retail price: $1");
 		en.put("offer","Offer: $1 for $2 $a each");
 		en.put("request","Request: $1 for $2 $a each");
 		en.put("welcome","Welcome to KrimSale - worldofminecraft.de");
@@ -75,6 +76,7 @@ public class KSLang
 		de.put("err_noreq","Du hast keine Gegenstaende im Ankauf");
 		de.put("err_noperm","Du darfst dies nicht tun");
 		de.put("err_to_ah","Du musst in ein Auktionshaus gehen");
+		de.put("default_price", "Preisempfehlung: $1");
 		de.put("err_toohigh","$1 ist zu hoch");
 		de.put("err_nodeliver", "Dein Postfach ist leer");
 		de.put("err_block_404","Item nicht gefunden");

@@ -1575,6 +1575,11 @@ public class KSHelper
 			int am = this.getMaxAmount(i);
 			Main.lng.msg(p, "amount_sale",new Object[]{am});
 			
+			if(configManager.werte.get(KrimBlockName.getIdByItemStack(i)) != null)
+			{
+				Main.lng.msg(p, "default_price",new Object[]{ configManager.werte.get(KrimBlockName.getIdByItemStack(i))});
+			}
+			
 			if(am > 0)
 			{
 				for(Map.Entry<Integer,KSOffer> m : this.getPrices(i, 4).entrySet())
