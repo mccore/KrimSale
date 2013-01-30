@@ -10,7 +10,9 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -983,7 +985,7 @@ public class KSHelper
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps,ps2=null;
         	
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 0,1");
+        	StringBuilder b = (new StringBuilder()).append("SELECT sworld,amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 0,1");
         	ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, id);
     		
@@ -1012,10 +1014,17 @@ public class KSHelper
     				ps2.setInt(1, (rs.getInt("amount") - amount));
     				ps2.setInt(2,id);
     				ps2.executeUpdate();
+    				
+    				if(rs.getString("sworld").length() > 0)
+    					this.updateSign(id, false, false);
 
     			} else
     			{
     				ret = rs.getInt("amount");
+    				
+    				if(rs.getString("sworld").length() > 0)
+    					this.updateSign(id, true, false);
+    				
     				//Entferne angebot
     				b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 1");
     				ps2 = conn.prepareStatement(b.toString());
@@ -1114,6 +1123,72 @@ public class KSHelper
 		return true;
 	}
 	
+	
+	public void updateSign(int id, boolean delete,boolean offer)
+	{
+		Block block = null;
+		int price=0,amount=0,type=0,subtype=0;
+		
+		Connection conn = Main.Database.getConnection();
+    	PreparedStatement ps;
+    	String what = "";
+    	if(offer)
+    		what = "_offer";
+    	else
+    		what = "_request";
+    	
+    	StringBuilder b = (new StringBuilder()).append("SELECT sworld,signx,signy,signz,amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append(what).append(" WHERE id = ? LIMIT 0,1");
+    	try 
+    	{
+			ps = conn.prepareStatement(b.toString());
+			ps.setInt(1, id);
+
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+			{
+				if(rs.getString("sworld").length() > 0)
+				{
+					World w = Bukkit.getWorld(rs.getString("sworld"));
+					if(w != null)
+						block = w.getBlockAt(rs.getInt("signx"),rs.getInt("signy"),rs.getInt("signz"));
+				}
+				price = rs.getInt("price");
+				amount = rs.getInt("amount");
+				type = rs.getInt("type");
+				subtype = rs.getInt("subtype");
+			}
+    	} catch (SQLException e) 
+    	{
+    		System.out.println((new StringBuilder()).append("[KS] unable to update sign: ").append(e).toString());
+		}
+		
+    	if(block != null && (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST))
+    	{
+    		//OKAY UPDATE SIGN
+    		if(amount <= 0 || delete == true)
+    			block.setType(Material.AIR);
+    		else
+    		{
+    			if(block.getState() instanceof Sign)
+    			{
+    				String way = "";
+    				if(offer)
+    					way = "Sell";
+    				else
+    					way = "Buy";
+    				
+    				Sign s = (Sign) block;
+    				s.setLine(0, way+" ID: "+id);
+    				s.setLine(1, KrimBlockName.getNameById(type, subtype));
+    				s.setLine(2, "Amount left: "+amount);
+    				s.setLine(3, "Price: "+price);
+    				s.update();
+    			}
+    		}
+    	}
+	}
+	
 	public int buyItem(int id, int amount, String p)
 	{
 		
@@ -1124,7 +1199,7 @@ public class KSHelper
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps,ps2=null;
         	
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
+        	StringBuilder b = (new StringBuilder()).append("SELECT sworld,amount,price,type,subtype,player,admin FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 0,1");
         	ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, id);
     		
@@ -1155,10 +1230,17 @@ public class KSHelper
     				ps2.setInt(1, (rs.getInt("amount") - amount));
     				ps2.setInt(2,id);
     				ps2.executeUpdate();
+    				
+    				if(rs.getString("sworld").length() > 0)
+    					this.updateSign(id, false, true);
 
     			} else
     			{
     				ret = rs.getInt("amount");
+    				
+    				if(rs.getString("sworld").length() > 0)
+    					this.updateSign(id, true, true);
+    				
     				//Entferne angebot
     				b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 1");
     				ps2 = conn.prepareStatement(b.toString());
