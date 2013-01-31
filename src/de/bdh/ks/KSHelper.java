@@ -1214,7 +1214,7 @@ public class KSHelper
     		System.out.println((new StringBuilder()).append("[KS] unable to update sign: ").append(e).toString());
 		}
 		
-    	if(block != null && (block.getType() == Material.SIGN || block.getType() == Material.SIGN_POST))
+    	if(block != null && (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST))
     	{
     		//OKAY UPDATE SIGN
     		if(amount <= 0 || delete == true)

@@ -81,7 +81,7 @@ public class KSListener implements Listener
 		
 		if(event.getBlock() != null)
 		{
-			if(event.getBlock().getType() == Material.SIGN || event.getBlock().getType() == Material.SIGN_POST)
+			if(event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST)
 			{
 				if(this.m.poffer.get(event.getPlayer()) != null)
 				{
@@ -104,7 +104,7 @@ public class KSListener implements Listener
     {
 		if(event.getClickedBlock() != null) 
 		{  
-			if(event.getClickedBlock().getType() == Material.SIGN || event.getClickedBlock().getType() == Material.SIGN_POST)
+			if(event.getClickedBlock().getType() == Material.SIGN_POST || event.getClickedBlock().getType() == Material.WALL_SIGN)
 			{
 				//Signshop Implementation
 				if(event.getClickedBlock().getState() instanceof Sign && event.getAction() == Action.RIGHT_CLICK_BLOCK)
