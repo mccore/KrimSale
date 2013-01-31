@@ -398,12 +398,14 @@ public class Commander implements CommandExecutor {
             						Main.lng.msg(sender,"suc_bought_part",new Object[]{bought,amount});
             					int req = amount - bought;
             					
-            					
             					KSOffer o = new KSOffer(i,sender.getName(),price);
             					int resp = Main.helper.enlistRequest(o);
             					if(resp == 1)
             					{
-            						Main.lng.msg(sender,"suc_req",new Object[]{req,(req*price)});
+            						if(o.getAmount() == req)
+            							Main.lng.msg(sender,"suc_req",new Object[]{req,(req*price)});
+            						else
+            							Main.lng.msg(sender,"suc_req_part",new Object[]{o.getAmount(),(o.getAmount()*price)});
             						Main.lng.msg(sender,"req_info");
 
             					} else if(resp == -2)

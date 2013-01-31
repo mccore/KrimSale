@@ -51,6 +51,7 @@ public class KSLang
 		en.put("suc_req", "You've requested $1 items for $2 $a");
 		en.put("suc_rec_item","You've received $1 items");
 		en.put("suc_rec_money","You've received $1 $a");
+		en.put("suc_req_part","You've only enough money for $1 items for $2 $a");
 		en.put("suc_sign","Now just destroy the sign you want to use");
 		en.put("info", "Auction details about $1");
 		en.put("goto_ah", "You can collect some items in the auction house");
@@ -85,6 +86,7 @@ public class KSLang
 		de.put("err_to_ah","Du musst in ein Auktionshaus gehen");
 		de.put("default_price", "Preisempfehlung: $1");
 		de.put("err_toohigh","$1 ist zu hoch");
+		de.put("suc_req_part","Dein Geld hat nur fuer $1 Items zu je $2 $a gereicht");
 		de.put("err_nodeliver", "Dein Postfach ist leer");
 		de.put("err_block_404","Item nicht gefunden");
 		de.put("err_block","Item ist ungueltig");
