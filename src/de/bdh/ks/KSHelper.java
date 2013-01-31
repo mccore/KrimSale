@@ -1819,10 +1819,13 @@ public class KSHelper
     			this.getDelivery(plx);
     		} else
     		{
-    			if(configManager.ender == 1)
-        			Main.lng.msg(plx, "goto_ah");
-        		else
-        			Main.lng.msg(plx, "collect");
+    			if(!plx.hasPermission("kb.admin"))
+    			{
+	    			if(configManager.ender == 1)
+	        			Main.lng.msg(plx, "goto_ah");
+	        		else
+	        			Main.lng.msg(plx, "collect");
+    			}
     		}
     		
 		} catch(Exception e)
