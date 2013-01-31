@@ -26,6 +26,7 @@ public class KSHelper
 		this.m = main;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public int giveItem(Player p, ItemStack is)
 	{
 		PlayerInventory inv = p.getInventory();
@@ -80,6 +81,7 @@ public class KSHelper
 				stack.setAmount(stack.getAmount() + diff);
 			}
 		}
+		p.updateInventory();
 		return addedAmount;
 	}
 	
