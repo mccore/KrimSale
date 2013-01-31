@@ -1316,7 +1316,15 @@ public class KSHelper
 								i.setTypeId(rs.getInt("type"));
 								if(rs.getInt("subtype") > 0)
 									i.setDurability((byte)rs.getInt("subtype"));
-								i.setAmount(1);
+								
+								if(p.getItemInHand().getType() == i.getType())
+								{
+									if(i.getType().getMaxDurability() == 0 && p.getItemInHand().getDurability() != 0)
+										i.setAmount(p.getItemInHand().getAmount());
+									else
+										i.setAmount(1);
+								} else
+									i.setAmount(1);
 								
 								KSOffer o = new KSOffer(i,p.getName(),rs.getInt("price"));
 								int am = Main.helper.removeItemsFromPlayer(p, i, i.getAmount());
