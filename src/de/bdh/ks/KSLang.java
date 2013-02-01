@@ -15,7 +15,7 @@ public class KSLang
 		HashMap<String,String> en = new HashMap<String,String>();
 		HashMap<String,String> de = new HashMap<String,String>();
 		
-		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/SIGN/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
+		en.put("usage", "USAGE: /auction SELL/BUY/REQUEST/DETAIL/LIST/SIGN/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUESTS");
 		en.put("usage_abort","USAGE: /auction abort ID - you can get the id by using list");
 		en.put("usage_request", "USAGE: /auction request (Item) MAXPRICE AMOUNT");
 		en.put("usage_buy","USAGE: /auction buy (Item (MAXPRICE)) AMOUNT");
@@ -65,7 +65,7 @@ public class KSLang
 		en.put("suc_sign_com","Success. The sign has been created");
 		en.put("req_info","Your request is valid for 14 days. If noone offers this item for your price, you'll get your money back");
 		
-		de.put("usage", "NUTZUNG: /auction SELL/BUY/REQUEST/DETAIL/LIST/SIGN/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUEST");
+		de.put("usage", "NUTZUNG: /auction SELL/BUY/REQUEST/DETAIL/LIST/SIGN/LISTREQUESTS/COLLECT/ABORT/ABORTREQUEST/OVERVIEW/OVERVIEWREQUESTS");
 		de.put("usage_abort","NUTZUNG: /auction abort ID - die ID erhaelst du mittels List");
 		de.put("usage_request", "NUTZUNG: /auction request (Item) MAXPREIS MENGE");
 		de.put("usage_buy","NUTZUNG: /auction buy (Item (MAXPREIS)) MENGE");

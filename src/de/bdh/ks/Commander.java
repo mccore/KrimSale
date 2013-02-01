@@ -574,7 +574,7 @@ public class Commander implements CommandExecutor {
             					sender.sendMessage("Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getPrice()+ " "+Main.econ.currencyNamePlural()+" each");
             				}
                 		}
-        			} else if(args[0].equalsIgnoreCase("overviewrequest"))
+        			} else if(args[0].equalsIgnoreCase("overviewrequest") || args[0].equalsIgnoreCase("overviewrequests"))
         			{
         				if(!sender.hasPermission("ks.list"))
         				{
