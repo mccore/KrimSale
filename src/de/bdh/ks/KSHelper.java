@@ -1130,6 +1130,42 @@ public class KSHelper
 		return true;
 	}
 	
+	public String getOwnerofId(KSId id)
+	{
+		String w = "";
+		if(id.type == 1)
+		{
+			//OFFER
+			w = "_offer";
+		} else if(id.type == 2)
+		{
+			//REQUEST
+			w = "_request";
+		}
+		
+		Connection conn = Main.Database.getConnection();
+    	PreparedStatement ps;
+    	String name = null;
+    	try
+    	{
+	    	StringBuilder b = (new StringBuilder()).append("SELECT player FROM ").append(configManager.SQLTable).append(w).append(" WHERE id = ? LIMIT 0,1");
+	    	ps = conn.prepareStatement(b.toString());
+			ps.setInt(1, id.id);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+			{
+				name = rs.getString("player");
+			}
+    	} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to enlist Item: ").append(e).toString());
+			return null;
+		}
+    	
+    	return name;
+	}
 	
 	public void setSign(KSId id, Block b)
 	{

@@ -22,8 +22,8 @@ public class KrimBlockName
 		names.put("dirt","3");
 		names.put("cobblestone","4");
 		names.put("woodenplanks","5");
-		names.put("birchwoodenplanks","5:1");
-		names.put("pinewoodenplanks","5:2");
+		names.put("pinewoodenplanks","5:1");
+		names.put("birchwoodenplanks","5:2");
 		names.put("djunglewoodenplanks","5:3");
 		names.put("sapling","6");
 		names.put("birchsapling","6:1");
