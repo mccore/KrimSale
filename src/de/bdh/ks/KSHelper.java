@@ -1362,13 +1362,16 @@ public class KSHelper
 								} else
 									i.setAmount(1);
 								
+								if(rs.getInt("amount") > i.getAmount())
+									i.setAmount(rs.getInt("amount"));
+								
 								KSOffer o = new KSOffer(i,p.getName(),rs.getInt("price"));
 								int am = Main.helper.removeItemsFromPlayer(p, i, i.getAmount());
 								if(am > 0)
 								{
 									if(o.payFee())
 									{
-										serveRequest(id, o, 1);
+										serveRequest(id, o, i.getAmount());
 										done = true;
 									} else
 									{
