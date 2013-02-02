@@ -1362,7 +1362,7 @@ public class KSHelper
 								} else
 									i.setAmount(1);
 								
-								if(rs.getInt("amount") > i.getAmount())
+								if(rs.getInt("amount") < i.getAmount())
 									i.setAmount(rs.getInt("amount"));
 								
 								KSOffer o = new KSOffer(i,p.getName(),rs.getInt("price"));
