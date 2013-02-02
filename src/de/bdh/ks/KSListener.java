@@ -110,7 +110,9 @@ public class KSListener implements Listener
 				if(event.getClickedBlock().getState() instanceof Sign && event.getAction() == Action.RIGHT_CLICK_BLOCK)
     			{
 					if(Main.helper.serveOfferBySign(event.getPlayer(), event.getClickedBlock()))
+					{
 						event.setCancelled(true);
+					}
     			}
 			}
 			

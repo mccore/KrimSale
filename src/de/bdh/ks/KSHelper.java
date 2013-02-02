@@ -198,7 +198,7 @@ public class KSHelper
 			
     		while(rs.next())
     		{
-    			if(p == null || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
+    			if(p == null || p.hasPermission("ks.admin") || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
     			{
     				if(rs.getString("sworld").length() > 0)
     					updateSign(id,true,false);
@@ -248,7 +248,7 @@ public class KSHelper
 			
     		while(rs.next())
     		{
-    			if(p == null || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
+    			if(p == null || p.hasPermission("ks.admin") || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
     			{
     				if(rs.getString("sworld").length() > 0)
     					updateSign(id,true,true);
