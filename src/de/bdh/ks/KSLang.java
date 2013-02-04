@@ -28,10 +28,10 @@ public class KSLang
 		en.put("rem_success","Your auction has been cancelled. You can pick it up at the auction house");
 		en.put("err_invalid_id", "This ID was invalid or you dont have the permissions to do that");
 		en.put("rem_rec_suc","Your request has been cancelled. You can pick it up at the auction house");
-		en.put("err_nosale","You don't have items for sale");
+		en.put("err_nosale","Nothing for sale");
 		en.put("noqsell","Unable to quicksell item - no default price");
 		en.put("header_list","You've $1 $2. Page: $3 of $4");
-		en.put("err_noreq","You don't have items requested");
+		en.put("err_noreq","Nothing requested");
 		en.put("err_noperm","You're not allowed to do this");
 		en.put("err_to_ah","You've to go to an auction house to do this");
 		en.put("err_toohigh","$1 is too high");
@@ -79,9 +79,9 @@ public class KSLang
 		de.put("rem_success","Deine Auktion wurde abgebrochen. Du kannst deine Gegenstaende im Auktionshaus abholen");
 		de.put("err_invalid_id", "Diese ID ist ungueltig oder du hast keine Berechtigung dies zu tun");
 		de.put("rem_rec_suc","Deine Anfrage wurde abgebrochen. Du kannst dein Geld im Auktionshaus abholen");
-		de.put("err_nosale","Du hast nichts zum Verkauf angeboten");
+		de.put("err_nosale","Es wurden keine Gegenstaende zum Verkauf gefunden");
 		de.put("header_list","Du hast $1 $2. Seite: $3 von $4");
-		de.put("err_noreq","Du hast keine Gegenstaende im Ankauf");
+		de.put("err_noreq","Es wurden keine Gegenstaende zum Ankauf gefunden");
 		de.put("err_noperm","Du darfst dies nicht tun");
 		de.put("err_to_ah","Du musst in ein Auktionshaus gehen");
 		de.put("default_price", "Preisempfehlung: $1");
