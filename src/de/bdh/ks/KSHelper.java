@@ -1170,10 +1170,12 @@ public class KSHelper
 	public void setSign(KSId id, Block b)
 	{
 		String w = "";
+		boolean offer = false;
 		if(id.type == 1)
 		{
 			//OFFER
 			w = "_offer";
+			offer = true;
 		} else if(id.type == 2)
 		{
 			//REQUEST
@@ -1182,6 +1184,7 @@ public class KSHelper
 		
 		if(w.length() > 0)
 		{
+			this.updateSign(id.id, true, offer); //zerstöre altes Schild
 			Connection conn = Main.Database.getConnection();
 	    	PreparedStatement ps;
 	    	StringBuilder bld = (new StringBuilder()).append("UPDATE ").append(configManager.SQLTable).append(w).append(" SET signx=?,signy=?,signz=?,sworld=? WHERE id = ? LIMIT 1");
