@@ -22,6 +22,7 @@ public class configManager {
     public static String SQLPassword = "";
     public static String SQLDatabase = "minecraft";
     public static String SQLTable = "minecraft";
+    public static String worlds = "world";
     public static Integer useMaps = 0;
     public static Integer ender = 1;
     public static Integer brautec = 0;
@@ -62,6 +63,7 @@ public class configManager {
         SQLPassword = conf.getString("System.Database.Settings.MySQL.Password", SQLPassword);
         useMaps = conf.getInt("System.useMaps", useMaps);
         fee = conf.getInt("System.fee", fee);
+        worlds = conf.getString("System.worlds", worlds);
         lang = conf.getString("System.lang", lang);
         interactBlock = conf.getInt("System.interactBlock", interactBlock);
         interactBlockSub = conf.getInt("System.interactBlockSub", interactBlockSub);
@@ -127,6 +129,7 @@ public class configManager {
             conf.set("System.Database.Settings.MySQL.Password", SQLPassword);
             conf.set("System.useMaps",useMaps);
             conf.set("System.fee",fee);
+            conf.set("System.worlds",worlds);
             conf.set("System.lang",lang);
             conf.set("System.interactBlock",interactBlock);
             conf.set("System.interactBlockSub",interactBlockSub);

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,7 +23,22 @@ import org.bukkit.inventory.PlayerInventory;
 public class KSHelper 
 {
 	Main m;
+	public ArrayList<World> worlds;
 	public KSHelper(Main main) {
+		
+		this.worlds = new ArrayList<World>();
+		String w = configManager.worlds;
+		if(w != null && w.length() > 0)
+		{
+			String[] tmpBoh = w.split(",");
+			for (String bl: tmpBoh) {
+				if(Bukkit.getWorld(bl) != null)
+				{
+					System.out.println("[KB] Enabled for World: "+bl);
+					this.worlds.add(Bukkit.getWorld(bl));
+				}
+			}
+		}
 		this.m = main;
 	}
 	
@@ -1819,6 +1835,12 @@ public class KSHelper
 	}
 	public boolean ahNear(Player p)
 	{
+		if(!this.worlds.contains(p.getWorld()))
+    		return false;
+		
+		if(configManager.enderForTransaction == 0)
+			return true;
+		
 		if(configManager.ender == 0)
 			return true;
 		

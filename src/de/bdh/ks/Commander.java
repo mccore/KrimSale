@@ -185,7 +185,7 @@ public class Commander implements CommandExecutor {
         					return true;
         				}
         				
-        				if(configManager.enderForTransaction == 1 && this.enderChestClose(sender) == false)
+        				if(this.enderChestClose(sender) == false)
     					{
         					Main.lng.msg(sender,"err_to_ah");	
         					return true;
@@ -311,7 +311,7 @@ public class Commander implements CommandExecutor {
         				}
         				
         				
-        				if(configManager.enderForTransaction == 1 && this.enderChestClose(sender) == false)
+        				if(this.enderChestClose(sender) == false)
     					{
         					Main.lng.msg(sender,"err_to_ah");
         					return true;
@@ -433,7 +433,7 @@ public class Commander implements CommandExecutor {
         					Main.lng.msg(sender,"usage_buy");
                 		} else
                 		{
-                			if(configManager.enderForTransaction == 1 && this.enderChestClose(sender) == false)
+                			if(this.enderChestClose(sender) == false)
         					{
             					Main.lng.msg(sender,"err_to_ah");	
             					return true;
