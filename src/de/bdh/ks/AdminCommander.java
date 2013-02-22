@@ -49,7 +49,7 @@ public class AdminCommander implements CommandExecutor
         				}
         				else if (sel instanceof CuboidSelection)
         				{
-        					int value = 0;
+        					int value = 0,avalue = 0;
         					HashMap<Block,Integer> prices = new HashMap<Block,Integer>();
         					
         					Location max = sel.getMaximumPoint();
@@ -73,11 +73,13 @@ public class AdminCommander implements CommandExecutor
                 									prices.put(b,0);
                 							}
                 							value += prices.get(b);
+                							avalue += Main.helper.getDurchschnitsspreis(KrimBlockName.getStackByBlock(b), 14);
                 						}
                 					}
             					}	
         					}
-        					sender.sendMessage(ChatColor.YELLOW+"Price of selection: "+value);
+        					sender.sendMessage(ChatColor.YELLOW+"Default Price of selection: "+value);
+        					sender.sendMessage(ChatColor.YELLOW+"Average Price of selection: "+avalue);
         				}
         			}
         			else if(args[0].equalsIgnoreCase("player"))

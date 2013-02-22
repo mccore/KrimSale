@@ -58,6 +58,7 @@ public class KSLang
 		en.put("collect", "You can collect some items by entering /auction collect");
 		en.put("amount_sale", "Amount for sale: $1");
 		en.put("default_price", "Suggested retail price: $1");
+		en.put("average_price", "Average price: $1");
 		en.put("offer","Offer: $1 for $2 $a each");
 		en.put("request","Request: $1 for $2 $a each");
 		en.put("err_noitem","You dont own this item");
@@ -107,6 +108,7 @@ public class KSLang
 		de.put("suc_sign","Jetzt zerstoere das Schild, welches du nutzen willst");
 		de.put("suc_sign_com","Erfolgreich. Das Schild wurde angelegt");
 		de.put("info", "Auktionsinformationen ueber $1");
+		de.put("average_price", "Durchschnittspreis: $1");
 		de.put("goto_ah", "Einige Waren koennen im Auktionshaus abgeholt werden");
 		de.put("collect", "Du kannst einige Waren via /auction collect empfangen");
 		de.put("amount_sale", "Menge zum Verkauf: $1");

@@ -1667,4 +1667,13 @@ public class KrimBlockName
 			str += ":"+i.getData();
 		return str;
 	}
+	
+	public static ItemStack getStackByBlock(Block i)
+	{
+		ItemStack s = new ItemStack(Material.AIR);
+		s.setType(i.getType());
+		if(i.getData() > 0 && i.getType().getMaxDurability() == 0)
+			s.setDurability(i.getData());
+		return s;
+	}
 }

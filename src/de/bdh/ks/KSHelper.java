@@ -562,6 +562,63 @@ public class KSHelper
 		return ret;
 	}
 	
+	public HashMap<String,Long> durchDate = new HashMap<String,Long>();
+	public HashMap<String,Long> durchWert = new HashMap<String,Long>();
+	public long getDurchschnitsspreis(ItemStack i, int zeit)
+	{
+		int blockid = i.getTypeId();
+		int subid = i.getDurability();
+		
+		long ret = 0;
+		boolean redo = true;
+		String block = KrimBlockName.getNameById(blockid, subid);
+		if(this.durchWert.get(block) != null && this.durchDate.get(block) != null)
+		{
+			long timer = this.durchDate.get(block);
+			ret = this.durchWert.get(block);
+			//Gecached
+			
+			if (Math.abs(System.currentTimeMillis() - timer) < 1000*60*60*3)
+				redo = false;
+		}
+		
+		if(redo == true || ret == 0)
+		try
+		{
+    		Connection conn = Main.Database.getConnection();
+        	PreparedStatement ps;
+        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as a, SUM(price) as p FROM ").append(configManager.SQLTable).append("_transaction WHERE type=? AND subtype=? AND zeit >= CURRENT_DATE() - INTERVAL ? DAYS");
+        	
+        	String strg = b.toString();
+    		ps = conn.prepareStatement(strg);
+    		ps.setInt(1, blockid);
+    		ps.setInt(2, subid);
+    		ps.setInt(3, zeit);
+    		ResultSet rs = ps.executeQuery();
+    			
+    		while(rs.next())
+    		{
+    			if(rs.getInt("a") > 0)
+    				ret = rs.getLong("p") / rs.getLong("a");
+    		}
+    		
+    		this.durchDate.put(block, System.currentTimeMillis());
+    		this.durchWert.put(block,ret);
+    		
+    		if(ps != null)
+				ps.close();
+			if(rs != null)
+				rs.close();
+
+		} catch (SQLException e)
+		{
+			System.out.println((new StringBuilder()).append("[KS] unable to get normal price: ").append(e).toString());
+			ret = -1;
+		}
+		
+		return ret;
+	}
+	
 	public Map<Integer,KSOffer> getOffers(int orderby, int am, int begin)
 	{
 		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
@@ -1809,6 +1866,8 @@ public class KSHelper
 			{
 				Main.lng.msg(p, "default_price",new Object[]{ configManager.werte.get(KrimBlockName.getIdByItemStack(i))});
 			}
+			
+			Main.lng.msg(p, "average_price",new Object[]{ this.getDurchschnitsspreis(i, 14)});
 			
 			if(am > 0)
 			{
