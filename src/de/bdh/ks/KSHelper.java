@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -563,13 +564,13 @@ public class KSHelper
 	}
 	
 	public HashMap<String,Long> durchDate = new HashMap<String,Long>();
-	public HashMap<String,Long> durchWert = new HashMap<String,Long>();
-	public long getDurchschnitsspreis(ItemStack i, int zeit)
+	public HashMap<String,Double> durchWert = new HashMap<String,Double>();
+	public double getDurchschnitsspreis(ItemStack i, int zeit)
 	{
 		int blockid = i.getTypeId();
 		int subid = i.getDurability();
 		
-		long ret = 0;
+		double ret = 0;
 		boolean redo = true;
 		String block = KrimBlockName.getNameById(blockid, subid);
 		if(this.durchWert.get(block) != null && this.durchDate.get(block) != null)
@@ -597,9 +598,9 @@ public class KSHelper
     		ResultSet rs = ps.executeQuery();
     			
     		while(rs.next())
-    		{
+    		{	
     			if(rs.getInt("a") > 0)
-    				ret = rs.getLong("p") / rs.getLong("a");
+    				ret = (rs.getInt("p") * 1.0) / (rs.getInt("a") * 1.0);
     		}
     		
     		this.durchDate.put(block, System.currentTimeMillis());
@@ -1867,7 +1868,10 @@ public class KSHelper
 				Main.lng.msg(p, "default_price",new Object[]{ configManager.werte.get(KrimBlockName.getIdByItemStack(i))});
 			}
 			
-			Main.lng.msg(p, "average_price",new Object[]{ this.getDurchschnitsspreis(i, 14)});
+			DecimalFormat twoDForm = new DecimalFormat("#.##");
+	        Double val = Double.valueOf(twoDForm.format(this.getDurchschnitsspreis(i, 14)));
+	        
+			Main.lng.msg(p, "average_price",new Object[]{ val.toString() });
 			
 			if(am > 0)
 			{
