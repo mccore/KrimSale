@@ -587,7 +587,7 @@ public class KSHelper
 		{
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as a, SUM(price) as p FROM ").append(configManager.SQLTable).append("_transaction WHERE type=? AND subtype=? AND zeit >= CURRENT_DATE() - INTERVAL ? DAYS");
+        	StringBuilder b = (new StringBuilder()).append("SELECT SUM(amount) as a, SUM(price) as p FROM ").append(configManager.SQLTable).append("_transaction WHERE type=? AND subtype=? AND zeit >= CURRENT_DATE() - INTERVAL ? DAY");
         	
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
