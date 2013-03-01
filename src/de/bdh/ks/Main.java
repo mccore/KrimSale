@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+
 
 
 public class Main  extends JavaPlugin
@@ -90,6 +92,7 @@ public class Main  extends JavaPlugin
         
         this.listener = new KSListener(this);
         Bukkit.getServer().getPluginManager().registerEvents(this.listener, this);
+        Bukkit.getServicesManager().register(KSHelper.class, helper, this, ServicePriority.Normal);
         
         getCommand("auction").setExecutor(new Commander(this)); 
         getCommand("ks").setExecutor(new AdminCommander(this)); 
