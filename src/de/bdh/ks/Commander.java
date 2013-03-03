@@ -55,7 +55,7 @@ public class Commander implements CommandExecutor {
 	            					return true;
 	            				}
 	                			
-	                			if(of > 0 && id > 0 && Main.helper.getOwnerofId(new KSId(of,id)).equalsIgnoreCase(sender.getName()))
+	                			if(of > 0 && id > 0 && (Main.helper.getOwnerofId(new KSId(of,id)).equalsIgnoreCase(sender.getName()) || sender.hasPermission("ks.admin")))
 	                			{
 	                				this.plugin.poffer.put((Player) sender, new KSId(of,id));
 	                				Main.lng.msg(sender,"suc_sign");
