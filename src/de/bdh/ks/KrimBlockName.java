@@ -1567,6 +1567,7 @@ public class KrimBlockName
 			if(entry.getKey().contains(name))
 				return entry.getKey();
     	}
+		
 		return "null";
 	}
 	
@@ -1595,6 +1596,19 @@ public class KrimBlockName
 			if(entry.getValue().trim().equalsIgnoreCase(id.trim()))
 				return entry.getKey();
     	}
+		
+		//Suche Master Block
+		String[] subidTmp = id.split(":");
+		String nid = "";
+		if(subidTmp.length > 1)
+		{
+			nid = subidTmp[0];
+			for (Map.Entry<String,String> entry : names.entrySet())
+	    	{
+				if(entry.getValue().trim().equalsIgnoreCase(nid.trim()))
+					return entry.getKey();
+	    	}
+		}
 		return ""+id;
 	}
 	
