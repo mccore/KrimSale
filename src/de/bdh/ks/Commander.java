@@ -624,17 +624,17 @@ public class Commander implements CommandExecutor {
         				}
         				
         				//ZEIGE
-        				if(args.length < 2)
-                		{
-        					Main.lng.msg(sender,"usage_detail");
-                		} else
-                		{
-                			ItemStack i = KrimBlockName.parseName(args[1]);
-                			if(i != null)
-                				Main.helper.sendInfos((Player)sender, i);
-                			else
-                				Main.lng.msg(sender,"err_block_404");	
-                		}
+            			ItemStack i = null;
+            			if(args.length == 2)
+            				i = KrimBlockName.parseName(args[1]);	
+            			else
+            				i = ((Player) sender).getItemInHand();
+            			
+            			if(i != null)
+            				Main.helper.sendInfos((Player)sender, i);
+            			else
+            				Main.lng.msg(sender,"err_block_404");	
+                		
         			} else if(args[0].equalsIgnoreCase("collect"))
         			{
         				if(!sender.hasPermission("ks.buy"))

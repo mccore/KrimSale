@@ -485,8 +485,6 @@ public class KrimBlockName
 		names.put("FireRocket","401");
 		names.put("Firestar","402");
 		names.put("Enchantedbook","403");
-		
-		
 		names.put("Disk C418-13","2256");
 		names.put("Disk C418-Cat","2257");
 		names.put("Disk C418-Blocks","2258");
@@ -499,24 +497,20 @@ public class KrimBlockName
 		names.put("Disk C418-Ward","2265");
 		names.put("Disk 11","2266");
 		names.put("Disk C418-Wait","2267");
-		if(configManager.brautec == 1)
-		{
-			//TODO
-		}
 	}
 	
 	public static void loadNames(Map<String,String> m)
 	{
 		for(Entry<?, ?> i : m.entrySet())
 		{
-			names.put((String)i.getKey(),(String)i.getValue());
+			KrimBlockName.names.put(i.getKey().toString().toLowerCase().trim(),(String)i.getValue());
 		}
 	}
 	
 	public static String searchName(String name)
 	{
 		name = name.toLowerCase();
-		for (Map.Entry<String,String> entry : names.entrySet())
+		for (Map.Entry<String,String> entry : KrimBlockName.names.entrySet())
     	{
 			if(entry.getKey().contains(name))
 				return entry.getKey();
@@ -528,8 +522,8 @@ public class KrimBlockName
 	public static String getIdByName(String name)
 	{
 		name = name.trim().toLowerCase();
-		if(names.get(name) != null)
-			return names.get(name);
+		if(KrimBlockName.names.get(name) != null)
+			return KrimBlockName.names.get(name);
 		else
 			return "-1";
 	}
@@ -545,7 +539,7 @@ public class KrimBlockName
 	}
 	public static String getNameById(String id)
 	{
-		for (Map.Entry<String,String> entry : names.entrySet())
+		for (Map.Entry<String,String> entry : KrimBlockName.names.entrySet())
     	{
 			if(entry.getValue().trim().equalsIgnoreCase(id.trim()))
 				return entry.getKey();
@@ -557,7 +551,7 @@ public class KrimBlockName
 		if(subidTmp.length > 1)
 		{
 			nid = subidTmp[0];
-			for (Map.Entry<String,String> entry : names.entrySet())
+			for (Map.Entry<String,String> entry : KrimBlockName.names.entrySet())
 	    	{
 				if(entry.getValue().trim().equalsIgnoreCase(nid.trim()))
 					return entry.getKey();
