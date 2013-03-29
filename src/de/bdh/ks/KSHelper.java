@@ -57,37 +57,42 @@ public class KSHelper
 		while(amount - addedAmount > 0)
 		{
 			freeslot = -1;
-			for (int i =  0; i < 36; i++) 
-	    	{
-				ItemStack tmp = inv.getItem(i);
-	    		if(tmp != null)
-	    		{
-	    			if(tmp.getEnchantments().size() == 0 && tmp.getTypeId() == blockType && tmp.getDurability() == subType && tmp.getAmount() < tmp.getMaxStackSize())
-	    			{
-	    				freeslot = i;
-	    			}
-	    		}
-	    	}	 
-			
-			if (freeslot == -1)
+			if(configManager.brautec == 0)
 			{
+				for (int i =  0; i < 36; i++) 
+		    	{
+					ItemStack tmp = inv.getItem(i);
+		    		if(tmp != null)
+		    		{
+		    			if(tmp.getEnchantments().size() == 0 && tmp.getTypeId() == blockType && tmp.getDurability() == subType && tmp.getAmount() < tmp.getMaxStackSize())
+		    			{
+		    				freeslot = i;
+		    			}
+		    		} else
+		    			freeslot = i;
+		    	}	 
+			}
+			
+			if(freeslot == -1)
 				freeslot = inv.firstEmpty();
-				if (freeslot == -1)
+			
+			if(freeslot == -1 || freeslot >= 36)
+			{
+				p.updateInventory();
+				return addedAmount;
+			}
+			
+			if (inv.getItem(freeslot) == null || inv.getItem(freeslot).getType() == Material.AIR)
+			{
+				if (amount - addedAmount >= stackSize)
 				{
-					break;
+					inv.setItem(freeslot, new ItemStack(blockType, stackSize, (short) subType));
+					addedAmount += stackSize;
 				}
 				else
 				{
-					if (amount - addedAmount >= stackSize)
-					{
-						inv.setItem(freeslot, new ItemStack(blockType, stackSize, (short) subType));
-						addedAmount += stackSize;
-					}
-					else
-					{
-						inv.setItem(freeslot, new ItemStack(blockType, amount - addedAmount, (short) subType));
-						addedAmount += amount - addedAmount;
-					}
+					inv.setItem(freeslot, new ItemStack(blockType, amount - addedAmount, (short) subType));
+					addedAmount += amount - addedAmount;
 				}
 			}
 			else
