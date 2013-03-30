@@ -1821,37 +1821,83 @@ public class KSHelper
 	//Nimm Items vom Spieler
 	public int removeItemsFromPlayer(Player p, ItemStack i, int amount)
 	{
+	
 		int taken = 0;
-		HashMap<Integer, ? extends ItemStack> stacks = p.getInventory().all(i.getTypeId());
-		for (Entry<Integer, ? extends ItemStack> en : stacks.entrySet())
+		
+		if(configManager.brautec == 1)
 		{
-			ItemStack stack = en.getValue();
-			if(stack != null)
+			int firstempty = p.getInventory().firstEmpty();
+			if(firstempty == -1)
 			{
-				if(stack.getDurability() == i.getDurability())
-				{
-					if(canbeSold(stack))
-					{
-						if(amount > 0)
+				Main.lng.msg(p,"err_full_inv");
+				return 0;
+			} else
+			{
+				for (int u =  0; u < 36; u++) 
+		    	{
+					ItemStack tmp = p.getInventory().getItem(u);
+		    		if(tmp != null && tmp.getTypeId() == i.getTypeId())
+		    		{
+		    			if(tmp.getDurability() == i.getDurability())
 						{
-							if(stack.getAmount() <= amount)
+							if(canbeSold(tmp))
 							{
-								taken += stack.getAmount();
-								amount -= stack.getAmount();
-								p.getInventory().removeItem(stack);
-							} else
+								if(amount > 0)
+								{
+									if(tmp.getAmount() <= amount)
+									{
+										taken += tmp.getAmount();
+										amount -= tmp.getAmount();
+										p.getInventory().setItem(u, null);
+									} else
+									{
+										ItemStack n = new ItemStack(tmp.getType());
+										n.setDurability(tmp.getDurability());
+										n.setAmount(tmp.getAmount() - amount);
+										p.getInventory().setItem(u, null);
+										p.getInventory().setItem(firstempty,n);
+										taken += amount;
+										amount = 0;
+									}
+								}
+							}
+						}
+		    		} 
+		    	}	
+			}
+		} else
+		{
+			HashMap<Integer, ? extends ItemStack> stacks = p.getInventory().all(i.getTypeId());
+			for (Entry<Integer, ? extends ItemStack> en : stacks.entrySet())
+			{
+				ItemStack stack = en.getValue();
+				if(stack != null)
+				{
+					if(stack.getDurability() == i.getDurability())
+					{
+						if(canbeSold(stack))
+						{
+							if(amount > 0)
 							{
-								stack.setAmount(stack.getAmount() - amount);
-								taken += amount;
-								amount = 0;
+								if(stack.getAmount() <= amount)
+								{
+									taken += stack.getAmount();
+									amount -= stack.getAmount();
+									p.getInventory().removeItem(stack);
+								} else
+								{
+									stack.setAmount(stack.getAmount() - amount);
+									taken += amount;
+									amount = 0;
+								}
 							}
 						}
 					}
 				}
+				
+				if(amount <= 0)
+					return taken;
 			}
-			
-			if(amount <= 0)
-				return taken;
 		}
 		return taken;
 	}
