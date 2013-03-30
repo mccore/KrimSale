@@ -68,7 +68,7 @@ public class configManager {
         interactBlock = conf.getInt("System.interactBlock", interactBlock);
         interactBlockSub = conf.getInt("System.interactBlockSub", interactBlockSub);
         ender = conf.getInt("System.useEnderChests", ender);
-        brautec = conf.getInt("System.brautec", brautec);
+        brautec = conf.getInt("System.bukkitforge", brautec);
         enderForTransaction = conf.getInt("System.useEnderChestsForTransaction", enderForTransaction);
         
         ConfigurationSection nsel = conf.getConfigurationSection("Names");
@@ -134,7 +134,7 @@ public class configManager {
             conf.set("System.interactBlock",interactBlock);
             conf.set("System.interactBlockSub",interactBlockSub);
             conf.set("System.useEnderChests", ender);
-            conf.set("System.brautec", brautec);
+            conf.set("System.bukkitforge", brautec);
             conf.set("System.useEnderChestsForTransaction", enderForTransaction);
             conf.set("Names", n);
             conf.set("Values", v);
