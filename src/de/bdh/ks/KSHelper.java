@@ -1810,7 +1810,7 @@ public class KSHelper
 			if(i.getType() == Material.AIR)
 				return false;
 			
-			if(i.getAmount() == 0)
+			if(i.getAmount() <= 0)
 				return false;
 			
 		} else return false;
@@ -1883,6 +1883,7 @@ public class KSHelper
 								{
 									taken += stack.getAmount();
 									amount -= stack.getAmount();
+									stack.setType(null);
 									p.getInventory().removeItem(stack);
 								} else
 								{

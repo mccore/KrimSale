@@ -90,6 +90,9 @@ public class Main  extends JavaPlugin
         version = pdf.getVersion();
         author = "Krim";
         
+        if(configManager.brautec == 1)
+        	System.out.println((new StringBuilder()).append("BukkitForge Adaption loaded").toString()); 
+        
         this.listener = new KSListener(this);
         Bukkit.getServer().getPluginManager().registerEvents(this.listener, this);
         Bukkit.getServicesManager().register(KSHelper.class, helper, this, ServicePriority.Normal);
