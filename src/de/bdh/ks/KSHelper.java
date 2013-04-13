@@ -1883,7 +1883,7 @@ public class KSHelper
 								{
 									taken += stack.getAmount();
 									amount -= stack.getAmount();
-									stack.setType(null);
+									stack.setType(Material.AIR);
 									p.getInventory().removeItem(stack);
 								} else
 								{
