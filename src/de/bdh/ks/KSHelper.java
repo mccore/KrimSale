@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -1823,82 +1822,51 @@ public class KSHelper
 	{
 	
 		int taken = 0;
-		
-		if(configManager.brautec == 1)
+		int firstempty = p.getInventory().firstEmpty();
+		if(firstempty == -1 && configManager.brautec >= 1)
 		{
-			int firstempty = p.getInventory().firstEmpty();
-			if(firstempty == -1)
-			{
-				Main.lng.msg(p,"err_full_inv");
-				return 0;
-			} else
-			{
-				for (int u =  0; u < 36; u++) 
-		    	{
-					ItemStack tmp = p.getInventory().getItem(u);
-		    		if(tmp != null && tmp.getTypeId() == i.getTypeId())
-		    		{
-		    			if(tmp.getDurability() == i.getDurability())
-						{
-							if(canbeSold(tmp))
-							{
-								if(amount > 0)
-								{
-									if(tmp.getAmount() <= amount)
-									{
-										taken += tmp.getAmount();
-										amount -= tmp.getAmount();
-										p.getInventory().setItem(u, null);
-									} else
-									{
-										ItemStack n = new ItemStack(tmp.getType());
-										n.setDurability(tmp.getDurability());
-										n.setAmount(tmp.getAmount() - amount);
-										p.getInventory().setItem(u, null);
-										p.getInventory().setItem(firstempty,n);
-										taken += amount;
-										amount = 0;
-									}
-								}
-							}
-						}
-		    		} 
-		    	}	
-			}
+			Main.lng.msg(p,"err_full_inv");
+			return 0;
 		} else
 		{
-			HashMap<Integer, ? extends ItemStack> stacks = p.getInventory().all(i.getTypeId());
-			for (Entry<Integer, ? extends ItemStack> en : stacks.entrySet())
-			{
-				ItemStack stack = en.getValue();
-				if(stack != null)
-				{
-					if(stack.getDurability() == i.getDurability())
+			for (int u =  0; u < 36; u++) 
+	    	{
+				ItemStack tmp = p.getInventory().getItem(u);
+	    		if(tmp != null && tmp.getTypeId() == i.getTypeId())
+	    		{
+	    			if(tmp.getDurability() == i.getDurability())
 					{
-						if(canbeSold(stack))
+						if(canbeSold(tmp))
 						{
 							if(amount > 0)
 							{
-								if(stack.getAmount() <= amount)
+								if(tmp.getAmount() <= amount)
 								{
-									taken += stack.getAmount();
-									amount -= stack.getAmount();
-									p.getInventory().removeItem(stack);
-									stack.setType(Material.AIR);
+									taken += tmp.getAmount();
+									amount -= tmp.getAmount();
+									p.getInventory().setItem(u, null);
 								} else
 								{
-									stack.setAmount(stack.getAmount() - amount);
+									ItemStack n = new ItemStack(tmp.getType());
+									n.setDurability(tmp.getDurability());
+									n.setAmount(tmp.getAmount() - amount);
+									
+									if(configManager.brautec >= 1)
+									{
+										p.getInventory().setItem(u, null);
+										p.getInventory().setItem(firstempty,n);
+									}
+									else
+										p.getInventory().setItem(u, n);
+									
 									taken += amount;
 									amount = 0;
 								}
 							}
 						}
 					}
-				}
-				
-				if(amount <= 0)
-					return taken;
-			}
+	    		} 
+	    	}	
 		}
 		return taken;
 	}
