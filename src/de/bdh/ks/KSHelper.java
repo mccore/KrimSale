@@ -1026,7 +1026,7 @@ public class KSHelper
 			int amount = of.getAmount();
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_request WHERE type = ? AND subtype = ? AND price >= ? ORDER BY price DESC, admin ASC LIMIT 0,50");
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_request WHERE type = ? AND subtype = ? AND price >= ? ORDER BY price DESC, admin ASC, zeit ASC LIMIT 0,50");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, of.i.getTypeId());
     		ps.setInt(2, of.i.getDurability());
@@ -1609,7 +1609,7 @@ public class KSHelper
 			
     		Connection conn = Main.Database.getConnection();
         	PreparedStatement ps;
-        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC, admin ASC LIMIT 0,50");
+        	StringBuilder b = (new StringBuilder()).append("SELECT amount,id,price FROM ").append(configManager.SQLTable).append("_offer WHERE type = ? AND subtype = ? AND price <= ? ORDER BY price ASC, admin ASC, zeit ASC LIMIT 0,50");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, i.getTypeId());
     		ps.setInt(2, i.getDurability());
