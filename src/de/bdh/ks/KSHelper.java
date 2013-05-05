@@ -1342,12 +1342,12 @@ public class KSHelper
     			{
     				String way = "";
     				if(offer)
-    					way = "Selling";
+    					way = "Sell";
     				else
-    					way = "Buying";
+    					way = "Buy";
     				
     				Sign s = (Sign) block.getState();
-    				s.setLine(0, way+" ID: "+id);
+    				s.setLine(0, way+": "+id);
     				s.setLine(1, KrimBlockName.getNameById(type, subtype));
     				s.setLine(2, "Amount: "+amount);
     				s.setLine(3, "Price: "+price);
@@ -1369,9 +1369,9 @@ public class KSHelper
 			int id = 0,type=0;
 			try
 			{
-				if(line.startsWith("selling id: "))
+				if(line.startsWith("sell: "))
 				{
-					line = line.replace("selling id: ", "");
+					line = line.replace("sell: ", "");
 					//offer
 					
 					if(!p.hasPermission("ks.buy"))
@@ -1379,9 +1379,9 @@ public class KSHelper
 					
 					id = Integer.parseInt(line);
 					type = 1;
-				} else if(line.startsWith("buying id: "))
+				} else if(line.startsWith("buy: "))
 				{
-					line = line.replace("buying id: ", "");
+					line = line.replace("buy: ", "");
 					//request
 					
 					if(!p.hasPermission("ks.sell"))
