@@ -26,8 +26,8 @@ public class KrimBlockName
 		KrimBlockName.put("birchwoodenplanks","5:2");
 		KrimBlockName.put("djunglewoodenplanks","5:3");
 		KrimBlockName.put("sapling","6");
-		KrimBlockName.put("birchsapling","6:1");
-		KrimBlockName.put("pinesapling","6:2");
+		KrimBlockName.put("birchsapling","6:2");
+		KrimBlockName.put("pinesapling","6:1");
 		KrimBlockName.put("djunglesapling","6:3");
 		KrimBlockName.put("bedrock","7");
 		KrimBlockName.put("watersource","8");
@@ -40,13 +40,13 @@ public class KrimBlockName
 		KrimBlockName.put("ironore","15");
 		KrimBlockName.put("coalore","16");
 		KrimBlockName.put("wood","17");
-		KrimBlockName.put("birchwood","17:1");
-		KrimBlockName.put("pinewood","17:2");
+		KrimBlockName.put("birchwood","17:2");
+		KrimBlockName.put("pinewood","17:1");
 		KrimBlockName.put("djunglewood","17:3");
 		KrimBlockName.put("leaves","18");
-		KrimBlockName.put("birchleaves","18:6");
+		KrimBlockName.put("birchleaves","18:5");
 		KrimBlockName.put("oakleaves","18:4");
-		KrimBlockName.put("spruceleaves","18:5");
+		KrimBlockName.put("spruceleaves","18:6");
 		KrimBlockName.put("djungleleaves","18:7");
 		KrimBlockName.put("sponge","19");
 		KrimBlockName.put("glass","20");
