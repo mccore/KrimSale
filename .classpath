@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/krim/Dropbox/Shares/BdH Mod/bins/Vault.jar"/>
-	<classpathentry kind="lib" path="/Users/krim/Dropbox/Shares/BdH Mod/bins/craftbukkit-1.4.6-R0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/Users/krim/Dropbox/Shares/BdH Mod/bins/WorldEdit.jar"/>
+	<classpathentry kind="lib" path="/Users/krim/Dropbox/Shares/BdH Moderatoren/bins/Vault.jar"/>
+	<classpathentry kind="lib" path="/Users/krim/Dropbox/Shares/BdH Moderatoren/bins/WorldEdit.jar"/>
+	<classpathentry kind="lib" path="/Users/krim/Dropbox/Shares/BdH Moderatoren/bins/craftbukkit-1-1.6.1-R0.1-20130703.085909-10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
