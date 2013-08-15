@@ -1888,9 +1888,16 @@ public class KSHelper
 				Main.lng.msg(p, "default_price",new Object[]{ configManager.werte.get(KrimBlockName.getIdByItemStack(i))});
 			}
 			
-			DecimalFormat twoDForm = new DecimalFormat("#.##");
-	        Double val = Double.valueOf(twoDForm.format(this.getDurchschnitsspreis(i, 14)));
-	        
+			Double val = 0.0;
+			try
+			{
+				DecimalFormat twoDForm = new DecimalFormat("#.##");
+		        val = Double.valueOf(twoDForm.format(this.getDurchschnitsspreis(i, 14)));
+			} catch (Exception e)
+			{
+				
+			}
+			
 			Main.lng.msg(p, "average_price",new Object[]{ val.toString() });
 			
 			if(am > 0)
