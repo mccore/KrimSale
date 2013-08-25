@@ -2,7 +2,7 @@ name: KrimSale
 main: de.bdh.ks.Main
 version: 1.0
 authors: [wmchris]
-depend: [WorldEdit]
+depend: [Vault,WorldEdit]
 permissions:
     ks.buy:
         description: User permissions for buy
