@@ -1919,6 +1919,9 @@ public class KSHelper
 	
 	public boolean ahNear(CommandSender s)
 	{
+		if(s.hasPermission("ks.admin"))
+			return true;
+		
 		if(s instanceof Player)
 			return this.ahNear((Player)s);
 		else return false;
