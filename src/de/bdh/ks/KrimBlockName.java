@@ -478,6 +478,7 @@ public class KrimBlockName
 		KrimBlockName.put("spawnsnowgolem","383:97");
 		KrimBlockName.put("spawnocelot","383:98");
 		KrimBlockName.put("spawnirongolem","383:99");
+		KrimBlockName.put("spawnhorse","383:100");
 		KrimBlockName.put("spawnvillager","383:120");
 		KrimBlockName.put("bottleo´enchanting","384");
 		KrimBlockName.put("firecharge","385");
