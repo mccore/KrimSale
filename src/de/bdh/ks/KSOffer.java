@@ -2,6 +2,7 @@ package de.bdh.ks;
 
 import java.sql.Timestamp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 public class KSOffer 
@@ -44,6 +45,12 @@ public class KSOffer
 	{
 		if(configManager.fee > 0)
 		{
+			try
+			{
+				if(Bukkit.getPlayer(this.ply).hasPermission("ks.nofee"))
+					return true;
+			} catch(Exception e) {}
+			
 			int fee = this.getFee();
 			return Main.econ.withdrawPlayer(this.ply, fee).transactionSuccess();
 		}

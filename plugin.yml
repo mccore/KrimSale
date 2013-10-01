@@ -13,6 +13,9 @@ permissions:
     ks.sign:
         description: User permissions for signs
         default: op
+    ks.nofee:
+        description: User permissions for no fees
+        default: op
     ks.list:
         description: User permissions for list
         default: op
