@@ -38,6 +38,9 @@ public class KSOffer
 	
 	public int getFee()
 	{
+		if(Bukkit.getPlayer(this.ply).hasPermission("ks.nofee"))
+			return 0;
+		
 		return new Double(this.getFullPrice()*1.0 / 100 * configManager.fee).intValue();
 	}
 	
