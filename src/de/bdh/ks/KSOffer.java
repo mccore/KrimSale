@@ -1,6 +1,7 @@
 package de.bdh.ks;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -8,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 public class KSOffer 
 {
 	ItemStack i;
-	String ply,to;
+	UUID ply,to;
 	int amount = 0;
 	int price = 0;
 	public int type = 0;
@@ -16,19 +17,19 @@ public class KSOffer
 	
 	Timestamp time = null;
 	int admin = 0;
-	public KSOffer(ItemStack i,String ply, int priceEach)
+	public KSOffer(ItemStack i,UUID ply, int priceEach)
 	{
 		this.reg(i, ply, priceEach);
 	}
 	
-	public KSOffer(ItemStack i,String ply,int priceEach, int am)
+	public KSOffer(ItemStack i,UUID ply,int priceEach, int am)
 	{
 		this.reg(i, ply, priceEach);
 		this.setAmount(am);
 	}
 	
 	//Vergangenheitseintrag
-	public KSOffer(ItemStack i,String ply, String to, int priceEach, int am, Timestamp time)
+	public KSOffer(ItemStack i,UUID ply, UUID to, int priceEach, int am, Timestamp time)
 	{
 		this.reg(i, ply, priceEach);
 		this.setAmount(am);
@@ -55,7 +56,7 @@ public class KSOffer
 			} catch(Exception e) {}
 			
 			int fee = this.getFee();
-			return Main.econ.withdrawPlayer(this.ply, fee).transactionSuccess();
+			return Main.econ.withdrawPlayer(Bukkit.getPlayer(this.ply), fee).transactionSuccess();
 		}
 		else
 			return true;
@@ -73,7 +74,7 @@ public class KSOffer
 		if(this.time == null) return false; else return true;
 	}
 	
-	public void reg(ItemStack i,String ply, int priceEach)
+	public void reg(ItemStack i,UUID ply, int priceEach)
 	{
 		this.ply = ply;
 		this.i = i.clone();
@@ -93,12 +94,12 @@ public class KSOffer
 		return this.i;
 	}
 	
-	public String getPlayer()
+	public UUID getPlayer()
 	{
 		if(this.ply != null)
 			return this.ply;
 		else
-			return "admin";
+			return UUID.fromString("00000000-0000-0000-0000-000000000000");
 	}
 	
 	public int getFullPrice()

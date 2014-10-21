@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -116,7 +117,7 @@ public class KSHelper
         	PreparedStatement ps,ps2 = null;
         	StringBuilder b = (new StringBuilder()).append("SELECT id,money,type,subtype,amount FROM ").append(configManager.SQLTable).append("_deliver WHERE player = ?");
     		ps = conn.prepareStatement(b.toString());
-    		ps.setString(1, p.getName());
+    		ps.setString(1, p.getUniqueId().toString());
     		ResultSet rs = ps.executeQuery();
     		boolean remove = false;
     		boolean fisent = false;
@@ -128,7 +129,7 @@ public class KSHelper
     			if(rs.getInt("money") > 0)
     			{
     				System.out.println("[KS] Delivering to User "+p.getName()+ " Money: "+rs.getInt("money"));
-    				Main.econ.depositPlayer(p.getName(), rs.getInt("money"));
+    				Main.econ.depositPlayer(p, rs.getInt("money"));
     				++ret;
     				money += rs.getInt("money");
     				
@@ -219,14 +220,14 @@ public class KSHelper
 			
     		while(rs.next())
     		{
-    			if(p == null || p.hasPermission("ks.admin") || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
+    			if(p == null || p.hasPermission("ks.admin") || (p != null && p.getUniqueId().toString().equalsIgnoreCase(rs.getString("player"))))
     			{
     				if(rs.getString("sworld").length() > 0)
     					updateSign(id,true,false);
     				ret = true;
 	    			System.out.println((new StringBuilder()).append("[KS] abort request with id: ").append(id).toString());
 	    			int money = rs.getInt("amount")*rs.getInt("price");
-	    			this.addDelivery(rs.getString("player"),money);
+	    			this.addDelivery(UUID.fromString(rs.getString("player")),money);
 	    			b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_request WHERE id = ? LIMIT 1");
 	            	ps2 = conn.prepareStatement(b.toString());
 	            	ps2.setInt(1, id);
@@ -269,7 +270,7 @@ public class KSHelper
 			
     		while(rs.next())
     		{
-    			if(p == null || p.hasPermission("ks.admin") || (p != null && p.getName().equalsIgnoreCase(rs.getString("player"))))
+    			if(p == null || p.hasPermission("ks.admin") || (p != null && p.getUniqueId().toString().equalsIgnoreCase(rs.getString("player"))))
     			{
     				if(rs.getString("sworld").length() > 0)
     					updateSign(id,true,true);
@@ -281,7 +282,7 @@ public class KSHelper
 	    				i.setDurability((short) rs.getInt("subtype"));
 	    			i.setAmount(rs.getInt("amount"));
 	    			
-	    			this.addDelivery(rs.getString("player"), i);
+	    			this.addDelivery(UUID.fromString(rs.getString("player")), i);
 	    			b = (new StringBuilder()).append("DELETE FROM ").append(configManager.SQLTable).append("_offer WHERE id = ? LIMIT 1");
 	            	ps2 = conn.prepareStatement(b.toString());
 	            	ps2.setInt(1, id);
@@ -314,7 +315,7 @@ public class KSHelper
         	PreparedStatement ps;
         	StringBuilder b = (new StringBuilder()).append("SELECT COUNT(*) as c FROM ").append(configManager.SQLTable).append("_deliver WHERE player = ?");
     		ps = conn.prepareStatement(b.toString());
-    		ps.setString(1, p.getName());
+    		ps.setString(1, p.getUniqueId().toString());
     		ResultSet rs = ps.executeQuery();
     		int am = 0;	
     		while(rs.next())
@@ -336,12 +337,12 @@ public class KSHelper
 		return 0;
 	}
 	
-	public int getRequestAmountFromPlayer(String p)
+	public int getRequestAmountFromPlayer(UUID p)
 	{
 		return this.getRequestAmountFromPlayer(p,null);
 	}
 	
-	public int getRequestAmountFromPlayer(String p, ItemStack i)
+	public int getRequestAmountFromPlayer(UUID p, ItemStack i)
 	{
 		int ret = 0;
 		try
@@ -354,7 +355,7 @@ public class KSHelper
         	
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
-    		ps.setString(1, p);
+    		ps.setString(1, p.toString());
     		if(i != null)
     		{
     			ps.setInt(2, i.getTypeId());
@@ -383,12 +384,12 @@ public class KSHelper
 	}
 
 	
-	public int getOfferAmountFromPlayer(String p)
+	public int getOfferAmountFromPlayer(UUID p)
 	{
 		return this.getOfferAmountFromPlayer(p,null);
 	}
 	
-	public int getOfferAmountFromPlayer(String p, ItemStack i)
+	public int getOfferAmountFromPlayer(UUID p, ItemStack i)
 	{
 		int ret = 0;
 		try
@@ -401,7 +402,7 @@ public class KSHelper
         	
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
-    		ps.setString(1, p);
+    		ps.setString(1, p.toString());
     		if(i != null)
     		{
     			ps.setInt(2, i.getTypeId());
@@ -430,12 +431,12 @@ public class KSHelper
 	}
 	
 	
-	public Map<Integer,KSOffer> getRequestsFromPlayer(String p,int am, int begin)
+	public Map<Integer,KSOffer> getRequestsFromPlayer(UUID p,int am, int begin)
 	{
 		return this.getRequestsFromPlayer(p, null,am,begin);
 	}
 	
-	public Map<Integer,KSOffer> getRequestsFromPlayer(String p, ItemStack i, int am, int begin)
+	public Map<Integer,KSOffer> getRequestsFromPlayer(UUID p, ItemStack i, int am, int begin)
 	{
 		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
 		try
@@ -449,7 +450,7 @@ public class KSHelper
         	b.append("LIMIT ").append(begin).append(",").append(am);
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
-    		ps.setString(1, p);
+    		ps.setString(1, p.toString());
     		if(i != null)
     		{
     			ps.setInt(2, i.getTypeId());
@@ -482,12 +483,12 @@ public class KSHelper
 		return hm;
 	}
 	
-	public Map<Integer,KSOffer> getOffersFromPlayer(String p,int am, int begin)
+	public Map<Integer,KSOffer> getOffersFromPlayer(UUID p,int am, int begin)
 	{
 		return this.getOffersFromPlayer(p, null,am,begin);
 	}
 	
-	public Map<Integer,KSOffer> getOffersFromPlayer(String p, ItemStack i, int am, int begin)
+	public Map<Integer,KSOffer> getOffersFromPlayer(UUID p, ItemStack i, int am, int begin)
 	{
 		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
 		try
@@ -501,7 +502,7 @@ public class KSHelper
         	b.append("LIMIT ").append(begin).append(",").append(am);
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
-    		ps.setString(1, p);
+    		ps.setString(1, p.toString());
     		if(i != null)
     		{
     			ps.setInt(2, i.getTypeId());
@@ -745,13 +746,13 @@ public class KSHelper
 		return hm;
 	}
 	
-	public Map<Integer,KSOffer> getTransactionsByPlayer(String p,boolean from, int am, int begin)
+	public Map<Integer,KSOffer> getTransactionsByPlayer(UUID p,boolean from, int am, int begin)
 	{
 		return this.getTransactionsByPlayer(p,null,from,am,begin);
 	}
 	
 	//Name, Itemlimiter, FROMPLAYER/TOPLAYER, Einträge, Einträge beginnend bei
-	public Map<Integer,KSOffer> getTransactionsByPlayer(String p, ItemStack i, boolean from, int am, int begin)
+	public Map<Integer,KSOffer> getTransactionsByPlayer(UUID p, ItemStack i, boolean from, int am, int begin)
 	{
 		HashMap<Integer,KSOffer> hm = new HashMap<Integer,KSOffer>();
 		try
@@ -769,7 +770,7 @@ public class KSHelper
         	b.append("ORDER BY zeit DESC LIMIT ").append(begin).append(",").append(am);
         	String strg = b.toString();
     		ps = conn.prepareStatement(strg);
-    		ps.setString(1, p);
+    		ps.setString(1, p.toString());
     		if(i != null)
     		{
     			ps.setInt(2, i.getTypeId());
@@ -785,7 +786,7 @@ public class KSHelper
     			is = new ItemStack(rs.getInt("type"));
     			if(rs.getInt("subtype") != 0)
     				is.setDurability((short) rs.getInt("subtype"));
-    			f = new KSOffer(is,rs.getString("fromplayer"),rs.getString("toplayer"),rs.getInt("price"), rs.getInt("amount"),rs.getTimestamp("zeit"));
+    			f = new KSOffer(is,UUID.fromString(rs.getString("fromplayer")),UUID.fromString(rs.getString("toplayer")),rs.getInt("price"), rs.getInt("amount"),rs.getTimestamp("zeit"));
     			hm.put(rs.getInt("id"), f);
     		}
     		
@@ -805,7 +806,7 @@ public class KSHelper
 	{
 		try
 		{
-    		Player plx = Bukkit.getServer().getPlayerExact(of.ply);
+    		Player plx = Bukkit.getServer().getPlayer(of.ply);
     		plx.getInventory().addItem(of.getItemStack());
 		} catch(Exception e)
 		{	
@@ -835,7 +836,7 @@ public class KSHelper
     			
     		while(rs.next())
     		{
-    			k = new KSOffer(i,rs.getString("player"),rs.getInt("price"),rs.getInt("m"));
+    			k = new KSOffer(i,UUID.fromString(rs.getString("player")),rs.getInt("price"),rs.getInt("m"));
     			ret.put(rs.getInt("price"), k);
     		}
     		
@@ -874,7 +875,7 @@ public class KSHelper
     			
     		while(rs.next())
     		{
-    			k = new KSOffer(i,rs.getString("player"),rs.getInt("price"),rs.getInt("m"));
+    			k = new KSOffer(i,UUID.fromString(rs.getString("player")),rs.getInt("price"),rs.getInt("m"));
     			ret.put(rs.getInt("price"), k);
     		}
     		
@@ -986,11 +987,11 @@ public class KSHelper
 		{
 			if(of.admin == 0)
 			{
-				double money = Main.econ.getBalance(of.ply);
+				double money = Main.econ.getBalance(Bukkit.getPlayer(of.ply));
 				if(money < of.getFullPrice())
 					return -1;
 				
-				if(!Main.econ.withdrawPlayer(of.ply, of.getFullPrice()).transactionSuccess())
+				if(!Main.econ.withdrawPlayer(Bukkit.getPlayer(of.ply), of.getFullPrice()).transactionSuccess())
 					return -1;
 			}
 			
@@ -1002,7 +1003,7 @@ public class KSHelper
     		ps.setInt(2,of.getItemStack().getDurability());
     		ps.setInt(3, of.getAmount());
     		ps.setInt(4, of.getPrice());
-    		ps.setString(5, of.getPlayer());
+    		ps.setString(5, of.getPlayer().toString());
     		ps.setInt(6, of.admin);
     		ps.executeUpdate();
     		
@@ -1117,7 +1118,7 @@ public class KSHelper
     				ps2.executeUpdate();
     			}
 
-    			ks = new KSOffer(i,rs.getString("player"),rs.getInt("price"),ret);
+    			ks = new KSOffer(i,UUID.fromString(rs.getString("player")),rs.getInt("price"),ret);
     			if(rs.getInt("admin") == 1)
     				ks.admin = 1;
     		}
@@ -1129,8 +1130,8 @@ public class KSHelper
 				ps2 = conn.prepareStatement(b.toString());
 				ps2.setInt(1,ks.getItemStack().getTypeId());
 				ps2.setInt(2,ks.getItemStack().getDurability());
-				ps2.setString(4, ks.getPlayer());
-				ps2.setString(3, of.getPlayer());
+				ps2.setString(4, ks.getPlayer().toString());
+				ps2.setString(3, of.getPlayer().toString());
 				ps2.setInt(5,ks.getAmount());
 				ps2.setInt(6,ks.getFullPrice());
 				ps2.executeUpdate();
@@ -1192,7 +1193,7 @@ public class KSHelper
     		ps.setInt(2,of.getItemStack().getDurability());
     		ps.setInt(3, of.getAmount());
     		ps.setInt(4, of.getPrice());
-    		ps.setString(5, of.getPlayer());
+    		ps.setString(5, of.getPlayer().toString());
     		ps.setInt(6, of.admin);
     		ps.executeUpdate();
     		
@@ -1208,7 +1209,7 @@ public class KSHelper
 		return true;
 	}
 	
-	public String getOwnerofId(KSId id)
+	public UUID getOwnerofId(KSId id)
 	{
 		String w = "";
 		if(id.type == 1)
@@ -1242,7 +1243,7 @@ public class KSHelper
 			return null;
 		}
     	
-    	return name;
+    	return UUID.fromString(name);
 	}
 	
 	public void setSign(KSId id, Block b)
@@ -1418,10 +1419,10 @@ public class KSHelper
 							if(type == 1)
 							{
 								//Kaufe
-								if(Main.econ.getBalance(p.getName()) >= rs.getInt("price"))
+								if(Main.econ.getBalance(p) >= rs.getInt("price"))
 								{
-									buyItem(id, 1, p.getName());
-									Main.econ.withdrawPlayer(p.getName(), rs.getInt("price"));
+									buyItem(id, 1, p.getUniqueId());
+									Main.econ.withdrawPlayer(p, rs.getInt("price"));
 									done = true;
 								} else
 									Main.lng.msg(p,"err_nomoney");
@@ -1444,7 +1445,7 @@ public class KSHelper
 								if(rs.getInt("amount") < i.getAmount())
 									i.setAmount(rs.getInt("amount"));
 								
-								KSOffer o = new KSOffer(i,p.getName(),rs.getInt("price"));
+								KSOffer o = new KSOffer(i,p.getUniqueId(),rs.getInt("price"));
 								int am = Main.helper.removeItemsFromPlayer(p, i, i.getAmount());
 								if(am > 0 && am == i.getAmount())
 								{
@@ -1481,7 +1482,7 @@ public class KSHelper
 			} else return false;
 		} else return false;
 	}
-	public int buyItem(int id, int amount, String p)
+	public int buyItem(int id, int amount, UUID p)
 	{
 		try
 		{
@@ -1539,7 +1540,7 @@ public class KSHelper
     				ps2.executeUpdate();
     			}
 
-    			ks = new KSOffer(i,rs.getString("player"),rs.getInt("price"),ret);
+    			ks = new KSOffer(i, UUID.fromString(rs.getString("player")),rs.getInt("price"),ret);
     		}
 
     		
@@ -1549,11 +1550,11 @@ public class KSHelper
 				ps2 = conn.prepareStatement(b.toString());
 				ps2.setInt(1,ks.getItemStack().getTypeId());
 				ps2.setInt(2,ks.getItemStack().getDurability());
-				ps2.setString(3, ks.getPlayer());
+				ps2.setString(3, ks.getPlayer().toString());
 				if(p == null)
-					ps2.setString(4,"admin");
+					ps2.setString(4,"00000000-0000-0000-0000-000000000000");
 				else
-					ps2.setString(4,p);
+					ps2.setString(4,p.toString());
 				ps2.setInt(5,ks.getAmount());
 				ps2.setInt(6,ks.getFullPrice());
 				ps2.executeUpdate();
@@ -1586,7 +1587,7 @@ public class KSHelper
 	}
 	
 	//Kaufe Item, gibt zurück wieviele er wirklich gekauft hat
-	public int buyItems(ItemStack i, int maxPrice, String p)
+	public int buyItems(ItemStack i, int maxPrice, UUID p)
 	{
 		try
 		{
@@ -1595,7 +1596,7 @@ public class KSHelper
 		
 			if(p != null)
 			{
-				double money = Main.econ.getBalance(p);
+				double money = Main.econ.getBalance(Bukkit.getPlayer(p));
 				int maxbuy = (int) (money / maxPrice);
 				
 				if(maxbuy < 1)
@@ -1638,7 +1639,7 @@ public class KSHelper
     		
     		if(p != null)
     		{
-	    		if(! Main.econ.withdrawPlayer(p, pay).transactionSuccess() || Main.econ.getBalance(p) < 0)
+	    		if(! Main.econ.withdrawPlayer(Bukkit.getPlayer(p), pay).transactionSuccess() || Main.econ.getBalance(Bukkit.getPlayer(p)) < 0)
 	    		{
 	    			System.out.println("[KS] FAULT! This should never happen! Player "+p+" didn't have enough money to pay: "+pay);
 	    		}
@@ -1728,7 +1729,7 @@ public class KSHelper
 	}
 	
 	//Setze in Abarbeitsungstabelle - nur Geld
-	public boolean addDelivery(String p, int money)
+	public boolean addDelivery(UUID p, int money)
 	{
 		//sollte nie passieren, aber sicher ist sicher
 		if(p.equals("admin"))
@@ -1744,7 +1745,7 @@ public class KSHelper
         	StringBuilder b = (new StringBuilder()).append("INSERT INTO ").append(configManager.SQLTable).append("_deliver (money,player) VALUES (?,?)");
     		ps = conn.prepareStatement(b.toString());
     		ps.setInt(1, money);
-    		ps.setString(2, p);
+    		ps.setString(2, p.toString());
     		ps.executeUpdate();
     		
     		if(ps != null)
@@ -1761,7 +1762,7 @@ public class KSHelper
 	}
 	
 	//Setze in Abarbeitungstabelle - Items
-	public boolean addDelivery(String p, ItemStack i)
+	public boolean addDelivery(UUID p, ItemStack i)
 	{
 		//sollte nie passieren, aber sicher ist sicher
 		if(p.equals("admin"))
@@ -1776,7 +1777,7 @@ public class KSHelper
     		ps.setInt(1, i.getTypeId());
     		ps.setInt(2, i.getDurability());
     		ps.setInt(3, i.getAmount());
-    		ps.setString(4, p);
+    		ps.setString(4, p.toString());
     		ps.executeUpdate();
     		
     		if(ps != null)
@@ -1963,11 +1964,11 @@ public class KSHelper
 		return false;
 	}
 	//Player hat nun etwas im Delivery
-	public void pokeDelivery(String p)
+	public void pokeDelivery(UUID p)
 	{
 		try
 		{
-    		Player plx = Bukkit.getServer().getPlayerExact(p);
+    		Player plx = Bukkit.getServer().getPlayer(p);
     		
     		if(ahNear(plx))
     		{

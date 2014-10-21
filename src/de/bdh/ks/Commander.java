@@ -1,5 +1,6 @@
 package de.bdh.ks;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.command.*;
@@ -55,8 +56,8 @@ public class Commander implements CommandExecutor {
 	            					return true;
 	            				}
 	                			
-	                			String nm = Main.helper.getOwnerofId(new KSId(of,id));
-	                			if(of > 0 && id > 0 && ((nm != null && nm.equalsIgnoreCase(sender.getName())) || sender.hasPermission("ks.admin")))
+	                			UUID nm = Main.helper.getOwnerofId(new KSId(of,id));
+	                			if(of > 0 && id > 0 && (nm == ((Player) sender).getUniqueId() || sender.hasPermission("ks.admin")))
 	                			{
 	                				this.plugin.poffer.put((Player) sender, new KSId(of,id));
 	                				Main.lng.msg(sender,"suc_sign");
@@ -130,7 +131,7 @@ public class Commander implements CommandExecutor {
         				catch(Exception e) { }
         				
         				
-        				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
+        				int amount = Main.helper.getOfferAmountFromPlayer(((Player) sender).getUniqueId());
         				int maxpage = (int) Math.ceil(amount / 5.0);
         				
         				if(amount == 0)
@@ -141,7 +142,7 @@ public class Commander implements CommandExecutor {
         				
         				page = page -1;
         				page = page * 5;
-        				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer(sender.getName(),5,page);
+        				Map<Integer,KSOffer> l = Main.helper.getOffersFromPlayer(((Player) sender).getUniqueId(),5,page);
         				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
         				{
         					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
@@ -159,7 +160,7 @@ public class Commander implements CommandExecutor {
         				catch(Exception e) { }
         				
         				
-        				int amount = Main.helper.getRequestAmountFromPlayer(sender.getName());
+        				int amount = Main.helper.getRequestAmountFromPlayer(((Player) sender).getUniqueId());
         				int maxpage = (int) Math.ceil(amount / 5.0);
         				
         				if(amount == 0)
@@ -170,7 +171,7 @@ public class Commander implements CommandExecutor {
         				
         				page = page -1;
         				page = page * 5;
-        				Map<Integer,KSOffer> l = Main.helper.getRequestsFromPlayer(sender.getName(),5,page);
+        				Map<Integer,KSOffer> l = Main.helper.getRequestsFromPlayer(((Player) sender).getUniqueId(),5,page);
         				for(Map.Entry<Integer, KSOffer> e: l.entrySet())
         				{
         					sender.sendMessage("ID: "+e.getKey()+ " - Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
@@ -280,7 +281,7 @@ public class Commander implements CommandExecutor {
             					Main.lng.msg(sender,"err_noitem");
             				} else
             				{
-                				KSOffer of = new KSOffer(i,sender.getName(),price,am);
+                				KSOffer of = new KSOffer(i,((Player) sender).getUniqueId(),price,am);
                 				if(of.payFee() == false)
                 				{
                 					Main.lng.msg(sender,"err_nomoney_fee",new Object[]{of.getFee()}); 
@@ -385,7 +386,7 @@ public class Commander implements CommandExecutor {
             					return true;
             				}
             				i.setAmount(amount);
-            				int bought = Main.helper.buyItems(i, price, sender.getName());
+            				int bought = Main.helper.buyItems(i, price, ((Player) sender).getUniqueId());
             				if(bought == -1)
             				{
             					Main.lng.msg(sender,"err_nomoney");
@@ -399,7 +400,7 @@ public class Commander implements CommandExecutor {
             						Main.lng.msg(sender,"suc_bought_part",new Object[]{bought,amount});
             					int req = amount - bought;
             					int org = i.getAmount();
-            					KSOffer o = new KSOffer(i,sender.getName(),price);
+            					KSOffer o = new KSOffer(i,((Player) sender).getUniqueId(),price);
             					o.setAmount(req);
             					
             					int resp = Main.helper.enlistRequest(o);
@@ -443,7 +444,7 @@ public class Commander implements CommandExecutor {
                 			int price=0, amount=0;
                 			ItemStack i = null;
                 			
-                			double money = Main.econ.getBalance(sender.getName());
+                			double money = Main.econ.getBalance((Player) sender);
                 			
                 			//Kaufe Gegenstand in der Hand ohne Preis
                 			if(args.length == 2)
@@ -522,7 +523,7 @@ public class Commander implements CommandExecutor {
             				if((money / price) < amount)
             					Main.lng.msg(sender,"err_nomoney");
             				
-            				int bought = Main.helper.buyItems(i, price, sender.getName());
+            				int bought = Main.helper.buyItems(i, price, ((Player) sender).getUniqueId());
             				if(bought == -1)
             				{
             					Main.lng.msg(sender,"err_nomoney");

@@ -84,8 +84,9 @@ public class AdminCommander implements CommandExecutor
         			}
         			else if(args[0].equalsIgnoreCase("player"))
         			{
+                        sender.sendMessage("fix this command for uuid");
         				//Liste von allen Transaktionen des Spielers oder alle Verkäufe oder alle Deposits
-        				if(args.length < 3)
+        				/*if(args.length < 3)
         				{
         					sender.sendMessage("USAGE: /ks player USERNAME REQUESTS/AUCTIONS/TRANSACTIONS_TO/TRANSACTIONS_FROM (PAGE)");
         				} else
@@ -127,7 +128,7 @@ public class AdminCommander implements CommandExecutor
                 				catch(Exception e) { }
                 				
                 				
-                				int amount = Main.helper.getOfferAmountFromPlayer(sender.getName());
+                				int amount = Main.helper.getOfferAmountFromPlayer(((Player) sender).getUniqueId());
                 				int maxpage = (int) Math.ceil(amount / 5);
                 				
                 				if(amount == 0)
@@ -179,7 +180,7 @@ public class AdminCommander implements CommandExecutor
                 					sender.sendMessage("Time: "+e.getValue().time.toString()+" To: "+e.getValue().to+" Block: "+KrimBlockName.getNameByItemStack(e.getValue().getItemStack()) + " Amount: "+e.getValue().getAmount()+ " for "+e.getValue().getFullPrice()+ " "+Main.econ.currencyNamePlural());
                 				}
         					}
-        				}
+        				}*/
         				
         			} else if(sender.hasPermission("ks.superadmin")) 
         			{ 
